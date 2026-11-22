@@ -49,7 +49,22 @@ await hit("audit", api("seo-audit") + "/v1/audit?url=https%3A%2F%2Fexample.com",
 await hit("text", api("seo-audit") + "/v1/text", json({ text: "Solar panels convert sunlight into electricity and adoption keeps growing." }), "seo-audit");
 
 console.log("== docparse");
-await hit("pdf/text", api("docparse") + "/v1/pdf/text", json({ url: "https://arxiv.org/pdf/1706.03762v7" }), "docparse");
+await hit("pdf/text (small)", api("docparse") + "/v1/pdf/text", json({ url: "https://www.orimi.com/pdf-test.pdf" }), "docparse");
+// a dense document above the CPU guard must return our JSON 413, never a Cloudflare HTML page
+const guardHeaders = { "content-type": "application/json" };
+const guardSecret = secret("docparse");
+if (guardSecret) guardHeaders["x-rapidapi-proxy-secret"] = guardSecret;
+const guardRes = await fetch(api("docparse") + "/v1/pdf/text", {
+  method: "POST",
+  headers: guardHeaders,
+  body: JSON.stringify({ url: "https://arxiv.org/pdf/1706.03762v7" }),
+});
+const guardBody = await guardRes.text();
+const guardOk = guardRes.status === 413 && guardBody.includes("PAYLOAD_TOO_LARGE");
+guardOk ? pass++ : fail++;
+console.log((guardOk ? "PASS " : "FAIL ") + String(guardRes.status).padEnd(3) + "      cpu guard returns JSON 413");
+if (!guardOk) console.log("      " + guardBody.slice(0, 140));
+await hit("pdf/pages", api("docparse") + "/v1/pdf/pages?pages=1", json({ url: "https://arxiv.org/pdf/1706.03762v7" }), "docparse");
 await hit("html/markdown", api("docparse") + "/v1/html/markdown", json({ html: "<h1>Hi</h1><p>Hello <b>world</b>.</p>" }), "docparse");
 
 console.log("== ai-text");
