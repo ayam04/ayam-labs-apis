@@ -1,4 +1,4 @@
-import json, pathlib, html, urllib.request
+import json, pathlib, html, urllib.request, urllib.parse
 
 OUT = pathlib.Path(r"C:\Users\ayamu\OneDrive\Documents\git uploads\api-marketplace\marketing\site\public")
 SITE = "https://labs.ayamk.in"
@@ -33,7 +33,53 @@ def md(text):
     parts = [p.strip() for p in out.split("\n\n") if p.strip()]
     return "</p><p style='color:var(--text-dim);margin:0 0 14px'>".join(parts)
 
+CURRENT_SPEC = {}
+
+# the specs' own example values need two fixes before they run:
+#  - acme.example hosts are refused by the SSRF guard (reserved TLD), so use example.com
+#  - DocumentInput/HtmlInput accept exactly one of url/base64 or url/html; send one
+BODY_KEEP = {"DocumentInput": "url", "HtmlInput": "html"}
+GET_PARAM_KEEP = {"/v1/keywords": ["text"], "/v1/readability": ["text"]}
+# per-endpoint example overrides: a DOCX route needs a DOCX, not the PDF the schema suggests
+BODY_URL_OVERRIDE = {
+    "/v1/docx/text": "https://calibre-ebook.com/downloads/demos/demo.docx",
+}
+
+def scrub(value):
+    if isinstance(value, str):
+        return value.replace("acme.example", "example.com").replace("https://example.example", "https://example.com")
+    if isinstance(value, list):
+        return [scrub(v) for v in value]
+    if isinstance(value, dict):
+        return {k: scrub(v) for k, v in value.items()}
+    return value
+
+def resolve(schema):
+    """Follow a $ref into components.schemas, otherwise return the schema unchanged."""
+    seen = 0
+    while isinstance(schema, dict) and "$ref" in schema and seen < 5:
+        name = schema["$ref"].split("/")[-1]
+        schema = (CURRENT_SPEC.get("components", {}).get("schemas", {}) or {}).get(name, {})
+        seen += 1
+    return schema
+
+def param_value(p):
+    sch = resolve(p.get("schema") or {})
+    if sch.get("example") is not None:
+        return sch["example"]
+    name = (p.get("name") or "").lower()
+    if name == "email":
+        return "jane@example.com"
+    if name == "domain":
+        return "stripe.com"
+    if name in ("url", "target"):
+        return "https://example.com"
+    if name == "lang":
+        return "en"
+    return sch.get("default", "example")
+
 def example_for(schema, depth=0):
+    schema = resolve(schema)
     if not isinstance(schema, dict):
         return None
     if "example" in schema:
@@ -91,12 +137,33 @@ def body_block(body):
             + esc(json.dumps(ex, indent=2)) + "</code></pre>")
 
 def curl_for(method, path, params, body):
-    lines = ["curl -s -X " + method.upper() + " 'https://{host}" + path + "' \\"]
+    url = path
+    if params:
+        if path in GET_PARAM_KEEP:
+            params = [p for p in params if p.get("name") in GET_PARAM_KEEP[path]]
+        pairs = []
+        for p in params:
+            v = param_value(p)
+            if isinstance(v, bool):
+                v = "true" if v else "false"
+            pairs.append(str(p.get("name")) + "=" + urllib.parse.quote(str(scrub(v)), safe=":/"))
+        url = path + "?" + "&".join(pairs)
+    lines = ["curl -s -X " + method.upper() + " 'https://{host}" + url + "' \\"]
     lines.append("  -H 'X-RapidAPI-Key: YOUR_KEY' \\")
     lines.append("  -H 'X-RapidAPI-Host: " + "{proxy}" + "'")
     if body:
         lines[-1] += " \\"
-        ex = example_for(body["content"]["application/json"]["schema"]) or {}
+        raw_schema = body["content"]["application/json"]["schema"]
+        ref_name = raw_schema.get("$ref", "").split("/")[-1] if isinstance(raw_schema, dict) else ""
+        ex = example_for(raw_schema) or {}
+        if ref_name in BODY_KEEP:
+            keep = BODY_KEEP[ref_name]
+            schema_props = resolve(raw_schema).get("properties") or {}
+            ex = {keep: ex.get(keep)} if keep in schema_props else ex
+        ex = scrub(ex)
+        if path in BODY_URL_OVERRIDE:
+            ex = dict(ex)
+            ex["url"] = BODY_URL_OVERRIDE[path]
         lines.append("  -H 'Content-Type: application/json' \\")
         lines.append("  -d '" + json.dumps(ex) + "'")
     return "\n".join(lines)
@@ -104,6 +171,7 @@ def curl_for(method, path, params, body):
 total_ops = 0
 for slug, host, name, demo, guide, listing in APIS:
     spec = json.loads(pathlib.Path(r"C:\Users\ayamu\OneDrive\Documents\git uploads\api-marketplace\.tmp\spec-" + slug + ".json").read_text(encoding="utf-8"))
+    CURRENT_SPEC = spec
     proxy = slug.replace("-", "") + ".p.rapidapi.com"
     sections = []
     ops = 0

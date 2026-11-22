@@ -214,7 +214,7 @@
       </div>
     </div>
   </section>
-</main>
+<div style="border:1px solid #3a2a1a;background:rgba(251,191,36,.06);border-radius:12px;padding:16px 18px;margin:22px 0"><p style="margin:0;color:var(--text-dim);font-size:.92rem"><b style="color:#fbbf24">Known limit, measured 2026-11-22:</b> text extraction runs on a Worker with a 10&nbsp;ms CPU budget. Small and text-light PDFs are fine; dense multi-page documents (a 16-page LaTeX paper is enough) can exceed it and return a 503 from Cloudflare rather than a JSON error. DOCX, HTML and the metadata routes are unaffected. If you need heavy PDFs today, split them with <code>/v1/pdf/pages</code>; the limit disappears on a paid Workers plan.</p></div></main>
 <footer class="site-footer">
   <div class="wrap">
     <div class="cols">

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DocParse API reference - every endpoint and parameter | Ayam Labs</title>
 <meta name="description" content="DocParse API reference generated from the live OpenAPI document: 7 endpoints, parameters, request bodies and curl examples.">
-<link rel="canonical" href="https://labs.ayamk.in/reference-docparse">
+<link rel="canonical" href="https://labs.ayamk.in/reference-docparse.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DocParse API reference">
 <meta property="og:description" content="7 endpoints with parameters and curl examples.">
@@ -16,30 +16,21 @@
 <link rel="stylesheet" href="/styles.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "DocParse API reference", "url": "https://labs.ayamk.in/reference-docparse.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
-<link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
-<meta property="og:image" content="https://labs.ayamk.in/og/site.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="DocParse API reference">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DocParse API reference">
-<meta name="twitter:description" content="7 endpoints with parameters and curl examples.">
-<meta name="twitter:image" content="https://labs.ayamk.in/og/site.png">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck">EmailCheck</a>
-        <a href="/seo-audit">SEO Audit</a>
-        <a href="/docparse">DocParse</a>
-        <a href="/ai-text">TextMind</a>
-        <a href="/pii-shield">PII Shield</a>
-        <a href="/demo">Demo</a>
-        <a href="/guides">Guides</a>
-        <a href="/performance">Latency</a>
-        <a href="/pricing">Pricing</a>
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
     </nav>
     <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/docparse-api" rel="noopener">Get an API key</a>
   </div>
@@ -51,9 +42,9 @@
       <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">DocParse API reference</h1>
       <p class="lede" style="max-width:64ch">Turn documents into clean text your pipeline can actually use.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>PDF</b> endpoints return the full text and per page text of a PDF, its metadata and page count without extracting text, or just the pages you ask for (?pages=1,3,5-7). Text is cleaned: unicode dashes and quotes normalised, trailing spaces removed, blank lines collapsed, paragraph breaks kept. Input can be a multipart upload, a base64 field, or a url.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>DOCX</b> returns paragraph text where headings carry their # level, list items become - entries and tables become pipe tables. Word's XML is parsed, nothing else.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>HTML</b> turns a page or fragment into readable text (nav, header, footer, aside, scripts and styles stripped) or into markdown with headings, emphasis, links, images, lists, blockquotes, fenced code blocks and pipe tables.</p><p style='color:var(--text-dim);margin:0 0 14px'>Every limit is documented and enforced: 8 MB input, 100 pages per PDF request, 5 MB of fetched HTML, 1,000,000 characters per response. Timeouts on outbound fetches are 12 s.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Honest scope:</b> text based PDFs only. Scanned pages return little or no text because no OCR engine is bundled. Encrypted PDFs return 422. Legacy .doc, .rtf and .odt files are not supported. DOCX images, headers, footers and footnotes are not extracted.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> RAG ingestion, invoice and contract parsing, resume parsing, note-taking tools, documentation pipelines.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-        <a class="btn btn-primary" href="/demo-docparse">Try it live</a>
+        <a class="btn btn-primary" href="/demo-docparse.html">Try it live</a>
         <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/docparse-api" rel="noopener">Open the listing</a>
-        <a class="btn" href="/guides-pdf-text">Read the guide</a>
+        <a class="btn" href="/guides-pdf-text.html">Read the guide</a>
       </div>
     </div>
   </section>
@@ -77,13 +68,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract full text and per-page text from a PDF</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Returns cleaned text, per page text, page count, words, characters and the PDF metadata dictionary. Accepts a multipart/form-data body with a 'file' part, or JSON with either a 'url' or a 'base64' field. Text extraction stops at 100 pages and the response reports truncated=true. Text based PDFs only: scanned pages return little or no text. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).</p>
       
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://arxiv.org/pdf/1706.03762",
+  "base64": "JVBERi0xLjcKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2c+PgplbmRvYmoK"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
         <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/pdf/text' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"url": "https://arxiv.org/pdf/1706.03762"}'</code></pre>
       </details>
     </div>
     <div id="post_v1_pdf_info" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -94,13 +88,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Read PDF metadata, page count, version and size without extracting text</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Fast path: parses the document structure and returns pageCount, the metadata dictionary, the PDF header version, the encryption flag and the file size. No text is extracted. Accepts the same multipart, base64 or url input as /v1/pdf/text. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).</p>
       
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://arxiv.org/pdf/1706.03762",
+  "base64": "JVBERi0xLjcKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2c+PgplbmRvYmoK"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
         <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/pdf/info' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"url": "https://arxiv.org/pdf/1706.03762"}'</code></pre>
       </details>
     </div>
     <div id="post_v1_pdf_pages" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -111,13 +108,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract only the pages you select from a PDF</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Extracts text from the pages named in ?pages=1,3,5-7 (single pages, inclusive ranges, comma separated, up to 100 pages). Only the selected pages are parsed, so a 500 page contract costs one page of work. Page numbers past the end of the document are listed in outOfRange and never padded. Body is a multipart 'file' part or JSON with 'url' or 'base64'. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).</p>
       <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>pages</td><td>query</td><td>string (required)</td><td>Page selection. Single pages and inclusive ranges, comma separated. Up to 100 pages and 64 tokens per call, page numbers 1-10000.</td></tr></tbody></table></div>
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://arxiv.org/pdf/1706.03762",
+  "base64": "JVBERi0xLjcKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2c+PgplbmRvYmoK"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
-        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/pdf/pages' \
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/pdf/pages?pages=1%2C3%2C5-7' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"url": "https://arxiv.org/pdf/1706.03762"}'</code></pre>
       </details>
     </div>
     <div id="post_v1_docx_text" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -128,13 +128,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract headings, list items, tables and paragraphs from a DOCX</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Unzips the .docx, reads word/document.xml and converts it to text: Heading and Title styles become #/## prefixes, numbered and bulleted paragraphs become '- ' items, tables become pipe tables, everything else becomes a paragraph. Returns paragraph, heading, list and table counts plus word and character totals. Accepts multipart, base64 or url input, 8 MB maximum. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).</p>
       
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://arxiv.org/pdf/1706.03762",
+  "base64": "JVBERi0xLjcKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2c+PgplbmRvYmoK"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
         <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/docx/text' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"url": "https://calibre-ebook.com/downloads/demos/demo.docx"}'</code></pre>
       </details>
     </div>
     <div id="post_v1_html_text" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -145,13 +148,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract readable main text, title and byline from HTML</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Strips scripts, styles, nav, header, footer, aside and forms, then returns the readable text with paragraph breaks, the document title, a byline-ish first paragraph and word count. Pass ?includeLinks=true to also get the outbound links (up to 200, http/https/mailto/tel only, relative links resolved). Send either an 'html' field (500,000 characters) or a 'url' (5 MB, 12 s timeout).</p>
       <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>includeLinks</td><td>query</td><td>string</td><td>When true, the response also lists the outbound links of the page (up to 200, http, https, mailto and tel only).</td></tr></tbody></table></div>
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://example.com",
+  "html": "&lt;h1&gt;Invoice 1042&lt;/h1&gt;&lt;p&gt;Total: &lt;strong&gt;49.00 EUR&lt;/strong&gt;&lt;/p&gt;"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
-        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/html/text' \
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/html/text?includeLinks=true' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"html": "&lt;h1&gt;Invoice 1042&lt;/h1&gt;&lt;p&gt;Total: &lt;strong&gt;49.00 EUR&lt;/strong&gt;&lt;/p&gt;"}'</code></pre>
       </details>
     </div>
     <div id="post_v1_html_markdown" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -162,13 +168,16 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
       <h3 style="margin:10px 0 8px;font-size:1.05rem">Convert HTML to clean markdown</h3>
       <p style="color:var(--text-dim);margin:0 0 14px">Converts HTML to markdown with HTMLRewriter: ATX headings, bold/italic/strike, inline code, fenced code blocks with a language hint, links, images, ordered and unordered lists, blockquotes, horizontal rules, pipe tables and paragraphs. Scripts, styles and page chrome are dropped, javascript: and data: URLs are removed, and the output contains no HTML tags. Send either an 'html' field (500,000 characters) or a 'url' (5 MB, 12 s timeout).</p>
       
-      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{}</code></pre>
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "url": "https://example.com",
+  "html": "&lt;h1&gt;Invoice 1042&lt;/h1&gt;&lt;p&gt;Total: &lt;strong&gt;49.00 EUR&lt;/strong&gt;&lt;/p&gt;"
+}</code></pre>
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
         <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://docparse.ayamk.in/v1/html/markdown' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: docparse.p.rapidapi.com' \
   -H 'Content-Type: application/json' \
-  -d '{}'</code></pre>
+  -d '{"html": "&lt;h1&gt;Invoice 1042&lt;/h1&gt;&lt;p&gt;Total: &lt;strong&gt;49.00 EUR&lt;/strong&gt;&lt;/p&gt;"}'</code></pre>
       </details>
     </div>
     <div id="get_v1_formats" style="border-top:1px solid var(--line);padding:26px 0 6px">
@@ -193,7 +202,7 @@ X-RapidAPI-Host: docparse.p.rapidapi.com</code></pre>
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/performance">Latency</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TextMind API reference - every endpoint and parameter | Ayam Labs</title>
 <meta name="description" content="TextMind API reference generated from the live OpenAPI document: 11 endpoints, parameters, request bodies and curl examples.">
-<link rel="canonical" href="https://labs.ayamk.in/reference-ai-text">
+<link rel="canonical" href="https://labs.ayamk.in/reference-ai-text.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TextMind API reference">
 <meta property="og:description" content="11 endpoints with parameters and curl examples.">
@@ -16,30 +16,21 @@
 <link rel="stylesheet" href="/styles.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "TextMind API reference", "url": "https://labs.ayamk.in/reference-ai-text.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
-<link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
-<meta property="og:image" content="https://labs.ayamk.in/og/site.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="TextMind API reference">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="TextMind API reference">
-<meta name="twitter:description" content="11 endpoints with parameters and curl examples.">
-<meta name="twitter:image" content="https://labs.ayamk.in/og/site.png">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck">EmailCheck</a>
-        <a href="/seo-audit">SEO Audit</a>
-        <a href="/docparse">DocParse</a>
-        <a href="/ai-text">TextMind</a>
-        <a href="/pii-shield">PII Shield</a>
-        <a href="/demo">Demo</a>
-        <a href="/guides">Guides</a>
-        <a href="/performance">Latency</a>
-        <a href="/pricing">Pricing</a>
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
     </nav>
     <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Get an API key</a>
   </div>
@@ -51,9 +42,9 @@
       <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">TextMind API reference</h1>
       <p class="lede" style="max-width:64ch">One API for text understanding. Six endpoints run deterministic algorithms with zero marginal cost, four call Cloudflare Workers AI when you need generation rather than measurement.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Deterministic (costClass "free", no model, stable output):</b> keyword extraction with TF-IDF over sentences and 1/2/3-grams, entity extraction with exact spans, lexicon sentiment with per-sentence breakdown, language detection across twelve languages, readability metrics and the stopword reference lists.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Neural (costClass "neural", Workers AI binding required):</b> summarisation with chunking, tone rewriting, zero-shot classification and translation. These return 503 AI_UNAVAILABLE when the binding is missing or a model call fails, never a 500.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Honest limits:</b> sentiment is a curated word list, so sarcasm, emoji and irony are missed. Language detection uses short built-in samples and is unreliable below about three words. Readability formulas are English-calibrated. AI output quality and factual accuracy depend on the model, and typical latency is 1-3 seconds. Plain text is expected: HTML is not stripped.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> support ticket triage, CMS and SEO content tooling, lead qualification from free text, migration audits, moderation pre-screens, and any product that needs a few text features without an OpenAI bill.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-        <a class="btn btn-primary" href="/demo-textmind">Try it live</a>
+        <a class="btn btn-primary" href="/demo-textmind.html">Try it live</a>
         <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Open the listing</a>
-        <a class="btn" href="/guides-ai-text">Read the guide</a>
+        <a class="btn" href="/guides-ai-text.html">Read the guide</a>
       </div>
     </div>
   </section>
@@ -79,7 +70,7 @@ X-RapidAPI-Host: aitext.p.rapidapi.com</code></pre>
       <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>text</td><td>query</td><td>string (required)</td><td>Plain text to analyse. The GET variant accepts up to 8,000 characters because of URL length limits; POST /v1/keywords accepts up to 100,000.</td></tr><tr><td class='mono'>limit</td><td>query</td><td>integer</td><td>Maximum number of keywords to return (1-100).</td></tr></tbody></table></div>
       
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
-        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/keywords' \
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/keywords?text=Solar%20panels%20convert%20sunlight%20into%20electricity.%20Solar%20panels%20are%20cheaper%20than%20ever%2C%20and%20solar%20adoption%20keeps%20growing.' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: aitext.p.rapidapi.com'</code></pre>
       </details>
@@ -190,7 +181,7 @@ X-RapidAPI-Host: aitext.p.rapidapi.com</code></pre>
       <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>lang</td><td>query</td><td>string</td><td>Return the stopword list for this language. Omit it to list every supported language with its stopword count.</td></tr></tbody></table></div>
       
       <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
-        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/stopwords' \
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/stopwords?lang=en' \
   -H 'X-RapidAPI-Key: YOUR_KEY' \
   -H 'X-RapidAPI-Host: aitext.p.rapidapi.com'</code></pre>
       </details>
@@ -290,7 +281,7 @@ X-RapidAPI-Host: aitext.p.rapidapi.com</code></pre>
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/performance">Latency</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>
