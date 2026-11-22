@@ -214,7 +214,7 @@
       </div>
     </div>
   </section>
-<div style="border:1px solid #3a2a1a;background:rgba(251,191,36,.06);border-radius:12px;padding:16px 18px;margin:22px 0"><p style="margin:0;color:var(--text-dim);font-size:.92rem"><b style="color:#fbbf24">Measured limit, 2026-11-22:</b> pdf.js costs roughly 30&nbsp;ms of CPU per page, and this deployment terminates a request at about 500&nbsp;ms. A 16-page document therefore died mid-extraction and Cloudflare answered with an HTML page. <code>/v1/pdf/text</code> now extracts up to 8 pages per call and sets <code>"truncated": true</code>; fetch more with <code>/v1/pdf/pages?pages=9-16</code>. Ranges are capped at 8 pages for the same reason, DOCX and HTML are unaffected, and a paid Workers plan would lift the ceiling.</p></div></main>
+<div style="border:1px solid #3a2a1a;background:rgba(251,191,36,.06);border-radius:12px;padding:16px 18px;margin:22px 0"><p style="margin:0;color:var(--text-dim);font-size:.92rem"><b style="color:#fbbf24">Measured limit, 2026-11-22:</b> pdf.js costs roughly 30&nbsp;ms of CPU per page and this deployment terminates a request near 500&nbsp;ms, so a 16-page document used to die mid-extraction and Cloudflare answered with an HTML page. <code>/v1/pdf/text</code> now extracts up to 4 pages and sets <code>"truncated": true</code>; page ranges are capped at 4 for the same reason, so a long document is fetched in slices (<code>?pages=5-8</code>, and so on). Four pages measured 188-223&nbsp;ms and passed five consecutive runs; eight pages still failed intermittently, which is why the cap is four. DOCX and HTML are unaffected.</p></div></main>
 <footer class="site-footer">
   <div class="wrap">
     <div class="cols">

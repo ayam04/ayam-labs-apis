@@ -19,12 +19,13 @@ export const LIMITS = {
    * Bounded by measured CPU, not by taste: on a 775 KB, 16-page LaTeX PDF, pdf.js costs
    * roughly 30 ms of CPU per page (1 page 77-224 ms, 4 pages 188-223 ms, 8 pages 285-316 ms,
    * 16 pages 421-513 ms) and this deployment terminates requests around 500 ms of CPU
-   * ("outcome": "exceededCpu"). Eight pages leaves headroom for denser documents; callers
-   * who need more pass explicit ranges to /v1/pdf/pages.
+   * ("outcome": "exceededCpu"). Eight pages still failed intermittently under repetition, so
+   * the cap is four, which measured 188-223 ms. Callers who need more pass explicit ranges to
+   * /v1/pdf/pages.
    */
-  maxPdfPages: 8,
+  maxPdfPages: 4,
   /** Pages a single /v1/pdf/pages call may select, same CPU budget as maxPdfPages. */
-  maxSelectedPages: 8,
+  maxSelectedPages: 4,
   /** Range tokens (comma separated chunks) accepted by /v1/pdf/pages. */
   maxPageRangeTokens: 64,
   /** Highest page number accepted in a range expression. */
