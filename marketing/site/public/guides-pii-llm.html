@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Redact PII before you send text to an LLM | Ayam Labs</title>
 <meta name="description" content="What leaks when customer text reaches a model prompt, which detectors catch it, and how to redact with labels so the model can still follow the conversation.">
-<link rel="canonical" href="https://labs.ayamk.in/guides-pii-llm.html">
+<link rel="canonical" href="https://labs.ayamk.in/guides-pii-llm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redact PII before you send text to an LLM">
 <meta property="og:description" content="Detection, redaction styles, and the restore pattern that keeps prompts coherent.">
@@ -23,17 +23,17 @@
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck.html">EmailCheck</a>
-        <a href="/seo-audit.html">SEO Audit</a>
-        <a href="/docparse.html">DocParse</a>
-        <a href="/ai-text.html">TextMind</a>
-        <a href="/pii-shield.html">PII Shield</a>
-        <a href="/demo.html">Demo</a>
-        <a href="/guides.html">Guides</a>
-        <a href="/performance.html">Latency</a>
-        <a href="/pricing.html">Pricing</a>
+        <a href="/emailcheck">EmailCheck</a>
+        <a href="/seo-audit">SEO Audit</a>
+        <a href="/docparse">DocParse</a>
+        <a href="/ai-text">TextMind</a>
+        <a href="/pii-shield">PII Shield</a>
+        <a href="/demo">Demo</a>
+        <a href="/guides">Guides</a>
+        <a href="/performance">Latency</a>
+        <a href="/pricing">Pricing</a>
     </nav>
-    <a class="btn btn-sm" href="/demo-pii-shield.html">Try it live</a>
+    <a class="btn btn-sm" href="/demo-pii-shield">Try it live</a>
   </div>
 </header>
 <main>
@@ -101,15 +101,15 @@ const restored = answer.replace(/\[[A-Z_]+_\d+\]/g, (t) =&gt; map.get(t) ?? t);<
     <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
       <h3 style="margin:0 0 8px;font-size:1.05rem">Try it on your own text</h3>
       <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">The demo runs the real endpoint, ten calls per visitor per day, no key needed.</p>
-      <a class="btn btn-primary" href="/demo-pii-shield.html">Open the redactor</a>
-      <a class="btn" href="/reference-pii-shield.html">API reference</a>
+      <a class="btn btn-primary" href="/demo-pii-shield">Open the redactor</a>
+      <a class="btn" href="/reference-pii-shield">API reference</a>
     </div>
   </div></section>
 </main>
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>

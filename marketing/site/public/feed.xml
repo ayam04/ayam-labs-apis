@@ -9,113 +9,113 @@
     <atom:link href="https://labs.ayamk.in/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Five APIs on Cloudflare Workers, and the four bugs that nearly shipped</title>
-      <link>https://labs.ayamk.in/blog-five-apis.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/blog-five-apis.html</guid>
+      <link>https://labs.ayamk.in/blog-five-apis</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/blog-five-apis</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Building five production APIs on Cloudflare Workers: the architecture, the pricing maths, and the four bugs that would have made them useless.</description>
     </item>
     <item>
       <title>Redact PII before you send text to an LLM | Ayam Labs</title>
-      <link>https://labs.ayamk.in/guides-pii-llm.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-pii-llm.html</guid>
+      <link>https://labs.ayamk.in/guides-pii-llm</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-pii-llm</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>What leaks when customer text reaches a model prompt, which detectors catch it, and how to redact with labels so the model can still follow the conversation.</description>
     </item>
     <item>
       <title>How to verify an email address without sending mail</title>
-      <link>https://labs.ayamk.in/guides-email-verification.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-email-verification.html</guid>
+      <link>https://labs.ayamk.in/guides-email-verification</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-email-verification</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>What an email verification API can actually check without SMTP, how to read the score, and where the approach stops working.</description>
     </item>
     <item>
       <title>Audit a page&#x27;s on-page SEO with one HTTP request</title>
-      <link>https://labs.ayamk.in/guides-seo-audit.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-seo-audit.html</guid>
+      <link>https://labs.ayamk.in/guides-seo-audit</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-seo-audit</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>The on-page signals that decide whether a page can rank, how to read them from a single audit response, and what the audit cannot tell you.</description>
     </item>
     <item>
       <title>Extract text from a PDF in a serverless function</title>
-      <link>https://labs.ayamk.in/guides-pdf-text.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-pdf-text.html</guid>
+      <link>https://labs.ayamk.in/guides-pdf-text</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-pdf-text</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Why PDF parsing breaks in edge runtimes, and how to get clean text, page counts and metadata from one POST without bundling a parser.</description>
     </item>
     <item>
       <title>Sentiment and keyword extraction without an LLM bill</title>
-      <link>https://labs.ayamk.in/guides-ai-text.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-ai-text.html</guid>
+      <link>https://labs.ayamk.in/guides-ai-text</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-ai-text</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Deterministic text analysis you can run on every row, when to pay for a model instead, and how to read the confidence numbers.</description>
     </item>
     <item>
       <title>Redact PII before it reaches a log or a model</title>
-      <link>https://labs.ayamk.in/guides-pii-redaction.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/guides-pii-redaction.html</guid>
+      <link>https://labs.ayamk.in/guides-pii-redaction</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-pii-redaction</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.</description>
     </item>
     <item>
       <title>EmailCheck API reference - every endpoint and parameter | Ayam Labs</title>
-      <link>https://labs.ayamk.in/reference-emailcheck.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/reference-emailcheck.html</guid>
+      <link>https://labs.ayamk.in/reference-emailcheck</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/reference-emailcheck</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>EmailCheck API reference generated from the live OpenAPI document: 5 endpoints, parameters, request bodies and curl examples.</description>
     </item>
     <item>
       <title>SEO Audit API reference - every endpoint and parameter | Ayam Labs</title>
-      <link>https://labs.ayamk.in/reference-seo-audit.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/reference-seo-audit.html</guid>
+      <link>https://labs.ayamk.in/reference-seo-audit</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/reference-seo-audit</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>SEO Audit API reference generated from the live OpenAPI document: 8 endpoints, parameters, request bodies and curl examples.</description>
     </item>
     <item>
       <title>DocParse API reference - every endpoint and parameter | Ayam Labs</title>
-      <link>https://labs.ayamk.in/reference-docparse.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/reference-docparse.html</guid>
+      <link>https://labs.ayamk.in/reference-docparse</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/reference-docparse</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>DocParse API reference generated from the live OpenAPI document: 7 endpoints, parameters, request bodies and curl examples.</description>
     </item>
     <item>
       <title>TextMind API reference - every endpoint and parameter | Ayam Labs</title>
-      <link>https://labs.ayamk.in/reference-ai-text.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/reference-ai-text.html</guid>
+      <link>https://labs.ayamk.in/reference-ai-text</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/reference-ai-text</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>TextMind API reference generated from the live OpenAPI document: 11 endpoints, parameters, request bodies and curl examples.</description>
     </item>
     <item>
       <title>PII Shield API reference - every endpoint and parameter | Ayam Labs</title>
-      <link>https://labs.ayamk.in/reference-pii-shield.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/reference-pii-shield.html</guid>
+      <link>https://labs.ayamk.in/reference-pii-shield</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/reference-pii-shield</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>PII Shield API reference generated from the live OpenAPI document: 6 endpoints, parameters, request bodies and curl examples.</description>
     </item>
     <item>
       <title>10,400 disposable email domains, free list (txt and json) | Ayam Labs</title>
-      <link>https://labs.ayamk.in/disposable-domains.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/disposable-domains.html</guid>
+      <link>https://labs.ayamk.in/disposable-domains</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/disposable-domains</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>A free list of 10,400 disposable and throwaway email domains, updated 2026-11-22. Download as plain text or JSON, no signup.</description>
     </item>
     <item>
       <title>Pricing comparison - what these APIs cost vs the market | Ayam Labs</title>
-      <link>https://labs.ayamk.in/compare-pricing.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/compare-pricing.html</guid>
+      <link>https://labs.ayamk.in/compare-pricing</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/compare-pricing</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Per-unit cost of five APIs against public market prices, with sources and dates. Includes where we are more expensive.</description>
     </item>
     <item>
       <title>Measured latency - real numbers per endpoint | Ayam Labs</title>
-      <link>https://labs.ayamk.in/performance.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/performance.html</guid>
+      <link>https://labs.ayamk.in/performance</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/performance</guid>
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Client-side p50 and p95 latency for every endpoint, measured on 22 November 2026, with the method and the caveats.</description>
     </item>
     <item>
       <title>Bulk email verification demo - 20 addresses in one call</title>
-      <link>https://labs.ayamk.in/demo-bulk.html</link>
-      <guid isPermaLink="true">https://labs.ayamk.in/demo-bulk.html</guid>
+      <link>https://labs.ayamk.in/demo-bulk</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/demo-bulk</guid>
       <description>Paste a list and see per-address verdicts, scores and the per-address cost of the bulk endpoint.</description>
     </item>
   </channel>

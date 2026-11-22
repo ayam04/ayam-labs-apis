@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>10,400 disposable email domains, free list (txt and json) | Ayam Labs</title>
 <meta name="description" content="A free list of 10,400 disposable and throwaway email domains, updated 2026-11-22. Download as plain text or JSON, no signup.">
-<link rel="canonical" href="https://labs.ayamk.in/disposable-domains.html">
+<link rel="canonical" href="https://labs.ayamk.in/disposable-domains">
 <meta property="og:type" content="article">
 <meta property="og:title" content="10,400 disposable email domains, free list">
 <meta property="og:description" content="Free text and JSON download, updated 2026-11-22.">
@@ -23,17 +23,17 @@
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck.html">EmailCheck</a>
-        <a href="/seo-audit.html">SEO Audit</a>
-        <a href="/docparse.html">DocParse</a>
-        <a href="/ai-text.html">TextMind</a>
-        <a href="/pii-shield.html">PII Shield</a>
-        <a href="/demo.html">Demo</a>
-        <a href="/guides.html">Guides</a>
-        <a href="/performance.html">Latency</a>
-        <a href="/pricing.html">Pricing</a>
+        <a href="/emailcheck">EmailCheck</a>
+        <a href="/seo-audit">SEO Audit</a>
+        <a href="/docparse">DocParse</a>
+        <a href="/ai-text">TextMind</a>
+        <a href="/pii-shield">PII Shield</a>
+        <a href="/demo">Demo</a>
+        <a href="/guides">Guides</a>
+        <a href="/performance">Latency</a>
+        <a href="/pricing">Pricing</a>
     </nav>
-    <a class="btn btn-sm" href="/demo.html">Try the API</a>
+    <a class="btn btn-sm" href="/demo">Try the API</a>
   </div>
 </header>
 <main>
@@ -45,7 +45,7 @@
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
         <a class="btn btn-primary" href="/disposable-domains.txt" download>Download .txt</a>
         <a class="btn" href="/disposable-domains.json" download>Download .json</a>
-        <a class="btn" href="/demo.html">Check an address live</a>
+        <a class="btn" href="/demo">Check an address live</a>
       </div>
       <p style="margin:20px 0 0;color:var(--muted);font-size:.85rem">Updated 2026-11-22. 10,400 domains, one per line, lowercase, deduplicated and sorted.</p>
     </div>
@@ -64,13 +64,13 @@
 
     <h2 style="margin:38px 0 12px;font-size:1.4rem">Why a list is not enough</h2>
     <p style="color:var(--text-dim);margin:0 0 14px">A static list tells you a domain was known to be disposable when the list was built. It cannot tell you whether the domain accepts mail at all, whether it is a catch-all, or whether it appeared last week. That is why the API runs the list plus live MX and A/AAAA lookups plus syntax and role-account checks, and returns the reasons rather than a single boolean.</p>
-    <p style="color:var(--text-dim);margin:0 0 14px">If you only need the list, take the file. If you need a decision per address, use <a href="/reference-emailcheck.html">the API</a>.</p>
+    <p style="color:var(--text-dim);margin:0 0 14px">If you only need the list, take the file. If you need a decision per address, use <a href="/reference-emailcheck">the API</a>.</p>
 
     <h2 style="margin:38px 0 12px;font-size:1.4rem">Check one address, right now</h2>
     <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;font-size:.82rem;margin:0 0 18px"><code>curl -s 'https://emailcheck.p.rapidapi.com/v1/verify?email=someone%40mailinator.com' \\
   -H 'X-RapidAPI-Key: YOUR_KEY' \\
   -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com'</code></pre>
-    <p style="color:var(--text-dim);margin:0 0 14px">Or run it in the browser without a key: <a href="/demo.html">the live demo</a> does exactly that call.</p>
+    <p style="color:var(--text-dim);margin:0 0 14px">Or run it in the browser without a key: <a href="/demo">the live demo</a> does exactly that call.</p>
 
     <p style="color:var(--muted);font-size:.85rem;margin:26px 0 0">Free to use with attribution. If the list helped, link this page rather than the raw file, so people see the update date.</p>
   </div></section>
@@ -78,7 +78,7 @@
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>

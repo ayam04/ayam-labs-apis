@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Redact PII before it reaches a log or a model</title>
 <meta name="description" content="Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.">
-<link rel="canonical" href="https://labs.ayamk.in/guides-pii-redaction.html">
+<link rel="canonical" href="https://labs.ayamk.in/guides-pii-redaction">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redact PII before it reaches a log or a model">
 <meta property="og:description" content="Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.">
@@ -23,15 +23,15 @@
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck.html">EmailCheck</a>
-        <a href="/seo-audit.html">SEO Audit</a>
-        <a href="/docparse.html">DocParse</a>
-        <a href="/ai-text.html">TextMind</a>
-        <a href="/pii-shield.html">PII Shield</a>
-        <a href="/demo.html">Demo</a>
-        <a href="/guides.html">Guides</a>
-        <a href="/performance.html">Latency</a>
-        <a href="/pricing.html">Pricing</a>
+        <a href="/emailcheck">EmailCheck</a>
+        <a href="/seo-audit">SEO Audit</a>
+        <a href="/docparse">DocParse</a>
+        <a href="/ai-text">TextMind</a>
+        <a href="/pii-shield">PII Shield</a>
+        <a href="/demo">Demo</a>
+        <a href="/guides">Guides</a>
+        <a href="/performance">Latency</a>
+        <a href="/pricing">Pricing</a>
     </nav>
     <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
   </div>
@@ -68,7 +68,7 @@
       <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Endpoint</th><th>Output</th><th>Use when</th></tr></thead><tbody><tr><td>POST /v1/scan</td><td>findings with offsets and validators</td><td>you want to review before changing anything</td></tr><tr><td>POST /v1/redact</td><td>same detection pass, replacements applied</td><td>shipping to a log or a model</td></tr><tr><td>POST /v1/profanity</td><td>profanity with obfuscation handling</td><td>user generated content</td></tr><tr><td>POST /v1/spam</td><td>weighted heuristic spam score</td><td>contact forms and comments</td></tr><tr><td>POST /v1/moderation</td><td>PII, profanity and spam in one call</td><td>a single gate before publish</td></tr><tr><td>GET /v1/types</td><td>every detector and its validator</td><td>building a review UI</td></tr></tbody></table></div>
       <h2 style="margin:44px 0 14px;font-size:1.5rem">Why validators matter</h2>
       <h2 style="margin:44px 0 14px;font-size:1.5rem">Redaction styles</h2><p style="color:var(--text-dim);margin:0 0 16px">Styles are a parameter on <code>/v1/redact</code>, not separate endpoints. <b>mask</b> keeps the last <code>keepLast</code> characters, which is what a support agent needs to read a card back to a customer. <b>label</b> emits stable tokens like <code>[EMAIL_1]</code> so two occurrences of the same address share a token and a model can still follow the thread. <b>hash</b> emits the first eight hex characters of the value was SHA-256, plus a hash-to-count map, so records stay joinable without the raw value ever coming back.</p><p style="color:var(--text-dim);margin:0 0 16px">A card number that fails Luhn is almost certainly not a card, and redacting it costs you real information. The card detector runs Luhn, the IBAN runs mod-97, and the response names the validator that fired so you can decide how strict to be.</p>
-      <p style="color:var(--text-dim);margin:0 0 16px">Sending text to a model prompt has its own pattern: <a href="/guides-pii-llm.html">redacting before an LLM call</a> covers labels, the restore map and what still leaks.</p><h2 style="margin:44px 0 14px;font-size:1.5rem">Where heuristics stop</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Sending text to a model prompt has its own pattern: <a href="/guides-pii-llm">redacting before an LLM call</a> covers labels, the restore map and what still leaks.</p><h2 style="margin:44px 0 14px;font-size:1.5rem">Where heuristics stop</h2>
       <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li>Structured data (emails, cards, IBANs, IPs, tokens) is reliable and checksummed.</li><li>Names and addresses are shapes, not formats. They carry lower confidence deliberately.</li><li>Unusual formats will slip through. That is why every finding has an offset and a confidence: review the low-confidence band, and never treat one pass as a guarantee.</li></ul>
       <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
         <h3 style="margin:0 0 8px;font-size:1.05rem">Try PII Shield</h3>
@@ -80,7 +80,7 @@
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+    <div class="mono"><a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/pricing">Pricing</a> &nbsp;·&nbsp; <a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>

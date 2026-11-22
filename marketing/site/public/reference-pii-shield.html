@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PII Shield API reference - every endpoint and parameter | Ayam Labs</title>
 <meta name="description" content="PII Shield API reference generated from the live OpenAPI document: 6 endpoints, parameters, request bodies and curl examples.">
-<link rel="canonical" href="https://labs.ayamk.in/reference-pii-shield.html">
+<link rel="canonical" href="https://labs.ayamk.in/reference-pii-shield">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PII Shield API reference">
 <meta property="og:description" content="6 endpoints with parameters and curl examples.">
@@ -23,15 +23,15 @@
   <div class="wrap inner">
     <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
     <nav class="nav">
-        <a href="/emailcheck.html">EmailCheck</a>
-        <a href="/seo-audit.html">SEO Audit</a>
-        <a href="/docparse.html">DocParse</a>
-        <a href="/ai-text.html">TextMind</a>
-        <a href="/pii-shield.html">PII Shield</a>
-        <a href="/demo.html">Demo</a>
-        <a href="/guides.html">Guides</a>
-        <a href="/performance.html">Latency</a>
-        <a href="/pricing.html">Pricing</a>
+        <a href="/emailcheck">EmailCheck</a>
+        <a href="/seo-audit">SEO Audit</a>
+        <a href="/docparse">DocParse</a>
+        <a href="/ai-text">TextMind</a>
+        <a href="/pii-shield">PII Shield</a>
+        <a href="/demo">Demo</a>
+        <a href="/guides">Guides</a>
+        <a href="/performance">Latency</a>
+        <a href="/pricing">Pricing</a>
     </nav>
     <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/pii-shield-api" rel="noopener">Get an API key</a>
   </div>
@@ -43,9 +43,9 @@
       <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">PII Shield API reference</h1>
       <p class="lede" style="max-width:64ch">One deterministic pass over a piece of text that tells you what personal data it contains, what to replace, how abusive it is and how spammy it looks.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Detect:</b> 19 detectors - email, phone, payment cards (Luhn), IBAN (mod-97), US SSN, IPv4/IPv6, URL, birth dates, passport and licence numbers (label driven), postal addresses, person names (dictionary heuristic), API keys (entropy heuristic), JWTs, crypto wallets (base58check verified), MAC addresses, GitHub tokens and AWS key ids. Findings carry a 0-1 confidence and never overlap.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Redact:</b> three styles. Mask keeps the last N characters, label emits stable [EMAIL_1] tokens per distinct value, hash emits [EMAIL_xxxxxxxx] from the first 8 hex characters of the value's SHA-256 so identical values correlate across documents.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Screen:</b> a four language profanity lexicon (en, es, fr, de) that undoes leetspeak, repeated letters and single-character separators, plus an 11 signal spam score with the points and evidence behind every signal.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Limits, stated plainly:</b> detection is regex plus checksum plus small dictionaries. It will miss unusual formats (spaced-out card numbers, names outside the dictionary, non-Latin scripts) and it cannot know whether a string is personal data without context - a bare date is reported at confidence 0.5 unless a birth keyword is nearby. Passport, licence and street addresses need their usual labels. No ML model, no data leaves the edge, no upstream calls: identical input always returns identical output.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> LLM prompt sanitisers, customer support desks, log pipelines, UGC platforms, GDPR/SOC2 evidence runs.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-        <a class="btn btn-primary" href="/demo-pii-shield.html">Try it live</a>
+        <a class="btn btn-primary" href="/demo-pii-shield">Try it live</a>
         <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/pii-shield-api" rel="noopener">Open the listing</a>
-        <a class="btn" href="/guides-pii-redaction.html">Read the guide</a>
+        <a class="btn" href="/guides-pii-redaction">Read the guide</a>
       </div>
     </div>
   </section>
@@ -202,7 +202,7 @@ X-RapidAPI-Host: piishield.p.rapidapi.com</code></pre>
 <footer class="site-footer">
   <div class="wrap inner">
     <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
-    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+    <div class="mono"><a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/performance">Latency</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
   </div>
 </footer>
 <script src="/app.js" defer></script>
