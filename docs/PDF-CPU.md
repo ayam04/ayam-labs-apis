@@ -1,65 +1,63 @@
-# PDF extraction and the Workers CPU budget - 2026-11-22 (round 20)
+# PDF extraction failure: correction - 2026-11-22 (round 21)
 
-## What I was doing
+## I was wrong yesterday
 
-Executing all 44 curl examples published on the site against the live APIs. Nineteen failed at
-first; I fixed the generator (it never resolved `$ref`, never put query params in the URL, and
-sent both `url` and `base64` into an endpoint that accepts exactly one). That took it to 2.
+Round 20 claimed: *"pdf.js needs tens of milliseconds of CPU and the Workers Free plan allows
+10 ms per request, so dense PDFs cannot fit."* That was a diagnosis built on one document and one
+bad measurement window, and it was published on /docparse and in the PDF guide.
 
-Those 2 were not documentation bugs:
+The account's `usage_model` is **standard**, not bundled:
 
 ```
-POST /v1/pdf/text  503  <!DOCTYPE html> ... error code: 1102
-644b-...           503  <!DOCTYPE html> ... error code: 1102
+$ GET /accounts/<id>/workers/scripts/docparse/settings
+usage_model: "standard"
 ```
 
-1102 is Cloudflare's *Worker exceeded CPU time limit*, and it is served as an HTML error page,
-so a buyer sees a Cloudflare error rather than our JSON envelope.
+So the 10 ms framing was wrong. The note is corrected on both pages: it now says what was
+observed rather than what I assumed, and states that the cause is still under investigation.
 
-## Measured boundary
+## What the measurements actually show
 
-| document | route | result |
+Workers analytics, last 7 days, `docparse`:
+
+```
+success            803 requests   cpu p50 762us  p99 681915us  p999 1464099us
+exceededResources   20 requests   cpu p50 10000us p99 553767us
+```
+
+For comparison, `emailcheck` over the same window: 896 requests, 0 errors, cpu p50 726us.
+
+So: about 2.4% of docparse requests hit a resource limit, and normal requests are sub-millisecond
+in CPU. That is not a product that cannot parse PDFs; it is a product with an intermittent
+failure mode on a subset of documents.
+
+## What is ruled out
+
+| hypothesis | test | result |
 | --- | --- | --- |
-| orimi 1-page, ~20 KB | /v1/pdf/text | 200, 670 ms wall |
-| orimi 1-page | /v1/pdf/info | 200, 1661 ms |
-| arXiv 1810.04805, 16 pages | /v1/pdf/info | 200, 418 ms |
-| arXiv 1810.04805, 16 pages | /v1/pdf/text | 503 x4 in a row, then 200 once (1030 ms) |
-| arXiv 1706.03762, 15 pages | /v1/pdf/text and /info | 503 |
-| HTML input | /v1/html/text | 200, 202 ms |
-| GET /v1/formats, /health | - | 200, 187-570 ms |
+| transport (URL fetch) | same bytes sent as base64 | fails the same way |
+| page count | `pages=1` | succeeded once at 1360 ms, then failed at 1372 ms minutes later |
+| route-specific | `/v1/pdf/info`, `/v1/pdf/text`, `/v1/pdf/pages` | all three fail in the same waves |
+| worker dead | `/health`, `/v1/formats`, `/v1/html/text` | all 200 throughout |
 
-Ranges do not save it: `pages=1`, `1-4`, `1-8` all returned 1102 on that file in the same window,
-because pdf.js must parse the document structure before it can honour a page selection.
+The failure arrives in ~200 ms once a window starts, which is too fast for a CPU limit to be
+consumed naturally, and the same request succeeds after a pause. That pattern looks more like
+isolate recycling or memory pressure than a hard CPU ceiling, but I have not proven it and I am
+not going to publish another confident wrong answer.
 
-## Cause
+## What changed in the product
 
-`apps/docparse/src/lib/pdf.ts` uses pdf.js through unpdf. pdf.js is a full PDF engine: it
-inflates content streams, parses font tables and maps glyphs. That is tens of milliseconds of CPU
-on a dense LaTeX paper. The Workers **Free** plan allows **10 ms CPU per request**, so a real
-document sits right on the cliff: simple files fit, dense ones do not, and the same file can
-succeed or fail depending on what the isolate has already warmed.
+Nothing in the worker. A speculative retry, page cap or size guard would have been a guess on top
+of a misdiagnosis, and a cap would silently degrade output for files that currently work.
 
-## Why not just add a size guard
+## What is on the site now
 
-I considered refusing documents above a byte threshold with a clear 422. I did not ship it:
+Both /docparse and the PDF guide carry the measured version: 20 of 823 requests over seven days,
+HTML 503 (error 1102) instead of a JSON envelope, DOCX and HTML unaffected, retry or split with
+/v1/pdf/pages, cause under investigation.
 
-- the cheap signal (input size) does not track the real cost (font and content-stream work), so a
-  threshold picked from two data points would reject documents that currently work;
-- a 422 for a perfectly normal 900 KB PDF is a worse product than an occasional 503,
-- and it would paper over a capacity decision that belongs to you.
+## Next step if it matters
 
-## The actual fix
-
-Move the five Workers to the **Paid** plan ($5/month for the account). That raises CPU from 10 ms
-to 30 s per request, which is three orders of magnitude of headroom, and pdf.js stops being
-marginal. Nothing in the code changes. I cannot make a billing change on your account.
-
-Until then, the honest thing is to say so on the page a buyer reads first.
-
-## Also true
-
-- DOCX, HTML and the cheap PDF routes are unaffected; only heavy PDF text extraction on dense
-  files is at risk.
-- The site's demo shares the same worker, so it hits the same wall on big PDFs.
-- 42 of 44 published examples now run green; the two remaining ones are real documents on a
-  capacity limit, not wrong documentation.
+Run `wrangler tail docparse --status error` while a failing document is retried to capture the real
+exception, and watch `cpuTimeP999` against the account limits. Both need the failing document in
+hand, which is worth doing before changing any code.
