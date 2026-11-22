@@ -1,5 +1,7 @@
 # Ayam Labs APIs
 
+[![CI](https://github.com/ayam04/ayam-labs-apis/actions/workflows/ci.yml/badge.svg)](https://github.com/ayam04/ayam-labs-apis/actions/workflows/ci.yml)
+
 Five production APIs on Cloudflare Workers, sold through the RapidAPI marketplace.
 TypeScript, Hono and zod-openapi, one shared core package, 470 tests.
 
