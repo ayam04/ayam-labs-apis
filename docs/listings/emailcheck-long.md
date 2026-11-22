@@ -13,7 +13,7 @@ It checks, in order: syntax and RFC length limits, MX records, A/AAAA fallback, 
 
 ## What to expect
 
-Warm responses land under 200ms. DNS answers are cached at the edge for 10 minutes, so repeated checks of the same domain cost one lookup. The disposable list ships inside the Worker, so that check costs nothing.
+The worker reports 16ms of its own execution time; a measured client round trip was 172ms p50 from India. DNS answers are cached at the edge for 10 minutes, so repeated checks of the same domain cost one lookup. The disposable list ships inside the Worker, so that check costs nothing.
 
 ## Limits, stated plainly
 

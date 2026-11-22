@@ -29,6 +29,7 @@
         <a href="/pii-shield.html">PII Shield</a>
         <a href="/demo.html">Demo</a>
         <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
         <a href="/pricing.html">Pricing</a>
     </nav>
     <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
@@ -45,7 +46,7 @@
   <section class="section"><div class="wrap" style="max-width:78ch">
       <h2 style="margin:44px 0 14px;font-size:1.5rem">The two kinds of text endpoints</h2>
       <p style="color:var(--text-dim);margin:0 0 16px">Lexicon and rule based endpoints are deterministic: same input, same output, no tokens, no bill that scales with prose. Neural endpoints (summaries, rewrites, zero-shot classification, translation) cost more and take seconds instead of milliseconds. Pick per column, not per project.</p>
-      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Task</th><th>Method</th><th>Latency</th><th>Cost class</th></tr></thead><tbody><tr><td>sentiment</td><td>AFINN-style lexicon with negation handling</td><td>under 100ms</td><td>free</td></tr><tr><td>keywords</td><td>term frequency with stop words and phrase merging</td><td>under 100ms</td><td>free</td></tr><tr><td>entities</td><td>pattern and shape matching</td><td>under 100ms</td><td>free</td></tr><tr><td>language</td><td>script plus trigram detection</td><td>under 100ms</td><td>free</td></tr><tr><td>summarize / rewrite / classify / translate</td><td>Workers AI model</td><td>1-3s</td><td>neural</td></tr></tbody></table></div>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Task</th><th>Method</th><th>Latency</th><th>Cost class</th></tr></thead><tbody><tr><td>sentiment</td><td>AFINN-style lexicon with negation handling</td><td>152ms p50 client round trip</td><td>free</td></tr><tr><td>keywords</td><td>term frequency with stop words and phrase merging</td><td>under 100ms</td><td>free</td></tr><tr><td>entities</td><td>pattern and shape matching</td><td>under 100ms</td><td>free</td></tr><tr><td>language</td><td>script plus trigram detection</td><td>under 100ms</td><td>free</td></tr><tr><td>summarize / rewrite / classify / translate</td><td>Workers AI model</td><td>1-3s</td><td>neural</td></tr></tbody></table></div>
       <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
       <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s -X POST &#x27;https://textmind.p.rapidapi.com/v1/sentiment&#x27; \
   -H &#x27;Content-Type: application/json&#x27; \

@@ -19,7 +19,7 @@ Send text, get structure back: sentiment with confidence, keywords with weights,
 
 ## What to expect
 
-The deterministic endpoints (keywords, entities, readability, language) answer in under 100ms. The neural ones (summarize, rewrite, classify, translate) take 1-3 seconds.
+The deterministic endpoints (sentiment, keywords, entities, readability, language) do their work in single-digit milliseconds server side; a measured client round trip was 152ms p50. The neural ones (summarize, rewrite, classify, translate) take 1-3 seconds, 2.4s p50 measured.
 
 ## Limits, stated plainly
 
