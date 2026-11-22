@@ -114,7 +114,7 @@ export const PagesQuerySchema = z.object({
     .max(500)
     .openapi({
       param: { name: "pages", in: "query" },
-      example: "1,3,5-7",
+      example: "1,3,5",
       description:
         "Page selection. Single pages and inclusive ranges, comma separated. Up to " + LIMITS.maxSelectedPages + " pages and 64 tokens per call, page numbers 1-10000.",
     }),
@@ -179,7 +179,7 @@ export const PdfPageSchema = z
 export const PdfPagesResponseSchema = z
   .object({
     pageCount: z.number().int().openapi({ example: 15, description: "Pages in the document." }),
-    requested: z.string().openapi({ example: "1,3,5-7", description: "Normalised selection that was processed." }),
+    requested: z.string().openapi({ example: "1,3,5", description: "Normalised selection that was processed." }),
     pages: z.array(PdfPageSchema).openapi({ description: "Extracted pages, ascending by page number." }),
     outOfRange: z.array(z.number().int()).openapi({ example: [], description: "Requested page numbers past the end of the document. These are skipped, never padded." }),
     characters: z.number().int().openapi({ example: 9412, description: "Characters across all returned pages." }),

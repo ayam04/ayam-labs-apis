@@ -167,7 +167,7 @@ const pdfPagesRoute = createRoute({
   tags: ["Extraction"],
   summary: "Extract only the pages you select from a PDF",
   description:
-    "Extracts text from the pages named in ?pages=1,3,5-7 (single pages, inclusive ranges, comma separated, up to " + LIMITS.maxSelectedPages + " pages per call). Only the selected pages are parsed, so a 500 page contract costs one page of work. Page numbers past the end of the document are listed in outOfRange and never padded. Body is a multipart 'file' part or JSON with 'url' or 'base64'. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
+    "Extracts text from the pages named in ?pages=1,3,5 (single pages, inclusive ranges, comma separated, up to " + LIMITS.maxSelectedPages + " pages per call). Only the selected pages are parsed, so a 500 page contract costs one page of work. Page numbers past the end of the document are listed in outOfRange and never padded. Body is a multipart 'file' part or JSON with 'url' or 'base64'. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
   request: {
     query: PagesQuerySchema,
     body: {

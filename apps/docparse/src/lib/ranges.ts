@@ -4,14 +4,14 @@ import { LIMITS } from "./limits";
 export interface ParsedPageRanges {
   /** Pages in ascending order, duplicates removed. */
   pages: number[];
-  /** Compact echo of the request, e.g. "1,3,5-7". */
+  /** Compact echo of the request, e.g. "1,3,5". */
   ranges: string;
   /** Number of comma separated tokens in the input. */
   tokens: number;
 }
 
 /**
- * Parses a page selection such as "1,3,5-7" (or "1, 3, 5-7", "2-2").
+ * Parses a page selection such as "1,3,5" (or "1-4", "2-4").
  * Rejects zero, negative, reversed, non numeric and oversized selections.
  */
 export function parsePageRanges(
@@ -24,7 +24,7 @@ export function parsePageRanges(
   const trimmed = (input ?? "").trim();
   if (!trimmed) {
     throw new ApiError(400, ErrorCode.MISSING_PARAMETER, "Missing required parameter: pages", {
-      hint: 'Pass a page selection such as ?pages=1,3,5-7.',
+      hint: 'Pass a page selection such as ?pages=1,3,5.',
     });
   }
   // Whitespace inside a token is tolerated: "1, 3 , 5 - 7" is the same request.
@@ -38,7 +38,7 @@ export function parsePageRanges(
   for (const token of tokens) {
     if (!token) {
       throw new ApiError(400, ErrorCode.INVALID_INPUT, "Empty page token in the pages parameter", {
-        hint: 'Use a comma separated list such as 1,3,5-7.',
+        hint: 'Use a comma separated list such as 1,3,5.',
       });
     }
     const single = /^(\d{1,5})$/.exec(token);
@@ -68,7 +68,7 @@ export function parsePageRanges(
       continue;
     }
     throw new ApiError(400, ErrorCode.INVALID_INPUT, `Invalid page selection "${token}"`, {
-      hint: 'Pages must look like 4 or 5-7, separated by commas: ?pages=1,3,5-7.',
+      hint: 'Pages must look like 4 or 5-7, separated by commas: ?pages=1,3,5.',
     });
   }
   const pages = [...selected].sort((a, b) => a - b);
@@ -93,7 +93,7 @@ function validatePage(page: number, maxPageNumber: number, token: string): void 
   }
 }
 
-/** Renders page numbers as a compact range string: [1,3,5,6,7] -> "1,3,5-7". */
+/** Renders page numbers as a compact range string: [1,2,3,5] -> "1-3,5". */
 export function formatPageRanges(pages: number[]): string {
   if (pages.length === 0) return "";
   const sorted = [...new Set(pages)].sort((a, b) => a - b);

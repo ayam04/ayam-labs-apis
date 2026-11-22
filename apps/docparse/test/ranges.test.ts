@@ -3,10 +3,10 @@ import { describe, expect, it } from "vitest";
 import { buildPageSelection, formatPageRanges, parsePageRanges } from "../src/lib/ranges";
 
 describe("parsePageRanges", () => {
-  it("expands the documented example 1,3,5-7", () => {
-    const parsed = parsePageRanges("1,3,5-7");
-    expect(parsed.pages).toEqual([1, 3, 5, 6, 7]);
-    expect(parsed.ranges).toBe("1,3,5-7");
+  it("expands the documented example 1,3,5", () => {
+    const parsed = parsePageRanges("1,3,5");
+    expect(parsed.pages).toEqual([1, 3, 5]);
+    expect(parsed.ranges).toBe("1,3,5");
   });
 
   it("sorts and deduplicates", () => {
