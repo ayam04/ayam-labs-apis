@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PII Shield API reference - every endpoint and parameter | Ayam Labs</title>
+<meta name="description" content="PII Shield API reference generated from the live OpenAPI document: 6 endpoints, parameters, request bodies and curl examples.">
+<link rel="canonical" href="https://labs.ayamk.in/reference-pii-shield.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PII Shield API reference">
+<meta property="og:description" content="6 endpoints with parameters and curl examples.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "PII Shield API reference", "url": "https://labs.ayamk.in/reference-pii-shield.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/pii-shield-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Reference / PII Shield</div>
+      <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">PII Shield API reference</h1>
+      <p class="lede" style="max-width:64ch">One deterministic pass over a piece of text that tells you what personal data it contains, what to replace, how abusive it is and how spammy it looks.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Detect:</b> 19 detectors - email, phone, payment cards (Luhn), IBAN (mod-97), US SSN, IPv4/IPv6, URL, birth dates, passport and licence numbers (label driven), postal addresses, person names (dictionary heuristic), API keys (entropy heuristic), JWTs, crypto wallets (base58check verified), MAC addresses, GitHub tokens and AWS key ids. Findings carry a 0-1 confidence and never overlap.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Redact:</b> three styles. Mask keeps the last N characters, label emits stable [EMAIL_1] tokens per distinct value, hash emits [EMAIL_xxxxxxxx] from the first 8 hex characters of the value's SHA-256 so identical values correlate across documents.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Screen:</b> a four language profanity lexicon (en, es, fr, de) that undoes leetspeak, repeated letters and single-character separators, plus an 11 signal spam score with the points and evidence behind every signal.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Limits, stated plainly:</b> detection is regex plus checksum plus small dictionaries. It will miss unusual formats (spaced-out card numbers, names outside the dictionary, non-Latin scripts) and it cannot know whether a string is personal data without context - a bare date is reported at confidence 0.5 unless a birth keyword is nearby. Passport, licence and street addresses need their usual labels. No ML model, no data leaves the edge, no upstream calls: identical input always returns identical output.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> LLM prompt sanitisers, customer support desks, log pipelines, UGC platforms, GDPR/SOC2 evidence runs.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+        <a class="btn btn-primary" href="/demo-pii-shield.html">Try it live</a>
+        <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/pii-shield-api" rel="noopener">Open the listing</a>
+        <a class="btn" href="/guides-pii-redaction.html">Read the guide</a>
+      </div>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:86ch">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Auth</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Two headers on every call. The marketplace rejects requests without them before they reach the API.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.82rem;margin:0 0 22px"><code>X-RapidAPI-Key: YOUR_KEY
+X-RapidAPI-Host: piishield.p.rapidapi.com</code></pre>
+
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Errors</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Every failure returns the same envelope, with a requestId you can quote to support.</p>
+    <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 26px"><code>{ "error": { "code": "INVALID_INPUT", "message": "...", "hint": "..." }, "requestId": "uuid", "timestamp": "ISO-8601" }</code></pre>
+
+    <h2 style="margin:0;font-size:1.3rem">6 endpoints</h2>
+    
+    <div id="post_v1_scan" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/scan</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Detect personal data and secrets in free text</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Runs every requested detector over the text and returns non-overlapping findings sorted by offset, counts per detector, merged replacement spans and a 0-100 risk summary. Checksum backed detectors (Luhn, IBAN mod-97, base58check) only report values that pass their check; heuristics such as PERSON_NAME and API_KEY report confidence below 0.6. Maximum 2,000 findings per response.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Card 4111 1111 1111 1111, SSH from 203.0.113.42, key AKIAIOSFODNN7EXAMPLE.",
+  "types": [
+    "EMAIL",
+    "CREDIT_CARD"
+  ],
+  "minConfidence": 0.6
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://piishield.ayamk.in/v1/scan' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Card 4111 1111 1111 1111, SSH from 203.0.113.42, key AKIAIOSFODNN7EXAMPLE.", "types": ["EMAIL", "CREDIT_CARD"], "minConfidence": 0.6}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_redact" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/redact</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Return the text with personal data masked, labelled or hashed</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Same detection pass as /v1/scan, then replaces each finding. mask keeps the last keepLast characters, label uses stable [TYPE_n] tokens per distinct value, hash uses [TYPE_xxxxxxxx] built from the first 8 hex characters of the value's SHA-256 and additionally returns a mapping of hash to occurrence count. Raw values are never echoed in the mapping.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Hi, I am Jane Doe. Reach me at jane.doe@example.com or 555-123-4567.",
+  "types": [
+    "EMAIL",
+    "PHONE"
+  ],
+  "minConfidence": 0.5,
+  "style": "mask",
+  "keepLast": 4
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://piishield.ayamk.in/v1/redact' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Hi, I am Jane Doe. Reach me at jane.doe@example.com or 555-123-4567.", "types": ["EMAIL", "PHONE"], "minConfidence": 0.5, "style": "mask", "keepLast": 4}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_profanity" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/profanity</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Screen text for profanity, sexual and promotional terms</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Matches a hand written lexicon in English, Spanish, French and German after undoing leetspeak (0 to o, 1 to i, @ to a), repeated letters and single-character punctuation separators such as f.u.c.k. Every match reports its severity (low/medium/high), category, a masked term and a masked context snippet. No slurs are shipped in the lexicon.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "This sh1t is f.u.c.k.ing unbelievable!!!",
+  "langs": [
+    "en",
+    "es"
+  ]
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://piishield.ayamk.in/v1/profanity' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "This sh1t is f.u.c.k.ing unbelievable!!!", "langs": ["en", "es"]}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_spam" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/spam</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Score text from 0 to 100 with 11 spam heuristics</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Additive heuristic scoring: exclamation density, ALL CAPS ratio, link count, shortener domains, money and prize phrases, urgency phrases, credential phishing, emoji density, repeated characters, phone plus link, and crypto scam phrasing. Returns the score, the band (clean, suspicious or spam) and every contributing signal with its maximum weight, awarded points and short evidence strings.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Contact Jane Doe at jane.doe@example.com or +1 (555) 123-4567."
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://piishield.ayamk.in/v1/spam' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Contact Jane Doe at jane.doe@example.com or +1 (555) 123-4567."}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_moderation" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/moderation</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Combined PII, profanity and spam moderation in one call</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Flagship endpoint: one pass returns the full PII scan, the profanity result, the spam score and a combined verdict (allow, review or block) scored 45% PII risk, 35% spam and 20% profanity. Every reason names detector ids, counts and scores only - never raw values.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "WIN a $1000 gift card NOW!!! Verify your account at https://bit.ly/xk9 and call 555-123-4567. Email jane.doe@example.com.",
+  "piiTypes": [
+    "EMAIL",
+    "PHONE"
+  ],
+  "minConfidence": 0.5,
+  "profanityLangs": [
+    "en"
+  ]
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://piishield.ayamk.in/v1/moderation' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "WIN a $1000 gift card NOW!!! Verify your account at https://bit.ly/xk9 and call 555-123-4567. Email jane.doe@example.com.", "piiTypes": ["EMAIL", "PHONE"], "minConfidence": 0.5, "profanityLangs": ["en"]}'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_types" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/types</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">List every detector, redaction style and spam signal</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Machine readable metadata for the whole API: detector id, label, description, example, validator, confidence range and risk weight; the three redaction styles; the four profanity languages; the 11 spam signals with weights; and the hard request and response caps. Use it to build a UI or to pick the types you pass to /v1/scan.</p>
+      
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://piishield.ayamk.in/v1/types' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin:26px 0 0">Generated from <a href="https://piishield.ayamk.in/openapi.json">piishield.ayamk.in/openapi.json</a> on 2026-11-22. If the page and the spec ever disagree, the spec is right.</p>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

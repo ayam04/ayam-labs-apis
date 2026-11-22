@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Audit API reference - every endpoint and parameter | Ayam Labs</title>
+<meta name="description" content="SEO Audit API reference generated from the live OpenAPI document: 8 endpoints, parameters, request bodies and curl examples.">
+<link rel="canonical" href="https://labs.ayamk.in/reference-seo-audit.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SEO Audit API reference">
+<meta property="og:description" content="8 endpoints with parameters and curl examples.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "SEO Audit API reference", "url": "https://labs.ayamk.in/reference-seo-audit.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Reference / SEO Audit</div>
+      <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">SEO Audit API reference</h1>
+      <p class="lede" style="max-width:64ch">Audit the HTML of a single public page and get back everything an SEO review needs, without a headless browser.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>What one call returns:</b> status and timing for the fetch, the final URL after redirects, title and meta description with length warnings, canonical, robots directives, lang, charset, viewport, H1-H6 counts with the first three headings of each level, image and alt-text counts, internal vs external link counts, word count, text-to-HTML ratio, Flesch reading ease and grade level, Open Graph and Twitter card completeness, JSON-LD types, hreflang entries, HTTPS, response compression, and a 0-100 score built from 14 weighted checks whose weights sum to exactly 100.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Other endpoints:</b> head metadata only, every anchor with rel attributes, keyword frequency with density, readability on its own, robots.txt parsing and sitemap.xml parsing. POST /v1/text runs the readability and keyword analysis on text you already have, with no network call.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Honest scope:</b> this API audits a single public page's HTML. It does not crawl a whole site, does not render JavaScript (so client-side injected tags are invisible to it), and does not measure Core Web Vitals, Lighthouse metrics or real-user performance. Word and syllable statistics target Latin-script languages; CJK word segmentation is not implemented.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> SEO agencies doing first-pass page reviews, SaaS products embedding a site audit feature, growth marketers checking metadata before a launch.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+        <a class="btn btn-primary" href="/demo-seo-audit.html">Try it live</a>
+        <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">Open the listing</a>
+        <a class="btn" href="/guides-seo-audit.html">Read the guide</a>
+      </div>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:86ch">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Auth</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Two headers on every call. The marketplace rejects requests without them before they reach the API.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.82rem;margin:0 0 22px"><code>X-RapidAPI-Key: YOUR_KEY
+X-RapidAPI-Host: seoaudit.p.rapidapi.com</code></pre>
+
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Errors</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Every failure returns the same envelope, with a requestId you can quote to support.</p>
+    <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 26px"><code>{ "error": { "code": "INVALID_INPUT", "message": "...", "hint": "..." }, "requestId": "uuid", "timestamp": "ISO-8601" }</code></pre>
+
+    <h2 style="margin:0;font-size:1.3rem">8 endpoints</h2>
+    
+    <div id="get_v1_audit" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/audit</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Run a full weighted on-page audit of one URL</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Fetches the page (10 s timeout, 2 MB cap, redirects followed through the SSRF-safe fetcher) and returns title and meta description with length warnings, canonical, robots directives, lang, charset, viewport, H1-H6 counts with the first three headings of each level, image and alt-text counts, internal vs external link counts, word count, text-to-HTML ratio, Flesch reading ease and grade, Open Graph and Twitter completeness, JSON-LD types, hreflang entries, HTTPS, compression, timings, and a 0-100 score from 14 weighted checks that always sum to 100. Pages that return 4xx/5xx are still parsed and the status is reported.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string (required)</td><td>Absolute http(s) URL of the page to audit. A bare hostname is upgraded to https://.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/audit' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_meta" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/meta</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract head metadata, social cards and structured data</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Returns only the document head: title, meta description, canonical, robots meta, lang, charset, viewport, theme-color, every og:<i> and twitter:</i> tag with a completeness summary, one parsed summary per JSON-LD block, favicon links and hreflang entries. The same 2 MB cap and 10 s timeout apply.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string (required)</td><td>Page whose head metadata should be extracted.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/meta' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_links" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/links</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract every anchor and classify internal vs external</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Parses all &lt;a href&gt; elements, resolves them against the final URL and classifies each as internal (same registrable domain), external or other (mailto/tel/javascript). Returns total counts, rel attribute counts, an empty-anchor-text count and up to 500 links with their anchor text, rel list and target. The truncated flag is set when the page has more than 500 anchors.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string (required)</td><td>Page whose anchors should be extracted. At most 500 links are returned.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/links' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_keywords" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/keywords</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Rank keywords and phrases with frequency and density</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Accepts either ?url= (visible text is extracted from the page) or ?text= (raw text, no network). Returns single words and two word phrases after stopword removal, each with occurrences, density percentage and an IDF-style importance score, plus density percentages for the top ten. The ranking uses a bundled frequency prior, not a live corpus.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string</td><td>Fetch this page and analyse its visible text. Send either url or text, not both.</td></tr><tr><td class='mono'>text</td><td>query</td><td>string</td><td>Analyse this raw text instead of fetching a URL (max 20,000 characters in a query string; POST /v1/text accepts up to 100,000).</td></tr><tr><td class='mono'>limit</td><td>query</td><td>integer</td><td>How many ranked terms to return (1-100, default 20).</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/keywords' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_readability" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/readability</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Score readability with Flesch, Flesch-Kincaid and Gunning Fog</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Accepts either ?url= or ?text=. Returns Flesch reading ease (0-100), Flesch-Kincaid grade, Gunning Fog index, word/sentence/paragraph/syllable counts, average words per sentence, the longest sentence with its position, and a passive-voice hint count. Syllables are counted heuristically, so treat grades as estimates.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string</td><td>Fetch this page and score its visible text. Send either url or text, not both.</td></tr><tr><td class='mono'>text</td><td>query</td><td>string</td><td>Score this raw text instead of fetching a URL (max 20,000 characters in a query string).</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/readability' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_robots" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/robots</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Fetch and parse a domain's robots.txt</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Fetches only &lt;origin&gt;/robots.txt and returns the user-agent groups with their allow/disallow rules and line numbers, crawl-delay, sitemap URLs, the non-standard Host value and any directives that were ignored. A missing file returns found=false with its status code instead of an error. Gzipped or HTML responses are reported, never parsed as rules.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>domain</td><td>query</td><td>string (required)</td><td>Domain to inspect, with or without scheme. Only /robots.txt is fetched.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/robots' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_sitemap" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/sitemap</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Parse a sitemap or sitemap index</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Fetches one sitemap URL and parses it as an &lt;urlset&gt; (up to 500 URLs with lastmod, changefreq and priority), a &lt;sitemapindex&gt; (up to 200 child sitemaps) or a plain text URL list. It does not follow child sitemaps. Gzipped .xml.gz files are rejected with 415; pass the decompressed XML URL.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>url</td><td>query</td><td>string (required)</td><td>Absolute URL of a sitemap.xml or sitemap index. Gzipped (.xml.gz) files are rejected.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://seo-audit.ayamk.in/v1/sitemap' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_text" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/text</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Run readability and keyword analysis on raw text</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">No network call. Send up to 100,000 characters of text and receive the readability metrics and keyword ranking in one response. Larger payloads are rejected with 413, and JSON bodies above 512 KB are rejected before parsing.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Keyword research is the practice of finding the terms people type into search engines. Good research starts with intent.",
+  "limit": 20
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://seo-audit.ayamk.in/v1/text' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: seoaudit.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Keyword research is the practice of finding the terms people type into search engines. Good research starts with intent.", "limit": 20}'</code></pre>
+      </details>
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin:26px 0 0">Generated from <a href="https://seo-audit.ayamk.in/openapi.json">seo-audit.ayamk.in/openapi.json</a> on 2026-11-22. If the page and the spec ever disagree, the spec is right.</p>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

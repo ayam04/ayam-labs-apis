@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmailCheck API reference - every endpoint and parameter | Ayam Labs</title>
+<meta name="description" content="EmailCheck API reference generated from the live OpenAPI document: 5 endpoints, parameters, request bodies and curl examples.">
+<link rel="canonical" href="https://labs.ayamk.in/reference-emailcheck.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EmailCheck API reference">
+<meta property="og:description" content="5 endpoints with parameters and curl examples.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "EmailCheck API reference", "url": "https://labs.ayamk.in/reference-emailcheck.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Reference / EmailCheck</div>
+      <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">EmailCheck API reference</h1>
+      <p class="lede" style="max-width:64ch">Validate email addresses before you send, store or bill for them.</p><p style='color:var(--text-dim);margin:0 0 14px'>Every call runs a syntax pass, live DNS lookups (MX + A/AAAA), a 10,000+ domain disposable-mailbox blocklist, role-account detection, free-provider detection, typo suggestions and a 0-100 deliverability score with human readable reasons.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Honest scope:</b> no SMTP handshake happens at the edge, so the API tells you whether the <i>domain</i> accepts mail and how risky the <i>address</i> looks. It does not claim to prove that a specific mailbox exists. Results are cached at the edge for 10 minutes to keep latency low.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> signup forms, lead qualification, CRM hygiene, bulk list cleaning, fraud checks.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+        <a class="btn btn-primary" href="/demo.html">Try it live</a>
+        <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Open the listing</a>
+        <a class="btn" href="/guides-email-verification.html">Read the guide</a>
+      </div>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:86ch">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Auth</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Two headers on every call. The marketplace rejects requests without them before they reach the API.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.82rem;margin:0 0 22px"><code>X-RapidAPI-Key: YOUR_KEY
+X-RapidAPI-Host: emailcheck.p.rapidapi.com</code></pre>
+
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Errors</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Every failure returns the same envelope, with a requestId you can quote to support.</p>
+    <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 26px"><code>{ "error": { "code": "INVALID_INPUT", "message": "...", "hint": "..." }, "requestId": "uuid", "timestamp": "ISO-8601" }</code></pre>
+
+    <h2 style="margin:0;font-size:1.3rem">5 endpoints</h2>
+    
+    <div id="get_v1_verify" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/verify</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Verify a single email address</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Runs the full pipeline for one address: syntax, MX/AAAA DNS, disposable blocklist, role account detection, free provider detection, typo suggestion and scoring.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>email</td><td>query</td><td>string (required)</td><td>Address to verify.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://emailcheck.ayamk.in/v1/verify' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_verify" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/verify</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Verify a single email address (JSON body)</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Same pipeline as the GET variant. Useful when addresses contain characters that need escaping in a query string.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "email": "jane@example.com"
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://emailcheck.ayamk.in/v1/verify' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"email": "jane@example.com"}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_bulk" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/bulk</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Verify up to 100 addresses in one request</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Deduplicates the input by canonical form, verifies with bounded concurrency and returns per-address results plus an aggregate summary. Regex-free: invalid lines are reported, not rejected.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "emails": [
+    "jane@gmail.com",
+    "info@stripe.com"
+  ]
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://emailcheck.ayamk.in/v1/bulk' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"emails": ["jane@gmail.com", "info@stripe.com"]}'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_domain" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/domain</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Inspect a domain's email infrastructure</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Returns MX, A/AAAA, NS records, mail provider fingerprint, SPF policy, DMARC policy, DKIM selector probes and disposable/free classification.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>domain</td><td>query</td><td>string (required)</td><td>Domain to inspect.</td></tr><tr><td class='mono'>dkim</td><td>query</td><td>string</td><td>Also probe four common DKIM selectors (slower).</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://emailcheck.ayamk.in/v1/domain' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_disposable" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/disposable</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Check a domain against the disposable mailbox blocklist</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Fast, DNS-free check of a single domain against 10,000+ known disposable and temporary mailbox providers.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>domain</td><td>query</td><td>string (required)</td><td></td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://emailcheck.ayamk.in/v1/disposable' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: emailcheck.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin:26px 0 0">Generated from <a href="https://emailcheck.ayamk.in/openapi.json">emailcheck.ayamk.in/openapi.json</a> on 2026-11-22. If the page and the spec ever disagree, the spec is right.</p>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TextMind API reference - every endpoint and parameter | Ayam Labs</title>
+<meta name="description" content="TextMind API reference generated from the live OpenAPI document: 11 endpoints, parameters, request bodies and curl examples.">
+<link rel="canonical" href="https://labs.ayamk.in/reference-ai-text.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TextMind API reference">
+<meta property="og:description" content="11 endpoints with parameters and curl examples.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "TextMind API reference", "url": "https://labs.ayamk.in/reference-ai-text.html", "publisher": {"@type": "Organization", "name": "Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Reference / TextMind</div>
+      <h1 style="font-size:clamp(1.9rem,4.4vw,2.9rem);margin:18px 0 16px;max-width:28ch">TextMind API reference</h1>
+      <p class="lede" style="max-width:64ch">One API for text understanding. Six endpoints run deterministic algorithms with zero marginal cost, four call Cloudflare Workers AI when you need generation rather than measurement.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Deterministic (costClass "free", no model, stable output):</b> keyword extraction with TF-IDF over sentences and 1/2/3-grams, entity extraction with exact spans, lexicon sentiment with per-sentence breakdown, language detection across twelve languages, readability metrics and the stopword reference lists.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Neural (costClass "neural", Workers AI binding required):</b> summarisation with chunking, tone rewriting, zero-shot classification and translation. These return 503 AI_UNAVAILABLE when the binding is missing or a model call fails, never a 500.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Honest limits:</b> sentiment is a curated word list, so sarcasm, emoji and irony are missed. Language detection uses short built-in samples and is unreliable below about three words. Readability formulas are English-calibrated. AI output quality and factual accuracy depend on the model, and typical latency is 1-3 seconds. Plain text is expected: HTML is not stripped.</p><p style='color:var(--text-dim);margin:0 0 14px'><b>Built for:</b> support ticket triage, CMS and SEO content tooling, lead qualification from free text, migration audits, moderation pre-screens, and any product that needs a few text features without an OpenAI bill.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+        <a class="btn btn-primary" href="/demo-textmind.html">Try it live</a>
+        <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Open the listing</a>
+        <a class="btn" href="/guides-ai-text.html">Read the guide</a>
+      </div>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:86ch">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Auth</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Two headers on every call. The marketplace rejects requests without them before they reach the API.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.82rem;margin:0 0 22px"><code>X-RapidAPI-Key: YOUR_KEY
+X-RapidAPI-Host: aitext.p.rapidapi.com</code></pre>
+
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Errors</h2>
+    <p style="color:var(--text-dim);margin:0 0 10px">Every failure returns the same envelope, with a requestId you can quote to support.</p>
+    <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 26px"><code>{ "error": { "code": "INVALID_INPUT", "message": "...", "hint": "..." }, "requestId": "uuid", "timestamp": "ISO-8601" }</code></pre>
+
+    <h2 style="margin:0;font-size:1.3rem">11 endpoints</h2>
+    
+    <div id="get_v1_keywords" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/keywords</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Rank keywords and key phrases from plain text</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Single-document TF-IDF: sentences are documents, terms are 1/2/3-grams built from contiguous tokens. Stopwords in twelve languages are removed, dense and repeated phrases rank first. The GET variant accepts up to 8,000 characters because of URL length limits; use POST /v1/keywords for up to 100,000.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>text</td><td>query</td><td>string (required)</td><td>Plain text to analyse. The GET variant accepts up to 8,000 characters because of URL length limits; POST /v1/keywords accepts up to 100,000.</td></tr><tr><td class='mono'>limit</td><td>query</td><td>integer</td><td>Maximum number of keywords to return (1-100).</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/keywords' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_keywords" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/keywords</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Rank keywords from a JSON body (up to 100,000 characters)</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Same scoring as the GET variant with a larger input limit. Returns the ranked keyword list, document statistics and a truncated flag.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Solar panels convert sunlight into electricity. Solar panels are cheaper than ever, and solar adoption keeps growing.",
+  "limit": 20
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/keywords' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Solar panels convert sunlight into electricity. Solar panels are cheaper than ever, and solar adoption keeps growing.", "limit": 20}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_entities" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/entities</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Extract emails, URLs, phones, dates, money and more</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Deterministic regex extraction of eleven entity types with exact [start, end) UTF-16 spans and a confidence per type. No model, no network call. Overlaps are resolved by type priority, so a URL wins over an email embedded in it and a date wins over a phone number shaped like a date. At most 200 entities are returned per request, and at most 50 of any one type, so a wall of URLs cannot crowd out emails.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/entities' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_sentiment" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/sentiment</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Score sentiment with a curated lexicon (free, deterministic)</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Sums word valences from a built-in AFINN-style lexicon and normalises them to [-1, 1]. Negators within two tokens flip and halve a word's valence. Returns per-sentence scores for the first 20 sentences plus the strongest positive and negative tokens. Word lists do not understand sarcasm, irony, emoji or non-English text.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/sentiment' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_detect-language" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/detect-language</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Detect one of twelve languages with a confidence score</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Combines written-script detection (Cyrillic, Arabic, Devanagari, Han) with stopword coverage and character-trigram similarity for the eight Latin-script languages. Returns the best language, a confidence in [0, 1], the top three candidates and the script mix. Short inputs (under about three words) are often unreliable; check isReliable.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/detect-language' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_readability" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/readability</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Flesch, Flesch-Kincaid and Gunning fog readability scores</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Standard English readability formulas with an estimated syllable count (vowel-group heuristic, no dictionary). Returns Flesch reading ease, Flesch-Kincaid grade, Gunning fog, word/sentence/syllable counts, averages and the longest sentence. Formulas are English-calibrated, so treat other languages as indicative only.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/readability' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "We shipped the new billing page on January 12, 2024 and support tickets dropped 38%. Contact billing@acme.io or call +1 415 555 2671. Our IBAN is DE89370400440532013000."}'</code></pre>
+      </details>
+    </div>
+    <div id="get_v1_stopwords" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">GET</span>
+        <span class="mono" style="font-size:1rem">/v1/stopwords</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">List supported stopword lists, or fetch one language</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Without lang, returns every supported language with its stopword count. With lang, also returns the full curated list for that language. These are the lists used by keyword extraction and language detection.</p>
+      <div style='overflow:auto;margin:0 0 16px'><table style='width:100%;border-collapse:collapse;font-size:.88rem'><thead><tr><th>Parameter</th><th>In</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td class='mono'>lang</td><td>query</td><td>string</td><td>Return the stopword list for this language. Omit it to list every supported language with its stopword count.</td></tr></tbody></table></div>
+      
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X GET 'https://textmind.ayamk.in/v1/stopwords' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_summarize" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/summarize</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Summarise up to 12,000 characters with Llama 3.1 8B</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Calls Cloudflare Workers AI. Input is trimmed, split into sentence-aligned chunks of 4,000 characters and summarised; when there is more than one chunk the partial summaries are merged in a final call, so a 12,000 character request uses at most four model calls. Returns the summary, the compression ratio and the model id. Latency is typically 1-3 s and quality depends on the model. Returns 503 AI_UNAVAILABLE when the binding is missing or the model fails.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Acme reported record revenue in the third quarter, driven by strong demand for its industrial sensors. Margins improved because the company renegotiated component contracts. Management warned that shipping costs may rise next year, and that hiring will slow until the new factory in Ohio opens.",
+  "maxWords": 80,
+  "style": "paragraph"
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/summarize' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Acme reported record revenue in the third quarter, driven by strong demand for its industrial sensors. Margins improved because the company renegotiated component contracts. Management warned that shipping costs may rise next year, and that hiring will slow until the new factory in Ohio opens.", "maxWords": 80, "style": "paragraph"}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_rewrite" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/rewrite</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Rewrite text in a chosen tone and return the model's notes</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Calls Cloudflare Workers AI (Llama 3.1 8B) and asks for the rewritten text followed by a NOTES section. The notes are the model's own, capped at five lines; if the model ignores the format the notes array is empty and the whole answer is returned as the rewritten text. One model call per request. Returns 503 AI_UNAVAILABLE when the binding is missing or the model fails.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "we got the thing working lol, it was a config typo. gonna ship it tomorrow if nothing explodes",
+  "tone": "professional"
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/rewrite' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "we got the thing working lol, it was a config typo. gonna ship it tomorrow if nothing explodes", "tone": "professional"}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_classify" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/classify</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Zero-shot classification into 2-20 labels you supply</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Calls Cloudflare Workers AI and asks the model for one label plus a score per label, in JSON. Scores are normalised relevance values, not calibrated probabilities: when the model returns no numbers the winning label scores 1 and the rest 0 and scoreSource says "choice-only". Labels the model invents are dropped. Returns 503 AI_UNAVAILABLE when the binding is missing or the model fails.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "My card was charged twice and nobody answered my emails for a week.",
+  "labels": [
+    "billing",
+    "shipping",
+    "product defect",
+    "account access",
+    "other"
+  ]
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/classify' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "My card was charged twice and nobody answered my emails for a week.", "labels": ["billing", "shipping", "product defect", "account access", "other"]}'</code></pre>
+      </details>
+    </div>
+    <div id="post_v1_translate" style="border-top:1px solid var(--line);padding:26px 0 6px">
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span class="mono" style="color:var(--accent);font-size:.8rem;letter-spacing:.08em">POST</span>
+        <span class="mono" style="font-size:1rem">/v1/translate</span>
+      </div>
+      <h3 style="margin:10px 0 8px;font-size:1.05rem">Translate up to 2,000 characters between twelve languages</h3>
+      <p style="color:var(--text-dim);margin:0 0 14px">Calls Cloudflare Workers AI with M2M100 (1.2B parameters). Source language is optional: when omitted the built-in detector runs first and the request fails with 400 instead of guessing if the detection is unreliable. One model call per request, typically 1-3 s. Returns 503 AI_UNAVAILABLE when the binding is missing or the model fails.</p>
+      
+      <p style='color:var(--text-dim);margin:0 0 8px'><b>Request body</b></p><pre style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;margin:0 0 14px'><code>{
+  "text": "Your invoice is attached. Please pay it within 14 days.",
+  "target": "es",
+  "source": "en"
+}</code></pre>
+      <details style="margin:0 0 10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem">curl example</summary>
+        <pre style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;margin:10px 0 0"><code>curl -s -X POST 'https://textmind.ayamk.in/v1/translate' \
+  -H 'X-RapidAPI-Key: YOUR_KEY' \
+  -H 'X-RapidAPI-Host: aitext.p.rapidapi.com' \
+  -H 'Content-Type: application/json' \
+  -d '{"text": "Your invoice is attached. Please pay it within 14 days.", "target": "es", "source": "en"}'</code></pre>
+      </details>
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin:26px 0 0">Generated from <a href="https://textmind.ayamk.in/openapi.json">textmind.ayamk.in/openapi.json</a> on 2026-11-22. If the page and the spec ever disagree, the spec is right.</p>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/performance.html">Latency</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
