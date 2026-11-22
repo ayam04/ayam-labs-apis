@@ -116,7 +116,7 @@ export const PagesQuerySchema = z.object({
       param: { name: "pages", in: "query" },
       example: "1,3,5-7",
       description:
-        "Page selection. Single pages and inclusive ranges, comma separated. Up to 100 pages and 64 tokens per call, page numbers 1-10000.",
+        "Page selection. Single pages and inclusive ranges, comma separated. Up to " + LIMITS.maxSelectedPages + " pages and 64 tokens per call, page numbers 1-10000.",
     }),
 });
 
@@ -143,7 +143,7 @@ export const PdfTextResponseSchema = z
     pagesReturned: z.number().int().openapi({ example: 15, description: "Pages included in the pages array (capped at 100)." }),
     truncated: z
       .boolean()
-      .openapi({ example: false, description: "True when the PDF had more than 100 pages, or the text exceeded 1,000,000 characters." }),
+      .openapi({ example: false, description: "True when the PDF had more pages than one call extracts, or the text exceeded 1,000,000 characters." }),
     characters: z.number().int().openapi({ example: 41230, description: "Characters in text." }),
     words: z.number().int().openapi({ example: 6731, description: "Words in text." }),
     metadata: PdfMetadataSchema,

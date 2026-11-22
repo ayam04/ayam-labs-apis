@@ -121,7 +121,7 @@ const pdfTextRoute = createRoute({
   tags: ["Extraction"],
   summary: "Extract full text and per-page text from a PDF",
   description:
-    "Returns cleaned text, per page text, page count, words, characters and the PDF metadata dictionary. Accepts a multipart/form-data body with a 'file' part, or JSON with either a 'url' or a 'base64' field. Text extraction stops at 100 pages and the response reports truncated=true. Text based PDFs only: scanned pages return little or no text. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
+    "Returns cleaned text, per page text, page count, words, characters and the PDF metadata dictionary. Accepts a multipart/form-data body with a 'file' part, or JSON with either a 'url' or a 'base64' field. Text extraction stops at " + LIMITS.maxPdfPages + " pages per call and the response reports truncated=true; fetch further pages with /v1/pdf/pages. Text based PDFs only: scanned pages return little or no text. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
   request: {
     body: {
       content: {
@@ -167,7 +167,7 @@ const pdfPagesRoute = createRoute({
   tags: ["Extraction"],
   summary: "Extract only the pages you select from a PDF",
   description:
-    "Extracts text from the pages named in ?pages=1,3,5-7 (single pages, inclusive ranges, comma separated, up to 100 pages). Only the selected pages are parsed, so a 500 page contract costs one page of work. Page numbers past the end of the document are listed in outOfRange and never padded. Body is a multipart 'file' part or JSON with 'url' or 'base64'. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
+    "Extracts text from the pages named in ?pages=1,3,5-7 (single pages, inclusive ranges, comma separated, up to " + LIMITS.maxSelectedPages + " pages per call). Only the selected pages are parsed, so a 500 page contract costs one page of work. Page numbers past the end of the document are listed in outOfRange and never padded. Body is a multipart 'file' part or JSON with 'url' or 'base64'. A request body is required in practice: it is listed as optional because two content types are accepted (multipart upload or JSON).",
   request: {
     query: PagesQuerySchema,
     body: {
@@ -416,7 +416,7 @@ const app = defineApi(config, (app) => {
             endpoints: ["/v1/pdf/text", "/v1/pdf/info", "/v1/pdf/pages"],
             maxInputBytes: LIMITS.maxDocumentBytes,
             notes:
-              "Text based PDFs only. Scanned pages return little or no text (no OCR). Encrypted files return 422. Up to 100 pages per extraction.",
+              "Text based PDFs only. Scanned pages return little or no text (no OCR). Encrypted files return 422. Up to " + LIMITS.maxPdfPages + " pages per extraction.",
           },
           {
             format: "DOCX",

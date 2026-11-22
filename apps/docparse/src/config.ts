@@ -1,4 +1,5 @@
 import type { ApiConfig } from "@api/core";
+import { LIMITS } from "./lib/limits";
 
 export const config: ApiConfig = {
   name: "docparse",
@@ -14,7 +15,7 @@ export const config: ApiConfig = {
     "",
     "**HTML** turns a page or fragment into readable text (nav, header, footer, aside, scripts and styles stripped) or into markdown with headings, emphasis, links, images, lists, blockquotes, fenced code blocks and pipe tables.",
     "",
-    "Every limit is documented and enforced: 8 MB input, 100 pages per PDF request, 5 MB of fetched HTML, 1,000,000 characters per response. Timeouts on outbound fetches are 12 s.",
+    "Every limit is documented and enforced: 8 MB input, " + LIMITS.maxPdfPages + " pages per PDF request, 5 MB of fetched HTML, 1,000,000 characters per response. Timeouts on outbound fetches are 12 s.",
     "",
     "**Honest scope:** text based PDFs only. Scanned pages return little or no text because no OCR engine is bundled. Encrypted PDFs return 422. Legacy .doc, .rtf and .odt files are not supported. DOCX images, headers, footers and footnotes are not extracted.",
     "",

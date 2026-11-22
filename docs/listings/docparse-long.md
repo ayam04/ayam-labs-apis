@@ -16,7 +16,7 @@ A single POST takes a URL or base64 payload and returns clean text, per-page tex
 
 ## What to expect
 
-A 100-page PDF extracts in roughly 3 seconds. A 16-page paper takes under a second. Files are held in memory only for the duration of the request and never written to storage.
+A 4-page extraction takes roughly a second. A 16-page paper takes under a second. Files are held in memory only for the duration of the request and never written to storage.
 
 ## Limits, stated plainly
 

@@ -36,7 +36,7 @@ Sidian) or given away as a feature of a bigger platform.
 | --- | --- | --- | --- | --- |
 | EmailCheck, single | 1 address | $0.05 | $0.005 | **10x market.** Wrong fit for one-at-a-time |
 | EmailCheck, bulk | 100 addresses | **$0.0005** per address | $0.005 | **10x cheaper than market.** Real advantage |
-| DocParse, 100-page PDF | page | **$0.0005** per page | $0.00075 | at parity with the cheapest OCR |
+| DocParse, 100-page PDF | page | **$0.0125** per page (4 pages per call) | $0.00075 | 17x the cheapest OCR |
 | DocParse, 1-page file | page | $0.05 per page | $0.00075 | 66x market. Penalises small files |
 | SEO Audit | 1 URL | $0.05 | none direct (credit tools charge more per crawl) | fine |
 | TextMind | 1 call | $0.05 | LLM call ~$0.001-0.01 | fine for neural, expensive for the free-tier methods |

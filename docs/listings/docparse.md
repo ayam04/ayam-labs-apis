@@ -36,7 +36,7 @@ Input is flexible: multipart upload with a `file` part, a base64 field, or a pub
 
 ### Why use this instead of building it
 
-- PDF text extraction that survives real files: pdf.js based, with a pdf-lib fallback for metadata and page counts, capped at 100 pages and 8 MB per call.
+- PDF text extraction that survives real files: pdf.js based, with a pdf-lib fallback for metadata and page counts, capped at 4 pages and 8 MB per call.
 - DOCX parsing without an office suite: the zip is read directly and `word/document.xml` is walked for heading styles, list numbering and table structure.
 - HTML handled with a real streaming rewriter (HTMLRewriter), not regex. Scripts and chrome are stripped before anything is tokenised, and markdown output is checked for stray tags.
 - Limits are enforced before parsing: 413 above 8 MB, 422 for the wrong format, 400 for a bad page selection. You get the same errors every time.
@@ -186,10 +186,10 @@ Yes. The url field is fetched server side through an SSRF guard: private, loopba
 Best effort. Each row becomes a pipe table row, cells are flattened to one line, and merged cells are duplicated as separate columns. Complex nested tables keep their text, not their layout.
 
 **How large can a document be?**
-8 MB per PDF or DOCX, 100 pages per PDF request, 500,000 characters for an inline HTML field, 5 MB of HTML by URL, and 1,000,000 characters per response. Anything above returns 413 PAYLOAD_TOO_LARGE, and a 120 page PDF returns the first 100 pages with truncated=true.
+8 MB per PDF or DOCX, 4 pages per PDF request, 500,000 characters for an inline HTML field, 5 MB of HTML by URL, and 1,000,000 characters per response. Anything above returns 413 PAYLOAD_TOO_LARGE, and a 120 page PDF returns the first 4 pages with truncated=true.
 
 **What does truncated mean on /v1/pdf/text?**
-The document had more than 100 pages, or the extracted text passed 1,000,000 characters. pagesReturned tells you how many pages are in the pages array.
+The document had more than 4 pages, or the extracted text passed 1,000,000 characters. pagesReturned tells you how many pages are in the pages array.
 
 **Is the output deterministic?**
 Text output is deterministic for the same input and version. durationMs and requestId are the only fields that change between identical calls.
