@@ -95,7 +95,11 @@
       var payload = { url: document.getElementById('demo-url').value };
       var res = await fetch('/api/demo/docparse', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
       var data = await res.json();
-      if (!res.ok) { status.textContent = data.error || ('Request failed (' + res.status + ')'); return; }
+      if (!res.ok) {
+        var e = data.error;
+        status.textContent = (e && (e.message || e.code)) || ('Request failed (' + res.status + ')');
+        return;
+      }
       document.getElementById('d-title').textContent = data.title || data.metadata && data.metadata.title || '(no title found)';
       document.getElementById('d-meta').innerHTML =
         '<span>' + (data.words || 0) + ' words</span>' +

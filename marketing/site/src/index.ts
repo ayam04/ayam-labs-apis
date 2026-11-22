@@ -114,8 +114,15 @@ export default {
         if (app === "docparse") {
           const target = String(body.url || "").trim();
           if (!/^https?:\/\//i.test(target) || target.length > 2000) return bad("Enter a full http(s) URL");
-          const path = /\.pdf($|\?)/i.test(target) ? "/v1/pdf/text" : "/v1/html/text";
-          const r = await callUpstream(app, secret, path, { method: "POST", body: JSON.stringify({ url: target }) });
+          const isPdf = /\.pdf($|\?)/i.test(target);
+          const fetchAs = (path: string) =>
+            callUpstream(app, secret, path, { method: "POST", body: JSON.stringify({ url: target }) });
+          let r = await fetchAs(isPdf ? "/v1/pdf/text" : "/v1/html/text");
+          if (!isPdf && r.status === 422) {
+            // arXiv style URLs carry no .pdf suffix; the HTML route reports the media type, then we retry as PDF
+            const probe = await r.clone().json().catch(() => null);
+            if (probe?.error?.code === "UNSUPPORTED_MEDIA") r = await fetchAs("/v1/pdf/text");
+          }
           return json(await r.json(), r.status);
         }
 
