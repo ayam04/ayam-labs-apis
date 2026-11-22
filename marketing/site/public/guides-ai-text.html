@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentiment and keyword extraction without an LLM bill</title>
+<meta name="description" content="Deterministic text analysis you can run on every row, when to pay for a model instead, and how to read the confidence numbers.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-ai-text.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sentiment and keyword extraction without an LLM bill">
+<meta property="og:description" content="Deterministic text analysis you can run on every row, when to pay for a model instead, and how to read the confidence numbers.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Sentiment on every row, priced like a regex", "description": "Deterministic text analysis you can run on every row, when to pay for a model instead, and how to read the confidence numbers.", "author": {"@type": "Organization", "name": "Ayam Labs"}, "publisher": {"@type": "Organization", "name": "Ayam Labs"}, "mainEntityOfPage": "https://labs.ayamk.in/guides-ai-text.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Text analysis</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:22ch">Sentiment on every row, priced like a regex</h1>
+      <p class="lede" style="max-width:64ch">Not every text problem needs a model. Sentiment, keywords, entities and language detection can be deterministic, explainable and cheap enough to run on the whole table.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The two kinds of text endpoints</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Lexicon and rule based endpoints are deterministic: same input, same output, no tokens, no bill that scales with prose. Neural endpoints (summaries, rewrites, zero-shot classification, translation) cost more and take seconds instead of milliseconds. Pick per column, not per project.</p>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Task</th><th>Method</th><th>Latency</th><th>Cost class</th></tr></thead><tbody><tr><td>sentiment</td><td>AFINN-style lexicon with negation handling</td><td>under 100ms</td><td>free</td></tr><tr><td>keywords</td><td>term frequency with stop words and phrase merging</td><td>under 100ms</td><td>free</td></tr><tr><td>entities</td><td>pattern and shape matching</td><td>under 100ms</td><td>free</td></tr><tr><td>language</td><td>script plus trigram detection</td><td>under 100ms</td><td>free</td></tr><tr><td>summarize / rewrite / classify / translate</td><td>Workers AI model</td><td>1-3s</td><td>neural</td></tr></tbody></table></div>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s -X POST &#x27;https://textmind.p.rapidapi.com/v1/sentiment&#x27; \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -H &#x27;X-RapidAPI-Key: YOUR_KEY&#x27; \
+  -H &#x27;X-RapidAPI-Host: textmind.p.rapidapi.com&#x27; \
+  -d &#x27;{&quot;text&quot;:&quot;The deploy was smooth and the tests all passed.&quot;}&#x27;</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The response explains itself</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>{
+  &quot;score&quot;: 0.0444,
+  &quot;label&quot;: &quot;neutral&quot;,
+  &quot;rawScore&quot;: 2,
+  &quot;tokens&quot;: 9,
+  &quot;matchedTokens&quot;: 1,
+  &quot;negatedTokens&quot;: 0,
+  &quot;topPositive&quot;: [{ &quot;token&quot;: &quot;smooth&quot;, &quot;valence&quot;: 2, &quot;count&quot;: 1 }],
+  &quot;topNegative&quot;: [],
+  &quot;meta&quot;: { &quot;costClass&quot;: &quot;free&quot;, &quot;method&quot;: &quot;afinn-lexicon-v1&quot; }
+}</code></pre>
+      <p style="color:var(--text-dim);margin:0 0 16px">That is the whole point of a lexicon method: you can see which word moved the score. When a result looks wrong you can fix the input or the threshold, not retrain a model.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Where it breaks</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li><b>Sarcasm</b> and irony read as positive because the words are positive.</li><li><b>Negation scoping</b> handles the common cases (not good, never great) and not the exotic ones.</li><li><b>Domain vocabulary</b> matters: in finance, volatile is neutral, not negative.</li><li>If your text is short and idiomatic, the neural endpoints on the same API will do better. Use them for the rows that matter, not the whole table.</li></ul>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">A sensible pipeline</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Run the deterministic endpoints on everything, store the label and score, then send only the ambiguous band (say 0.4 to 0.6) through the neural endpoint. You get coverage and accuracy without paying for both on every row.</p>
+      <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+        <h3 style="margin:0 0 8px;font-size:1.05rem">Try TextMind</h3>
+        <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">Pay as you go at $0.05 a call, no monthly minimum. or a monthly plan from $25 once the volume justifies it.</p>
+        <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Open the listing on RapidAPI</a>
+      </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

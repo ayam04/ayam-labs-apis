@@ -1,0 +1,124 @@
+import pathlib, json
+OUT = pathlib.Path(r"C:\Users\ayamu\OneDrive\Documents\git uploads\api-marketplace\marketing\site\public")
+SITE = "https://labs.ayamk.in"
+
+NAV = """        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>"""
+
+rows = [
+ ("EmailCheck, one address at a time", "$0.05 per call", "≈ $0.005 per email (credit packs)", "10× the market. Use bulk."),
+ ("<b>EmailCheck, bulk endpoint</b>", "<b>$0.05 per call of 100</b>", "≈ $0.005 per email", "<b>$0.0005 per email, 10× cheaper</b>"),
+ ("DocParse, 100-page PDF", "$0.05 per call", "$0.00075 per page (PennyOCR)", "parity at $0.0005 per page"),
+ ("DocParse, one-page file", "$0.05 per call", "$0.00075 per page", "66× the market on small files"),
+ ("SEO Audit, one URL", "$0.05 per call", "no direct commodity anchor", "fine"),
+ ("PII Shield, one scan up to 200k chars", "$0.05 per call", "$0.04 per page (Sidian)", "fine, and one call not per page"),
+ ("TextMind, one neural call", "$0.05 per call", "LLM calls run $0.001-0.01", "fine for summaries, heavy for the free methods"),
+]
+table = "".join(f"<tr><td>{a}</td><td class='mono'>{b}</td><td class='mono'>{c}</td><td>{d}</td></tr>" for a,b,c,d in rows)
+
+body = f"""  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Pricing / market check</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:26ch">What these APIs cost, against what the market charges</h1>
+      <p class="lede" style="max-width:64ch">Every number below was read from a public pricing page on 22 November 2026. Where we are expensive, this page says so.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:82ch">
+    <h2 style="margin:0 0 14px;font-size:1.5rem">The arithmetic</h2>
+    <div style="overflow:auto;margin:0 0 22px"><table style="width:100%;border-collapse:collapse;font-size:.9rem">
+      <thead><tr><th>Unit of work</th><th>Our price</th><th>Market anchor</th><th>Verdict</th></tr></thead>
+      <tbody>{table}</tbody></table></div>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">The one that matters: bulk verification</h2>
+    <p style="color:var(--text-dim);margin:0 0 16px">A single verification at $0.05 is ten times what a credit-pack vendor charges. The bulk endpoint changes that completely: it takes up to 100 addresses per call, so the same $0.05 buys 100 checks, which is <b>$0.0005 per address</b>. That is roughly ten times cheaper than the cheapest credit pack we found (EmailListVerify, €5 per 1,000 = €0.005 each).</p>
+    <p style="color:var(--text-dim);margin:0 0 16px">If you are verifying one address at a time, we are the wrong tool and we would rather say so. If you are cleaning a list, the bulk path is the cheapest per-address price in this comparison.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">Where we are expensive on purpose</h2>
+    <p style="color:var(--text-dim);margin:0 0 16px">DocParse bills per call, not per page. A 100-page PDF is $0.0005 per page, at parity with the cheapest OCR service. A one-page file is $0.05 per page, which is 66 times the market. If your documents are always short, per-page pricing elsewhere will beat us.</p>
+    <p style="color:var(--text-dim);margin:0 0 16px">TextMind runs deterministic methods (sentiment, keywords, entities, language) and neural ones (summaries, rewrites, labels, translation) behind the same call. At $0.05 the neural endpoints are fine; the deterministic ones are cheap to compute and priced high, which is why there is no free tier and no reason to run them on every row.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">Sources, dated</h2>
+    <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.8">
+      <li><a href="https://emaillistverify.com/pricing" rel="noopener">EmailListVerify pricing</a>: credit packs, €5 per 1,000, prices as of 2026-11-15.</li>
+      <li><a href="https://pennyocr.com/pdf-ocr-api/" rel="noopener">PennyOCR</a>: $0.75 per 1,000 pages, page updated 2026-08-30.</li>
+      <li><a href="https://aws.amazon.com/textract/pricing/" rel="noopener">AWS Textract</a>: $1.50 per 1,000 pages, as quoted in the PennyOCR comparison.</li>
+      <li><a href="https://sidian.io/api-pricing" rel="noopener">Sidian DataGuard</a>: $799/mo for 20,000 pages, then $0.04 per page.</li>
+    </ul>
+    <p style="color:var(--muted);font-size:.85rem">Prices change. Treat these as a snapshot, not a promise about anyone else's current rate card.</p>
+
+    <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+      <h3 style="margin:0 0 8px;font-size:1.05rem">Check the arithmetic yourself</h3>
+      <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">The bulk endpoint is live in the demo, or open the listing and run it with your own key.</p>
+      <a class="btn btn-primary" href="/demo.html">Try the email demo</a>
+      <a class="btn" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Open the listing</a>
+    </div>
+  </div></section>"""
+
+ld = {"@context": "https://schema.org", "@type": "WebPage", "name": "Pricing comparison",
+      "description": "What these APIs cost per unit against public market prices, with sources.",
+      "url": SITE + "/compare-pricing.html"}
+
+html = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing comparison - what these APIs cost vs the market | Ayam Labs</title>
+<meta name="description" content="Per-unit cost of five APIs against public market prices, with sources and dates. Includes where we are more expensive.">
+<link rel="canonical" href="{SITE}/compare-pricing.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pricing comparison - what these APIs cost vs the market">
+<meta property="og:description" content="Per-unit cost against public market prices, with sources and dates.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{json.dumps(ld)}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+{NAV}
+    </nav>
+    <a class="btn btn-sm" href="/pricing.html">See plans</a>
+  </div>
+</header>
+<main>
+{body}
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
+"""
+(OUT / "compare-pricing.html").write_text(html, encoding="utf-8")
+print("wrote compare-pricing.html")
+
+# link from pricing page + sitemap
+pr = OUT / "pricing.html"
+t = pr.read_text(encoding="utf-8")
+if "compare-pricing.html" not in t:
+    t = t.replace("</main>", '<p style="max-width:78ch;margin:26px auto 0;padding:0 24px;color:var(--text-dim)">Want the arithmetic against public market prices, including where we are more expensive? <a href="/compare-pricing.html">See the pricing comparison</a>.</p>\n</main>', 1)
+    pr.write_text(t, encoding="utf-8")
+    print("pricing page linked")
+sm = OUT / "sitemap.xml"
+xml = sm.read_text(encoding="utf-8")
+if "compare-pricing.html" not in xml:
+    xml = xml.replace("</urlset>", '  <url><loc>https://labs.ayamk.in/compare-pricing.html</loc><changefreq>monthly</changefreq></url>\n</urlset>')
+    sm.write_text(xml, encoding="utf-8")
+print("sitemap urls:", xml.count("<loc>"))

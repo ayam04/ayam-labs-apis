@@ -1,0 +1,29 @@
+{
+  "name": "api-marketplace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.2.0",
+  "scripts": {
+    "check": "pnpm -r --if-present run check",
+    "test": "pnpm -r --if-present run test",
+    "dev:emailcheck": "pnpm --filter emailcheck dev",
+    "dev:seo": "pnpm --filter seo-audit dev",
+    "dev:doc": "pnpm --filter docparse dev",
+    "dev:ai": "pnpm --filter ai-text dev",
+    "dev:pii": "pnpm --filter pii-shield dev",
+    "smoke": "node scripts/smoke.mjs",
+    "docs:build": "node scripts/build-listing-kits.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "wrangler": "4.166.0",
+    "vitest": "5.1.1",
+    "@types/node": "^26.6.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "workerd",
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "provider": "Ayam Labs",
+  "base": "https://ayamullahkhan04.workers.dev",
+  "products": [
+    {
+      "slug": "emailcheck",
+      "name": "EmailCheck",
+      "kind": "Email verification",
+      "tagline": "Validate email addresses before you send, store or bill for them.",
+      "worker": "emailcheck"
+    },
+    {
+      "slug": "seo-audit",
+      "name": "SEO Audit",
+      "kind": "On-page analysis",
+      "tagline": "Score any page in one request, without a headless browser.",
+      "worker": "seo-audit"
+    },
+    {
+      "slug": "docparse",
+      "name": "DocParse",
+      "kind": "Document extraction",
+      "tagline": "Turn PDFs, DOCX and HTML into clean text for your LLM pipeline.",
+      "worker": "docparse"
+    },
+    {
+      "slug": "ai-text",
+      "name": "TextMind",
+      "kind": "Text understanding",
+      "tagline": "Summarise, classify and rewrite text without an OpenAI bill.",
+      "worker": "ai-text"
+    },
+    {
+      "slug": "pii-shield",
+      "name": "PII Shield",
+      "kind": "Privacy and safety",
+      "tagline": "Find and redact personal data before it reaches your logs or your model.",
+      "worker": "pii-shield"
+    }
+  ]
+}

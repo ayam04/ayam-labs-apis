@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayam Labs - fast, honest APIs for email, SEO, documents, text and PII</title>
+<meta name="description" content="Five production APIs on Cloudflare Workers: email verification, on-page SEO audits, PDF and DOCX extraction, text understanding and PII redaction. One key each, priced per request.">
+<link rel="canonical" href="https://labs.ayamk.in/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ayam Labs - fast, honest APIs for email, SEO, documents, text and PII">
+<meta property="og:description" content="Five production APIs on Cloudflare Workers: email verification, on-page SEO audits, PDF and DOCX extraction, text understanding and PII redaction. One key each, priced per request.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.className += " js";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Ayam Labs","url":"https://labs.ayamk.in/","logo":"https://labs.ayamk.in/favicon.svg","sameAs":["https://github.com/ayam04"]}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+      <a href="/emailcheck.html">EmailCheck</a>
+      <a href="/seo-audit.html">SEO Audit</a>
+      <a href="/docparse.html">DocParse</a>
+      <a href="/ai-text.html">TextMind</a>
+      <a href="/pii-shield.html">PII Shield</a>
+      <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="/pricing.html">Get a key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Five APIs &middot; Cloudflare edge &middot; live</div>
+        <h1>APIs that do<br>one thing well.</h1>
+        <p class="lede" style="margin-top:22px">Email verification, on-page SEO audits, PDF extraction, text understanding and PII redaction. Each one is a single Worker with a clear contract, an OpenAPI document you can import, and a limit list that is honest about what it cannot do.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/demo.html">Try a live check</a>
+          <a class="btn" href="/pricing.html">See pricing</a>
+          <a class="btn" href="/emailcheck.html">Start with EmailCheck</a>
+        </div>
+        <div class="stats">
+          <div><div class="mono" style="font-size:1.35rem;color:var(--text)">5</div><div class="mono" style="font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">APIs</div></div>
+          <div><div class="mono" style="font-size:1.35rem;color:var(--text)">38</div><div class="mono" style="font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">endpoints</div></div>
+          <div><div class="mono" style="font-size:1.35rem;color:var(--text)">0</div><div class="mono" style="font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">payloads stored</div></div>
+          <div><div class="mono" style="font-size:1.35rem;color:var(--text)">4</div><div class="mono" style="font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">plan tiers</div></div>
+        </div>
+      </div>
+      <div class="terminal reveal">
+        <div class="bar"><i></i><i></i><i></i> <span>emailcheck / v1/verify</span></div>
+        <div class="body"><pre><span class="tok-cmd">$</span> curl -s "https://emailcheck.ayamk.in/v1/verify?email=tim%40stripe.com"
+{
+  <span class="tok-key">"validFormat"</span>: <span class="tok-bool">true</span>,
+  <span class="tok-key">"score"</span>: <span class="tok-num">100</span>,
+  <span class="tok-key">"deliverability"</span>: <span class="tok-str">"deliverable"</span>,
+  <span class="tok-key">"flags"</span>: {
+    <span class="tok-key">"disposable"</span>: <span class="tok-bool">false</span>,
+    <span class="tok-key">"roleAccount"</span>: <span class="tok-bool">false</span>,
+    <span class="tok-key">"hasMx"</span>: <span class="tok-bool">true</span>
+  },
+  <span class="tok-key">"provider"</span>: <span class="tok-str">"Google Workspace / Gmail"</span>,
+  <span class="tok-key">"durationMs"</span>: <span class="tok-num">41</span>
+}</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="section-num">01 - REGISTRY</div><h2>Everything shipped, nothing retired</h2></div>
+        <p style="max-width:34ch;margin:0;font-size:.88rem">Status reflects a real health probe, refreshed every 60 seconds. No vanity numbers.</p>
+      </div>
+      <div class="registry">
+      <a class="registry-row" href="/emailcheck.html">
+        <span class="idx">01</span>
+        <span class="pname">EmailCheck<span style="display:block;font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px">Email verification</span></span>
+        <span class="pdesc">Syntax, MX, disposable, role accounts, typos, 0-100 scoring.</span>
+        <span class="pprice">$0 / $25</span>
+        <span class="status-dot" data-status-for="emailcheck"><i></i> <span data-status-label>checking</span></span>
+        <span class="parrow">&rarr;</span>
+      </a>
+      <a class="registry-row" href="/seo-audit.html">
+        <span class="idx">02</span>
+        <span class="pname">SEO Audit<span style="display:block;font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px">On-page analysis</span></span>
+        <span class="pdesc">Titles, meta, links, structured data, readability, weighted score.</span>
+        <span class="pprice">$0 / $25</span>
+        <span class="status-dot" data-status-for="seo-audit"><i></i> <span data-status-label>checking</span></span>
+        <span class="parrow">&rarr;</span>
+      </a>
+      <a class="registry-row" href="/docparse.html">
+        <span class="idx">03</span>
+        <span class="pname">DocParse<span style="display:block;font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px">Document extraction</span></span>
+        <span class="pdesc">PDF and DOCX to clean text and markdown, per page.</span>
+        <span class="pprice">$0 / $25</span>
+        <span class="status-dot" data-status-for="docparse"><i></i> <span data-status-label>checking</span></span>
+        <span class="parrow">&rarr;</span>
+      </a>
+      <a class="registry-row" href="/ai-text.html">
+        <span class="idx">04</span>
+        <span class="pname">TextMind<span style="display:block;font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px">Text understanding</span></span>
+        <span class="pdesc">Keywords, entities, sentiment, summaries, zero-shot labels.</span>
+        <span class="pprice">$0 / $25</span>
+        <span class="status-dot" data-status-for="ai-text"><i></i> <span data-status-label>checking</span></span>
+        <span class="parrow">&rarr;</span>
+      </a>
+      <a class="registry-row" href="/pii-shield.html">
+        <span class="idx">05</span>
+        <span class="pname">PII Shield<span style="display:block;font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px">Privacy and safety</span></span>
+        <span class="pdesc">18 PII detectors with checksums, redaction, spam and profanity.</span>
+        <span class="pprice">$0 / $25</span>
+        <span class="status-dot" data-status-for="pii-shield"><i></i> <span data-status-label>checking</span></span>
+        <span class="parrow">&rarr;</span>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">02 - WHY THESE</div><h2>Narrow scope, verifiable behaviour</h2></div></div>
+      <div class="grid-3">
+        <div><h3>One Worker per product</h3><p>No shared mega-service. A bug in the document parser cannot take down email verification, and each API has its own limits, quotas and release cadence.</p></div>
+        <div><h3>Deterministic first</h3><p>Where a rule beats a model, we use the rule. Keywords, entities, PII, DNS and scoring are code, which means identical input gives identical output and your tests stay meaningful.</p></div>
+        <div><h3>Failure is documented</h3><p>Every endpoint lists its error codes, size caps and timeouts in the OpenAPI document. When something is not supported we say so instead of returning a plausible looking empty response.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">03 - HOW IT WORKS</div><h2>Three steps, no sales call</h2></div></div>
+      <div class="grid-3">
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">01</div><h3 style="font-size:1rem">Subscribe on RapidAPI</h3><p>Pick pay as you go, get a key immediately. Billing, invoices and quota enforcement are handled by the marketplace.</p></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">02</div><h3 style="font-size:1rem">Point at the proxy</h3><p>Send X-RapidAPI-Key and X-RapidAPI-Host to the marketplace URL. Or call the Worker directly with your own key for internal jobs.</p></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">03</div><h3 style="font-size:1rem">Generate a client</h3><p>Feed /openapi.json into openapi-generator, Postman, Insomnia or an LLM tool call. The spec is the source of truth, not a wiki page.</p></div>
+      </div>
+      <div class="code-block" style="margin-top:28px">
+        <div class="cb-head"><span>javascript - fetch through the marketplace</span><button class="copy-btn" data-copy="#home-js">copy</button></div>
+        <pre id="home-js">const res = await fetch(
+  "https://emailcheck.p.rapidapi.com/v1/verify?email=jane%40acme.com",
+  { headers: {
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "emailcheck.p.rapidapi.com",
+  }},
+);
+const data = await res.json();
+if (data.deliverability === "undeliverable") reject(data);</pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">04 - PRINCIPLES</div><h2>What we will not do</h2></div></div>
+      <div class="row" style="align-items:flex-start;gap:20px">
+        <div style="flex:1 1 340px;min-width:280px">
+          <h3 style="margin-bottom:10px">No resale of other people's data</h3>
+          <p style="font-size:.92rem">Every API here computes something from input you send, or fetches a page you asked about. None of them resell scraped social profiles, private datasets or someone else's licensed feed.</p>
+          <h3 style="margin-bottom:10px;margin-top:22px">No stored payloads</h3>
+          <p style="font-size:.92rem">Documents, emails, page bodies and text are processed in memory inside the request and discarded. What gets logged is the route, status, duration and a request id.</p>
+        </div>
+        <div style="flex:1 1 340px;min-width:280px">
+          <h3 style="margin-bottom:10px">No mystery boxes</h3>
+          <p style="font-size:.92rem">If a verdict is a heuristic, the response says so and lists the signals behind it. When we cannot verify something, we return unknown rather than guessing for a nicer looking number.</p>
+          <h3 style="margin-bottom:10px;margin-top:22px">No dark limits</h3>
+          <p style="font-size:.92rem">Size caps, page limits, truncation flags and rate limits are in the spec and in the response. You should never discover a limit in production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div style="border:1px solid var(--line-bright);background:var(--bg-raised);padding:clamp(24px,4vw,44px);display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+        <div>
+          <h2 style="margin-bottom:10px">Start with pay as you go</h2>
+          <p style="margin:0;max-width:58ch">$0.05 a call, no monthly minimum. Wire up the integration, see exactly what it costs, then move to a monthly plan when the volume makes it cheaper. Both happen on the same listing in one click.</p>
+        </div>
+        <div class="row"><a class="btn btn-primary" href="/pricing.html">Compare plans</a><a class="btn" href="/emailcheck.html">Browse the APIs</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><span class="mark">AL</span> Ayam Labs</div>
+        <div style="max-width:36ch">Small, fast, honest APIs. Built on Cloudflare Workers, sold through the RapidAPI marketplace.</div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">APIS</div>
+        <div><a href="/emailcheck.html">EmailCheck</a></div>
+        <div><a href="/seo-audit.html">SEO Audit</a></div>
+        <div><a href="/docparse.html">DocParse</a></div>
+        <div><a href="/ai-text.html">TextMind</a></div>
+        <div><a href="/pii-shield.html">PII Shield</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">DOCS</div>
+        <div><a href="https://emailcheck.ayamk.in/openapi.json">EmailCheck spec</a></div>
+        <div><a href="https://seo-audit.ayamk.in/openapi.json">SEO Audit spec</a></div>
+        <div><a href="https://docparse.ayamk.in/openapi.json">DocParse spec</a></div>
+        <div><a href="https://textmind.ayamk.in/openapi.json">TextMind spec</a></div>
+        <div><a href="https://piishield.ayamk.in/openapi.json">PII Shield spec</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">MORE</div>
+        <div><a href="/pricing.html">Pricing</a></div>
+        <div><a href="/blog-five-apis.html">Build log</a></div>
+        <div><a href="/legal.html">Terms and privacy</a></div>
+        <div><a href="https://github.com/ayam04">GitHub</a></div>
+      </div>
+    </div>
+    <div class="fine">
+      Ayam Labs builds and operates every API listed here. Listings are published on the RapidAPI marketplace, which handles billing, keys and quotas; the marketplace fee is included in the prices shown.
+      No customer text, documents or fetched page bodies are stored. Last reviewed November 2026.
+    </div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

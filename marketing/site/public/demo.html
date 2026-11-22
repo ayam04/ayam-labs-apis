@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Try the email verification API - live demo | Ayam Labs</title>
+<meta name="description" content="Run a real email verification check in the browser. Score, deliverability, disposable and role-account flags, no signup needed.">
+<link rel="canonical" href="https://labs.ayamk.in/demo.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Try the email verification API - live demo">
+<meta property="og:description" content="Run a real email verification check in the browser. No signup needed.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"EmailCheck demo","url":"https://labs.ayamk.in/demo.html","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"10 live demo checks per visitor per day, then the paid listing"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="demo-strip" style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px"><a href="/demo.html" style="padding:8px 14px;border:1px solid var(--line-bright);border-radius:999px;font-size:.85rem;background:var(--accent);color:#0a0a0a;">Email check</a><a href="/demo-seo-audit.html" style="padding:8px 14px;border:1px solid var(--line-bright);border-radius:999px;font-size:.85rem;color:var(--text-dim);">SEO audit</a><a href="/demo-docparse.html" style="padding:8px 14px;border:1px solid var(--line-bright);border-radius:999px;font-size:.85rem;color:var(--text-dim);">Document text</a><a href="/demo-textmind.html" style="padding:8px 14px;border:1px solid var(--line-bright);border-radius:999px;font-size:.85rem;color:var(--text-dim);">Text analysis</a><a href="/demo-pii-shield.html" style="padding:8px 14px;border:1px solid var(--line-bright);border-radius:999px;font-size:.85rem;color:var(--text-dim);">PII redaction</a></div>
+      <div class="eyebrow">Live demo &nbsp;/&nbsp; EmailCheck</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:26ch">Check an address against the real API</h1>
+      <p class="lede" style="max-width:60ch">This form calls the production endpoint over the same path a paying customer uses. No signup, no card. Ten checks per visitor per day, because the demo is not the product.</p>
+
+      <form id="demo-form" style="margin:34px 0 10px;display:flex;gap:10px;flex-wrap:wrap;max-width:640px">
+        <input id="demo-email" type="email" name="email" required placeholder="you@company.com" autocomplete="email"
+          style="flex:1 1 320px;padding:12px 14px;background:var(--bg-raised);border:1px solid var(--line-bright);border-radius:10px;color:var(--text);font-family:var(--font-mono);font-size:.95rem">
+        <button class="btn btn-primary" type="submit" id="demo-btn">Run check</button>
+      </form>
+      <p id="demo-status" style="margin:0 0 20px;color:var(--muted);font-size:.85rem;min-height:20px">Sends one request to <code>emailcheck.ayamk.in/v1/verify</code>.</p>
+
+      <div id="demo-out" style="display:none;border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--bg-raised);max-width:760px">
+        <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+          <div class="mono" id="demo-score" style="font-size:2.4rem;line-height:1">--</div>
+          <div>
+            <div id="demo-verdict" style="font-family:var(--font-display);font-size:1.1rem">--</div>
+            <div id="demo-provider" style="color:var(--muted);font-size:.85rem">--</div>
+          </div>
+        </div>
+        <div id="demo-flags" style="display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0"></div>
+        <pre style="margin:20px 0 0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;font-size:.8rem"><code id="demo-raw">--</code></pre>
+      </div>
+
+      <p style="margin:26px 0 0;color:var(--muted);font-size:.85rem">After ten checks the same form returns a 429 and points at the listing. That is deliberate: a demo that never ends is a free tier.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">01 - WHAT YOU ARE SEEING</div><h2>Every flag has a reason</h2></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:26px">
+        <div style="border:1px solid var(--line);border-radius:12px;padding:18px">
+          <h3 style="margin:0 0 8px;font-size:1rem">score 0-100</h3>
+          <p style="margin:0;color:var(--text-dim);font-size:.9rem">Weighted by the checks that fired. Gate signups on a threshold you choose, not on a boolean.</p>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:12px;padding:18px">
+          <h3 style="margin:0 0 8px;font-size:1rem">disposable</h3>
+          <p style="margin:0;color:var(--text-dim);font-size:.9rem">Checked against a 10,400 domain blocklist that ships inside the Worker, so it costs no DNS lookup.</p>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:12px;padding:18px">
+          <h3 style="margin:0 0 8px;font-size:1rem">roleAccount</h3>
+          <p style="margin:0;color:var(--text-dim);font-size:.9rem">support@ and admin@ never reach a person. Reject them on signup, keep them on contact forms.</p>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:12px;padding:18px">
+          <h3 style="margin:0 0 8px;font-size:1rem">didYouMean</h3>
+          <p style="margin:0;color:var(--text-dim);font-size:.9rem">Typo suggestions only within the same TLD. gmail.con gets flagged, hotmail.com does not.</p>
+        </div>
+      </div>
+      <p style="margin:28px 0 0;color:var(--text-dim)">Read the <a href="/guides-email-verification.html">guide</a> for what a DNS-based check cannot tell you, or open the <a href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">listing</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var form = document.getElementById('demo-form');
+  var input = document.getElementById('demo-email');
+  var btn = document.getElementById('demo-btn');
+  var status = document.getElementById('demo-status');
+  var out = document.getElementById('demo-out');
+  var raw = document.getElementById('demo-raw');
+
+  function chip(text, bad) {
+    var s = document.createElement('span');
+    s.textContent = text;
+    s.style.cssText = 'font-family:var(--font-mono);font-size:.75rem;padding:4px 9px;border-radius:999px;border:1px solid ' +
+      (bad ? '#7f1d1d' : 'var(--line-bright)') + ';color:' + (bad ? '#fca5a5' : 'var(--muted)');
+    return s;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    status.textContent = 'Calling the API...';
+    out.style.display = 'none';
+    try {
+      var res = await fetch('/api/demo/verify', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: input.value })
+      });
+      var data = await res.json();
+      if (!res.ok) {
+        status.textContent = data.error || ('Request failed (' + res.status + ')');
+        return;
+      }
+      document.getElementById('demo-score').textContent = data.score;
+      document.getElementById('demo-verdict').textContent = data.validFormat ? data.deliverability : 'invalid format';
+      document.getElementById('demo-provider').textContent = data.provider || data.domain || '';
+      var flags = document.getElementById('demo-flags');
+      flags.innerHTML = '';
+      var f = data.flags || {};
+      Object.keys(f).forEach(function (k) { if (f[k] === true) flags.appendChild(chip(k, k === 'disposable' || k === 'possibleTypo' || k === 'roleAccount')); });
+      if (!flags.children.length) flags.appendChild(chip('no flags raised', false));
+      raw.textContent = JSON.stringify(data, null, 2);
+      out.style.display = 'block';
+      status.textContent = 'One live request. Score ' + data.score + ' / 100.';
+    } catch (err) {
+      status.textContent = 'Network error. Try again.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

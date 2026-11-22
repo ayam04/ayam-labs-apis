@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extract text from a PDF in a serverless function</title>
+<meta name="description" content="Why PDF parsing breaks in edge runtimes, and how to get clean text, page counts and metadata from one POST without bundling a parser.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-pdf-text.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Extract text from a PDF in a serverless function">
+<meta property="og:description" content="Why PDF parsing breaks in edge runtimes, and how to get clean text, page counts and metadata from one POST without bundling a parser.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "PDF text extraction that runs where your code already runs", "description": "Why PDF parsing breaks in edge runtimes, and how to get clean text, page counts and metadata from one POST without bundling a parser.", "author": {"@type": "Organization", "name": "Ayam Labs"}, "publisher": {"@type": "Organization", "name": "Ayam Labs"}, "mainEntityOfPage": "https://labs.ayamk.in/guides-pdf-text.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Documents</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:22ch">PDF text extraction that runs where your code already runs</h1>
+      <p class="lede" style="max-width:64ch">Parsers assume a filesystem, a canvas and a few hundred milliseconds of CPU you may not have. A POST is easier than a runtime.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Why this is annoying in a worker</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Most PDF libraries pull in a native canvas for layout, assume Node built-ins, or want 300ms of CPU per page. In an edge runtime that is either unavailable or priced differently than you expect. The alternative is to move parsing out of your process entirely.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Send a URL or a base64 payload. URL is better for anything large: no encoding cost, and the fetch happens on our side.</p>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s -X POST &#x27;https://docparse.p.rapidapi.com/v1/pdf/text&#x27; \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -H &#x27;X-RapidAPI-Key: YOUR_KEY&#x27; \
+  -H &#x27;X-RapidAPI-Host: docparse.p.rapidapi.com&#x27; \
+  -d &#x27;{&quot;url&quot;:&quot;https://arxiv.org/pdf/1810.04805&quot;}&#x27;</code></pre>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>const res = await fetch(&#x27;https://docparse.p.rapidapi.com/v1/pdf/text&#x27;, {
+  method: &#x27;POST&#x27;,
+  headers: {
+    &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+    &#x27;X-RapidAPI-Key&#x27;: process.env.RAPIDAPI_KEY,
+    &#x27;X-RapidAPI-Host&#x27;: &#x27;docparse.p.rapidapi.com&#x27;
+  },
+  body: JSON.stringify({ url: pdfUrl })
+});
+const { text, pages, pageCount, words } = await res.json();</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">HTML is the same call shape</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>{
+  &quot;url&quot;: &quot;https://example.com/&quot;,
+  &quot;title&quot;: &quot;Example Domain&quot;,
+  &quot;text&quot;: &quot;This domain is for use in documentation examples...&quot;,
+  &quot;characters&quot;: 156,
+  &quot;words&quot;: 25,
+  &quot;truncated&quot;: false
+}</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Choosing an endpoint</h2>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Endpoint</th><th>Returns</th><th>When to use</th></tr></thead><tbody><tr><td>POST /v1/pdf/text</td><td>full text, per-page text, page count, words</td><td>the default for search, summarising, chunking</td></tr><tr><td>POST /v1/pdf/info</td><td>metadata, page count, version, size</td><td>validation before you pay for extraction</td></tr><tr><td>POST /v1/pdf/pages</td><td>only the pages you list</td><td>long documents where you need one section</td></tr><tr><td>POST /v1/docx/text</td><td>headings, lists, tables, paragraphs</td><td>Word documents from customers</td></tr><tr><td>POST /v1/html/text</td><td>readable text, title, byline</td><td>articles, blog posts, help pages</td></tr><tr><td>POST /v1/html/markdown</td><td>clean markdown</td><td>feeding a model or a CMS</td></tr></tbody></table></div>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Limits, stated plainly</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li><b>No OCR.</b> A scanned PDF has no text layer, so the text comes back empty. That is a different service.</li><li>Encrypted or password-protected files are rejected with a clear error rather than a partial parse.</li><li>A 100-page, 45,000-word PDF takes about three seconds. A 16-page paper is under one.</li><li>Nothing is stored. The file is held in memory for the request and dropped.</li></ul>
+      <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+        <h3 style="margin:0 0 8px;font-size:1.05rem">Try DocParse</h3>
+        <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">Pay as you go at $0.05 a call, no monthly minimum. or a monthly plan from $25 once the volume justifies it.</p>
+        <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/docparse-api" rel="noopener">Open the listing on RapidAPI</a>
+      </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

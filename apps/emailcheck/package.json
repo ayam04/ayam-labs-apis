@@ -1,0 +1,24 @@
+{
+  "name": "emailcheck",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8781",
+    "deploy": "wrangler deploy",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@api/core": "workspace:*",
+    "hono": "^4.13.19",
+    "@hono/zod-openapi": "^1.6.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261121.1",
+    "typescript": "5.9.3",
+    "vitest": "5.1.1",
+    "wrangler": "4.166.0"
+  }
+}

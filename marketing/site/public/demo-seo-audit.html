@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Try the SEO audit API - live demo | Ayam Labs</title>
+<meta name="description" content="Audit any URL's on-page SEO in the browser: weighted score, 14 checks, the exact message for each failure.">
+<link rel="canonical" href="https://labs.ayamk.in/demo-seo-audit.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Try the SEO audit API - live demo | Ayam Labs">
+<meta property="og:description" content="Audit any URL's on-page SEO in the browser: weighted score, 14 checks, the exact message for each failure.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Try the SEO audit API", "url": "https://labs.ayamk.in/demo-seo-audit.html", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (HTTP API)", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "10 live demo calls per visitor per day"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Live demo / SEO Audit</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:26ch">Audit a page from the address bar</h1>
+      <p class="lede" style="max-width:62ch">Paste any URL. The API fetches it, parses it, and runs fourteen weighted checks. You get the score, the grade and the reason for every check that did not pass.</p>
+      <form id="demo-form" style="margin:34px 0 10px;display:flex;gap:10px;flex-wrap:wrap;max-width:680px">
+        <input id="demo-url" type="url" required placeholder="https://example.com" autocomplete="off"
+          style="flex:1 1 380px;padding:12px 14px;background:var(--bg-raised);border:1px solid var(--line-bright);border-radius:10px;color:var(--text);font-family:var(--font-mono);font-size:.95rem">
+        <button class="btn btn-primary" type="submit" id="demo-btn">Run</button>
+      </form>
+      <p id="demo-status" style="margin:0 0 20px;color:var(--muted);font-size:.85rem;min-height:20px">Sends one live request to <code>seo-audit.ayamk.in/v1/audit</code>.</p>
+      <div id="demo-out" style="display:none;border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--bg-raised);max-width:820px">
+        <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+          <div class="mono" id="s-value" style="font-size:2.6rem;line-height:1">--</div>
+          <div><div class="mono" id="s-grade" style="font-size:1.1rem;color:var(--accent)">--</div>
+          <div id="s-summary" style="color:var(--muted);font-size:.85rem">--</div></div>
+        </div>
+        <div id="s-checks" style="margin:20px 0 0;display:grid;gap:8px"></div>
+        <pre style="margin:20px 0 0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;font-size:.78rem;max-height:260px"><code id="demo-raw">--</code></pre>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">01 - WHAT YOU ARE SEEING</div><h2>Every check carries a weight and a message</h2></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:26px"><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">score.value</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">0 to 100, computed from fourteen weighted checks. Not a vibe, arithmetic.</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">status</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">pass, warn or fail, with the points awarded so you can see what a fix is worth.</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">message</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">Plain English, e.g. &#34;Title is 14 characters; aim for 15-60.&#34;</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">timings</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">fetch and parse milliseconds, so you know whether the site or the parser was slow.</p></div></div>
+      <p style="margin:26px 0 0;color:var(--muted);font-size:.85rem">Ten demo calls per visitor per day. Past that the endpoint returns 429 and points at the listing, because a demo that never ends is a free tier.</p>
+      <p style="margin:14px 0 0;color:var(--text-dim)">Read the <a href="/guides-seo-audit.html">guide</a> or open the <a href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">listing</a>.</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script>
+(function () {
+  var form = document.getElementById('demo-form');
+  var btn = document.getElementById('demo-btn');
+  var status = document.getElementById('demo-status');
+  var out = document.getElementById('demo-out');
+  var raw = document.getElementById('demo-raw');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    status.textContent = 'Calling the API...';
+    out.style.display = 'none';
+    try {
+      var payload = { url: document.getElementById('demo-url').value };
+      var res = await fetch('/api/demo/seo-audit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      var data = await res.json();
+      if (!res.ok) { status.textContent = data.error || ('Request failed (' + res.status + ')'); return; }
+      document.getElementById('s-value').textContent = data.score.value;
+      document.getElementById('s-grade').textContent = data.score.grade;
+      document.getElementById('s-summary').textContent = data.score.passed + ' passed, ' + data.score.warned + ' warnings, ' + data.score.failed + ' failed on ' + data.finalUrl;
+      var box = document.getElementById('s-checks');
+      box.innerHTML = '';
+      (data.score.checks || []).forEach(function (c) {
+        var row = document.createElement('div');
+        var colour = c.status === 'pass' ? '#4ade80' : (c.status === 'warn' ? '#fbbf24' : '#f87171');
+        row.style.cssText = 'display:grid;grid-template-columns:70px 1fr;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.86rem';
+        row.innerHTML = '<span class="mono" style="color:' + colour + '">' + c.status + '</span>' +
+          '<span><b>' + c.label + '</b> <span style="color:var(--muted)">· ' + c.points + '/' + c.weight + '</span><br>' +
+          '<span style="color:var(--text-dim)">' + c.message + '</span></span>';
+        box.appendChild(row);
+      });
+      raw.textContent = JSON.stringify(data, null, 2);
+      out.style.display = 'block';
+      status.textContent = 'Live audit complete.';
+    } catch (err) {
+      status.textContent = 'Network error. Try again.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

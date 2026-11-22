@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Try the text analysis API - sentiment and keywords demo | Ayam Labs</title>
+<meta name="description" content="Paste text and get sentiment with the words that drove it, plus ranked keywords. Deterministic, no model bill.">
+<link rel="canonical" href="https://labs.ayamk.in/demo-textmind.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Try the text analysis API - sentiment and keywords demo | Ayam Labs">
+<meta property="og:description" content="Paste text and get sentiment with the words that drove it, plus ranked keywords. Deterministic, no model bill.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Try the text analysis API", "url": "https://labs.ayamk.in/demo-textmind.html", "applicationCategory": "DeveloperApplication", "operatingSystem": "Any (HTTP API)", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "10 live demo calls per visitor per day"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Live demo / TextMind</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:26ch">Sentiment you can argue with</h1>
+      <p class="lede" style="max-width:62ch">Paste a paragraph. You get a label, a score, the words that moved it, and the ranked keywords. Lexicon-driven, so the same input always gives the same answer.</p>
+      <form id="demo-form" style="margin:34px 0 10px;max-width:680px">
+        <textarea id="demo-text" required rows="4" placeholder="Paste a review, a ticket or a paragraph"
+          style="width:100%;padding:12px 14px;background:var(--bg-raised);border:1px solid var(--line-bright);border-radius:10px;color:var(--text);font-family:var(--font-mono);font-size:.9rem;resize:vertical">The deploy was smooth and the tests all passed, but the docs are still thin.</textarea>
+        <button class="btn btn-primary" type="submit" id="demo-btn" style="margin-top:12px">Run</button>
+      </form>
+      <p id="demo-status" style="margin:0 0 20px;color:var(--muted);font-size:.85rem;min-height:20px">Sends one live request to <code>textmind.ayamk.in/v1/sentiment and /v1/keywords</code>.</p>
+      <div id="demo-out" style="display:none;border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--bg-raised);max-width:820px">
+        <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+          <div class="mono" id="t-label" style="font-size:1.8rem;line-height:1">--</div>
+          <div id="t-score" style="color:var(--muted);font-size:.9rem">--</div>
+        </div>
+        <div id="t-detail" style="margin:14px 0 0;font-size:.85rem;color:var(--text-dim)"></div>
+        <div id="t-keywords" style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0"></div>
+        <pre style="margin:20px 0 0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;overflow:auto;font-size:.78rem;max-height:260px"><code id="demo-raw">--</code></pre>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">01 - WHAT YOU ARE SEEING</div><h2>Two free endpoints, no model in the loop</h2></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:26px"><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">label</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">positive, negative, neutral or mixed, from an AFINN-style lexicon with negation handling.</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">why</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">topPositive and topNegative list the exact tokens and their valence. Nothing is hidden.</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">keywords</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">term frequency with stop words removed and phrases merged, with a TF-IDF option.</p></div><div style="border:1px solid var(--line);border-radius:12px;padding:18px"><h3 style="margin:0 0 8px;font-size:1rem">when to pay</h3><p style="margin:0;color:var(--text-dim);font-size:.9rem">summaries, rewrites, zero-shot labels and translation are the neural endpoints on the same key. Use them on the ambiguous band only.</p></div></div>
+      <p style="margin:26px 0 0;color:var(--muted);font-size:.85rem">Ten demo calls per visitor per day. Past that the endpoint returns 429 and points at the listing, because a demo that never ends is a free tier.</p>
+      <p style="margin:14px 0 0;color:var(--text-dim)">Read the <a href="/guides-ai-text.html">guide</a> or open the <a href="https://rapidapi.com/ayamullahkhan04/api/textmind-api" rel="noopener">listing</a>.</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script>
+(function () {
+  var form = document.getElementById('demo-form');
+  var btn = document.getElementById('demo-btn');
+  var status = document.getElementById('demo-status');
+  var out = document.getElementById('demo-out');
+  var raw = document.getElementById('demo-raw');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    status.textContent = 'Calling the API...';
+    out.style.display = 'none';
+    try {
+      var payload = { text: document.getElementById('demo-text').value };
+      var res = await fetch('/api/demo/ai-text', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      var data = await res.json();
+      if (!res.ok) { status.textContent = data.error || ('Request failed (' + res.status + ')'); return; }
+      var s = data.sentiment || {};
+      document.getElementById('t-label').textContent = s.label || '?';
+      document.getElementById('t-score').textContent = 'score ' + (s.score != null ? s.score : '?') + ' · ' + (s.matchedTokens || 0) + ' of ' + (s.tokens || 0) + ' tokens matched';
+      var details = [];
+      (s.topPositive || []).slice(0, 4).forEach(function (x) { details.push('+' + x.token); });
+      (s.topNegative || []).slice(0, 4).forEach(function (x) { details.push('-' + x.token); });
+      document.getElementById('t-detail').textContent = details.length ? 'driven by: ' + details.join(', ') : 'no lexicon tokens matched, so the score stays near zero';
+      var box = document.getElementById('t-keywords');
+      box.innerHTML = '';
+      var list = (data.keywords && (data.keywords.keywords || data.keywords.terms)) || [];
+      list.slice(0, 12).forEach(function (k) {
+        var term = typeof k === 'string' ? k : (k.term || k.keyword || k.token || '');
+        var chip = document.createElement('span');
+        chip.textContent = term;
+        chip.style.cssText = 'font-family:var(--font-mono);font-size:.75rem;padding:4px 9px;border-radius:999px;border:1px solid var(--line-bright);color:var(--muted)';
+        box.appendChild(chip);
+      });
+      raw.textContent = JSON.stringify(data, null, 2);
+      out.style.display = 'block';
+      status.textContent = 'Analysis complete.';
+    } catch (err) {
+      status.textContent = 'Network error. Try again.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

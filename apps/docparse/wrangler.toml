@@ -1,0 +1,10 @@
+name = "docparse"
+routes = [
+  { pattern = "docparse.ayamk.in", custom_domain = true }
+]
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true

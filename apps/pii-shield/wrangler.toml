@@ -1,0 +1,9 @@
+name = "pii-shield"
+routes = [
+  { pattern = "piishield.ayamk.in", custom_domain = true }
+]
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+[observability]
+enabled = true

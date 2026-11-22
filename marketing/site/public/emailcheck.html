@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmailCheck API - Email verification | Ayam Labs</title>
+<meta name="description" content="Validate email addresses before you send, store or bill for them.">
+<link rel="canonical" href="https://labs.ayamk.in/emailcheck.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="EmailCheck API - Email verification | Ayam Labs">
+<meta property="og:description" content="Validate email addresses before you send, store or bill for them.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.className += " js";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Ayam Labs","url":"https://labs.ayamk.in/","logo":"https://labs.ayamk.in/favicon.svg","sameAs":["https://github.com/ayam04"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"EmailCheck API","description":"Email verification: syntax, MX DNS, disposable domains, role accounts, typo detection and deliverability scoring.","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","url":"https://labs.ayamk.in/emailcheck.html","offers":{"@type":"Offer","price":"0.05","priceCurrency":"USD","description":"Pay as you go from $0.05 per call, monthly plans from $25"},"publisher":{"@type":"Organization","name":"Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html" aria-current="page">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="#get-started">Get an API key</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Email verification &nbsp;/&nbsp; API @</div>
+        <h1>EmailCheck</h1>
+        <p class="lede">Syntax, live MX and A/AAAA DNS, a 10,400 domain disposable blocklist, role accounts, free providers, typo suggestions and a 0-100 score with reasons you can read. One request, under 100ms warm.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#get-started">Get a key on RapidAPI</a>
+          <a class="btn" href="/demo.html">Try it live, no key</a>
+          <a class="btn" href="https://emailcheck.ayamk.in/openapi.json">OpenAPI spec</a>
+          <a class="btn" href="#live">See a live response</a>
+        </div>
+        <div class="row" style="margin-top:22px">
+          <span class="status-dot" data-status-for="emailcheck"><i></i> <span data-status-label>checking</span></span>
+          <span class="tag">5 endpoints</span>
+          <span class="tag">Cloudflare edge</span>
+        </div>
+      </div>
+      <div class="terminal reveal">
+        <div class="bar"><i></i><i></i><i></i> <span>emailcheck &middot; live</span></div>
+        <div class="body"><pre><span class="tok-cmd">$</span> curl -s &quot;https://emailcheck.ayamk.in/v1/verify?email=tim%40stripe.com&quot; | jq</pre><pre class="dim">{
+  &quot;email&quot;: &quot;tim@stripe.com&quot;,
+  &quot;normalized&quot;: &quot;tim@stripe.com&quot;,
+  &quot;canonical&quot;: &quot;tim@stripe.com&quot;,
+  &quot;validFormat&quot;: true,
+  &quot;localPart&quot;: &quot;tim&quot;,
+  &quot;domain&quot;: &quot;stripe.com&quot;,
+  &quot;score&quot;: 100,
+  &quot;deliverability&quot;: &quot;deliverable&quot;,
+  ...</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="section-num">01 - ENDPOINTS</div><h2>5 endpoints, one key</h2></div>
+        <p style="max-width:38ch;margin:0;font-size:.9rem">Every route below is described in the OpenAPI document. Import it into Postman or generate a client.</p>
+      </div>
+      <div style="overflow-x:auto"><table>
+  <thead><tr><th style="width:80px">Method</th><th style="width:210px">Path</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/verify</td><td>Full verification for one address.</td></tr>
+    <tr><td><span class="method post">POST</span></td><td class="path">/v1/verify</td><td>Same pipeline, JSON body instead of a query string.</td></tr>
+    <tr><td><span class="method post">POST</span></td><td class="path">/v1/bulk</td><td>Up to 100 addresses per call, de-duplicated by canonical form.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/domain</td><td>MX, A/AAAA, NS, SPF, DMARC, DKIM probes, provider fingerprint.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/disposable</td><td>DNS-free disposable-domain lookup.</td></tr>
+  </tbody>
+</table></div>
+    </div>
+  </section>
+
+  <section id="live">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">02 - RESPONSE</div><h2>What you actually get back</h2></div></div>
+      <div class="row" style="align-items:flex-start;gap:20px">
+        <div style="flex:1 1 420px;min-width:300px" class="code-block">
+          <div class="cb-head"><span>curl</span><button class="copy-btn" data-copy="#curl-emailcheck">copy</button></div>
+          <pre id="curl-emailcheck">curl -s &quot;https://emailcheck.ayamk.in/v1/verify?email=tim%40stripe.com&quot; | jq</pre>
+        </div>
+        <div style="flex:1 1 420px;min-width:300px" class="code-block">
+          <div class="cb-head"><span>200 application/json</span><button class="copy-btn" data-copy="#res-emailcheck">copy</button></div>
+          <pre id="res-emailcheck">{
+  &quot;email&quot;: &quot;tim@stripe.com&quot;,
+  &quot;normalized&quot;: &quot;tim@stripe.com&quot;,
+  &quot;canonical&quot;: &quot;tim@stripe.com&quot;,
+  &quot;validFormat&quot;: true,
+  &quot;localPart&quot;: &quot;tim&quot;,
+  &quot;domain&quot;: &quot;stripe.com&quot;,
+  &quot;score&quot;: 100,
+  &quot;deliverability&quot;: &quot;deliverable&quot;,
+  &quot;flags&quot;: {
+    &quot;disposable&quot;: false, &quot;roleAccount&quot;: false,
+    &quot;freeProvider&quot;: false, &quot;randomLocalPart&quot;: false,
+    &quot;hasMx&quot;: true, &quot;hasARecord&quot;: true,
+    &quot;nullMx&quot;: false, &quot;possibleTypo&quot;: false
+  },
+  &quot;provider&quot;: &quot;Google Workspace / Gmail&quot;,
+  &quot;didYouMean&quot;: null,
+  &quot;mxRecords&quot;: [
+    { &quot;exchange&quot;: &quot;aspmx.l.google.com&quot;, &quot;priority&quot;: 10 },
+    { &quot;exchange&quot;: &quot;alt1.aspmx.l.google.com&quot;, &quot;priority&quot;: 20 }
+  ],
+  &quot;reasons&quot;: [],
+  &quot;durationMs&quot;: 41
+}</pre>
+        </div>
+      </div>
+      <div class="note" style="margin-top:20px"><strong style="color:var(--text)">Limit worth knowing.</strong> Confirms domain deliverability and address risk signals. It does not perform an SMTP handshake, so a catch-all domain will still return a positive verdict.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">03 - WHY</div><h2>Built for the boring part</h2></div></div>
+      <div class="grid-3">
+        <div><h3>Reasons, not just a boolean</h3><p>Every verdict ships with the signals behind it: which MX hosts answered, which flag fired, what the score costs. No black box you have to reverse engineer.</p></div>
+        <div><h3>Edge cached DNS</h3><p>MX and TXT lookups are cached per data centre for 10 minutes, so a warm call costs ~10ms instead of 300ms. Bulk cleaning stays cheap.</p></div>
+        <div><h3>Honest about the limit</h3><p>No SMTP handshake happens at the edge, so we never claim to prove a mailbox exists. We tell you whether the domain accepts mail and how risky the address looks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">04 - PRICING</div><h2>Priced per request, not per seat</h2></div></div>
+      <div class="pricing">
+  <div>
+    <div class="tier">Pay as you go</div>
+    <div class="price">$0.05<span style="font-size:.9rem;color:var(--muted)">/call</span></div>
+    <div class="req">no monthly minimum</div>
+    <div class="sub">Card required. Pay only for the calls you make. No free tier, no monthly minimum, no expiring trial.</div>
+  </div>
+  <div class="featured">
+    <div class="tier">Pro</div>
+    <div class="price">$25<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="req">25,000 requests / month</div>
+    <div class="sub">The tier most integrations land on.</div>
+  </div>
+  <div>
+    <div class="tier">Ultra</div>
+    <div class="price">$75<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="price" style="font-size:.8rem;color:var(--muted);font-family:var(--font-mono);margin-top:0">100,000 requests</div>
+    <div class="sub">Batch jobs and backfills.</div>
+  </div>
+  <div>
+    <div class="tier">Mega</div>
+    <div class="price">$150<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="price" style="font-size:.8rem;color:var(--muted);font-family:var(--font-mono);margin-top:0">400,000 requests</div>
+    <div class="sub">For platform-scale volume. Overage billed per request.</div>
+  </div>
+</div>
+      <p style="margin-top:8px;font-size:.85rem">The bulk endpoint verifies up to 100 addresses per call, which is the cheapest per-address path here. <a href="/compare-pricing.html">See the arithmetic</a>.</p><p style="margin-top:16px;font-size:.85rem">All plans are managed by the RapidAPI marketplace, which applies a marketplace fee before payout. Annual and custom limits are available on request.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">05 - USE CASES</div><h2>Where this earns its place</h2></div></div>
+      <div class="grid-3">
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">01</div><h3 style="font-size:1rem">Signup form validation</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">02</div><h3 style="font-size:1rem">CRM and list hygiene</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">03</div><h3 style="font-size:1rem">Lead scoring bumps</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">04</div><h3 style="font-size:1rem">Fraud and trial abuse checks</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">06 - FAQ</div><h2>Questions we get asked</h2></div></div>
+      <details><summary>Does it tell me if a specific inbox exists?</summary><p>No, and neither can any API that runs at the edge. We verify the domain accepts mail (MX + fallback A records), classify the address (disposable, role, free, typo) and score it. Be suspicious of any cheap API that claims otherwise.</p></details>
+      <details><summary>How many addresses can I send per call?</summary><p>100 on /v1/bulk. Send parallel requests for larger lists; bulk requests are de-duplicated and DNS is cached so throughput scales with concurrency, not with the list size.</p></details>
+      <details><summary>What is the canonical form for?</summary><p>De-duplication. Gmail ignores dots and anything after a plus sign, so jane.doe+news@gmail.com canonicalises to janedoe@gmail.com. Use it as a unique key and you stop paying for the same lead twice.</p></details>
+      <details><summary>Is the disposable list maintained?</summary><p>It is generated from the public disposable-email-domains blocklist (10,400 domains at build time) and ships inside the Worker, so lookups are a set membership test with no network round trip.</p></details>
+    </div>
+  </section>
+
+  <section id="get-started">
+    <div class="wrap">
+      <div style="border:1px solid var(--line-bright);background:var(--bg-raised);padding:clamp(24px,4vw,44px);display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+        <div>
+          <h2 style="margin-bottom:10px">Subscribe to EmailCheck</h2>
+          <p style="margin:0;max-width:56ch">Free tier included. The listing is published on the RapidAPI marketplace; the key works against every endpoint on this page.</p>
+        </div>
+        <div class="row">
+          <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Open the emailcheck listing</a>
+          <a class="btn" href="https://emailcheck.ayamk.in/">Raw API root</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><span class="mark">AL</span> Ayam Labs</div>
+        <div style="max-width:36ch">Small, fast, honest APIs. Built on Cloudflare Workers, sold through the RapidAPI marketplace.</div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">APIS</div>
+        <div><a href="/emailcheck.html">EmailCheck</a></div>
+        <div><a href="/seo-audit.html">SEO Audit</a></div>
+        <div><a href="/docparse.html">DocParse</a></div>
+        <div><a href="/ai-text.html">TextMind</a></div>
+        <div><a href="/pii-shield.html">PII Shield</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">DOCS</div>
+        <div><a href="https://emailcheck.ayamk.in/openapi.json">EmailCheck OpenAPI</a></div>
+        <div><a href="https://seo-audit.ayamk.in/openapi.json">SEO Audit OpenAPI</a></div>
+        <div><a href="https://docparse.ayamk.in/openapi.json">DocParse OpenAPI</a></div>
+        <div><a href="https://textmind.ayamk.in/openapi.json">TextMind OpenAPI</a></div>
+        <div><a href="https://piishield.ayamk.in/openapi.json">PII Shield OpenAPI</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">MORE</div>
+        <div><a href="/pricing.html">Pricing</a></div>
+        <div><a href="/legal.html">Terms and privacy</a></div>
+        <div><a href="https://github.com/ayam04">GitHub</a></div>
+      </div>
+    </div>
+    <div class="fine">
+      Ayam Labs builds and operates every API listed here. Listings are published on the RapidAPI marketplace, which handles billing, keys and quotas; the marketplace fee is included in the prices shown.
+      No customer text, documents or fetched page bodies are stored. Last reviewed November 2026.
+    </div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

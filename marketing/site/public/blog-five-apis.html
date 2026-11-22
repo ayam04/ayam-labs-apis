@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five APIs on Cloudflare Workers, and the four bugs that nearly shipped</title>
+<meta name="description" content="Building five production APIs on Cloudflare Workers: the architecture, the pricing maths, and the four bugs that would have made them useless.">
+<link rel="canonical" href="https://labs.ayamk.in/blog-five-apis.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Five APIs on Cloudflare Workers, and the four bugs that nearly shipped">
+<meta property="og:description" content="The architecture, the pricing maths, and the four bugs that would have made these APIs useless.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Ayam Labs","url":"https://labs.ayamk.in/","logo":"https://labs.ayamk.in/favicon.svg","sameAs":["https://github.com/ayam04"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Five APIs on Cloudflare Workers, and the four bugs that nearly shipped","datePublished":"2026-11-21","author":{"@type":"Organization","name":"Ayam Labs"},"mainEntityOfPage":"https://labs.ayamk.in/blog-five-apis.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+      <a href="/emailcheck.html">EmailCheck</a>
+      <a href="/seo-audit.html">SEO Audit</a>
+      <a href="/docparse.html">DocParse</a>
+      <a href="/ai-text.html">TextMind</a>
+      <a href="/pii-shield.html">PII Shield</a>
+      <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="/pricing.html">Get a key</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Build log &middot; November 2026</div>
+      <h1 style="margin:18px 0 22px;max-width:20ch">Five APIs on Cloudflare Workers, and the four bugs that nearly shipped</h1>
+      <p class="lede" style="max-width:62ch">Five products, 37 endpoints, 470 tests, one deploy command each. Here is the architecture, the pricing maths, and the four bugs that would have made the whole thing useless.</p>
+      <div class="row" style="margin-top:22px"><span class="tag">Cloudflare Workers</span><span class="tag">Hono</span><span class="tag">OpenAPI 3.0</span><span class="tag">RapidAPI</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" style="max-width:760px">
+      <h2>The shape of the thing</h2>
+      <p>One pnpm workspace, five Workers, one shared package. Each Worker is its own product with its own name, its own key, its own quota and its own failure domain. A bug in the PDF parser cannot take down email verification, and I can ship one without redeploying the other four.</p>
+      <p>The shared package does the boring, dangerous work once: error envelope, CORS, request ids, timing headers, OpenAPI generation, SSRF-safe fetching, and the RapidAPI proxy-secret check. Every route in every app is registered through <code>app.openapi(createRoute(...), handler)</code> so the spec is generated from the same source of truth as the handler. There is no hand-written YAML to drift out of date.</p>
+      <p>That gave me 37 endpoints and 470 unit tests. Every app passes <code>tsc --noEmit</code> and every route was answered with a real curl before it was listed anywhere.</p>
+
+      <h2>Why these five</h2>
+      <p>APIs on a marketplace sell on search intent, not on cleverness. Someone types "email verification api" because their signup flow is leaking bounces. They are not looking for a platform. So the product has to name the job, not the technology.</p>
+      <p>I avoided the categories that look lucrative and are legally toxic: scraped social profiles, real estate listings, job feeds. Those are someone else's data with someone else's terms attached. Everything here computes something from input you send, or fetches a page you asked about. That constraint is not just ethics, it is what makes the thing durable.</p>
+
+      <h2>The four bugs</h2>
+      <p><strong>1. The SSRF guard rejected every hostname.</strong> My <code>validateHostname()</code> ran the hostname through the private-IP blocker. That blocker reports "blocked" for any string that is not a parseable IP, so <code>example.com</code> looked like a private range. Every fetch-based endpoint returned a 400 before making a single request. A teammate building the SEO app found it and shipped a workaround, which is exactly the right instinct: unblock yourself, report the bug, delete the workaround once it is fixed.</p>
+      <p><strong>2. A UTF-8 BOM broke the OpenAPI import.</strong> PowerShell's <code>Set-Content -Encoding UTF8</code> writes a byte order mark. The marketplace's importer saw three junk bytes before <code>{</code> and refused the file with "failed to parse JSON content". The fix is boring: download the raw bytes, do not let a shell re-encode them. But the error message pointed at JSON syntax, not at encoding, which is why it cost half an hour.</p>
+      <p><strong>3. The model I pinned was deprecated.</strong> <code>@cf/meta/llama-3.1-8b-instruct</code> resolved to a retired backing model and every summarise call failed with a 5028. The replacement I tried first ignored the chat <code>messages</code> array and only accepted a plain <code>prompt</code>, which produced fluent but deranged output: a 118 word "summary" that repeated "The summary should be made in at most 40 words" until it ran out of tokens. The working answer was a chat-native model plus a parser that accepts both response shapes and a fallback to <code>prompt</code> when the chat shape comes back empty. Model ids are a supply chain dependency, treat them like one.</p>
+      <p><strong>4. The proxy secret had a trailing newline.</strong> Setting it with <code>wrangler secret put</code> from a shell pipe stored <code>uuid\n</code>. The guard compared the header against a value with a newline, failed, and returned 401 for every marketplace request. Trimming both sides before comparing fixed it. If I had tested only "direct call is now rejected" I would have shipped an API that rejected everyone.</p>
+
+      <h2>Pricing, with the real numbers</h2>
+      <p>The marketplace takes a flat 25% and pays out through PayPal after roughly two months. So a $25 subscription is about $18.75 to me, and it arrives in the new year.</p>
+      <p>There is no free tier. The entry plan is pay as you go at $0.05 a call with no monthly minimum, then monthly plans at $25, $75 and $150 once volume makes them cheaper. A free tier that covers the real use case kills the paid one, and a free tier too small to evaluate anything is just a teaser. Metering solves both: you pay for exactly what you test.</p>
+      <p>Marginal cost per call is close to zero for three of the five: DNS and HTTP lookups are cached at the edge, PDF parsing and PII detection are CPU on a single Worker. The exceptions are real and priced for: the neural endpoints bill per token to Workers AI, so they are capped per request, and the fetch-based ones make live network calls that no amount of pricing can make free.</p>
+
+      <h2>What I would tell the next person</h2>
+      <p>Build one endpoint you can explain in a sentence, then make the response explain itself. Every verdict in these APIs ships with the reasons behind it, because the moment a buyer cannot explain a score to their own manager, they stop trusting the API and cancel.</p>
+      <p>Write the limitation into the product. EmailCheck says outright that it cannot prove a mailbox exists without an SMTP handshake, so it verifies domain deliverability and risk signals instead. Buyers forgive a documented limit. They do not forgive discovering one in production.</p>
+      <p>And test the path a customer actually takes. My proxy-secret bug survived local testing, unit tests and a live smoke suite, and was only caught by running a request through the marketplace itself.</p>
+
+      <div class="note" style="margin-top:28px"><strong style="color:var(--text)">Disclosure.</strong> I build and operate every API linked from this page. This is a build log, not a review, and there is no affiliate relationship anywhere in it.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div style="border:1px solid var(--line-bright);background:var(--bg-raised);padding:clamp(24px,4vw,40px);display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+        <div><h2 style="margin-bottom:8px">Try one at $0.05 a call</h2><p style="margin:0;max-width:52ch">Every endpoint, metered, no monthly minimum and no sales call.</p></div>
+        <div class="row"><a class="btn btn-primary" href="/pricing.html">See pricing</a><a class="btn" href="/">All APIs</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="brand"><span class="mark">AL</span> Ayam Labs</div></div>
+      <div><a href="/blog-five-apis.html">Build log</a></div>
+      <div><a href="/pricing.html">Pricing</a></div>
+      <div><a href="/legal.html">Terms and privacy</a></div>
+    </div>
+    <div class="fine">Ayam Labs builds and operates every API listed here. Listings are published on the RapidAPI marketplace, which handles billing, keys and quotas.</div>
+  </div>
+</footer>
+<script>document.documentElement.className += " js";</script>
+<script src="/app.js" defer></script>
+</body>
+</html>

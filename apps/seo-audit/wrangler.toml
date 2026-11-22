@@ -1,0 +1,9 @@
+name = "seo-audit"
+routes = [
+  { pattern = "seo-audit.ayamk.in", custom_domain = true }
+]
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+[observability]
+enabled = true

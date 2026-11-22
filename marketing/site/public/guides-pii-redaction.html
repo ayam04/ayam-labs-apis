@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redact PII before it reaches a log or a model</title>
+<meta name="description" content="Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-pii-redaction.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redact PII before it reaches a log or a model">
+<meta property="og:description" content="Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Stop sending customer text to places that keep it", "description": "Detecting emails, phones, cards and tokens in text, choosing between redact, mask and hash, and why offsets matter more than counts.", "author": {"@type": "Organization", "name": "Ayam Labs"}, "publisher": {"@type": "Organization", "name": "Ayam Labs"}, "mainEntityOfPage": "https://labs.ayamk.in/guides-pii-redaction.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Privacy</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:22ch">Stop sending customer text to places that keep it</h1>
+      <p class="lede" style="max-width:64ch">Logs outlive their purpose. Prompts travel further than you think. Redaction is the cheap control that makes both survivable.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Where the leak actually happens</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li>Error logs that capture the request body.</li><li>Support tickets pasted into a model prompt.</li><li>Analytics events with a free-text field.</li><li>Third-party enrichment calls that echo the input back.</li></ul>
+      <p style="color:var(--text-dim);margin:0 0 16px">You rarely need the raw value after the request is served. You need to know it was there, and you need the record to remain joinable. That is what offsets and stable hashes give you.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s -X POST &#x27;https://piishield.p.rapidapi.com/v1/scan&#x27; \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -H &#x27;X-RapidAPI-Key: YOUR_KEY&#x27; \
+  -H &#x27;X-RapidAPI-Host: piishield.p.rapidapi.com&#x27; \
+  -d &#x27;{&quot;text&quot;:&quot;Contact ayam@example.com or +44 7700 900123, card 4111 1111 1111 1111.&quot;}&#x27;</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Findings carry positions and confidence</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>{
+  &quot;textLength&quot;: 70,
+  &quot;findings&quot;: [
+    { &quot;type&quot;: &quot;EMAIL&quot;, &quot;start&quot;: 8, &quot;end&quot;: 24, &quot;confidence&quot;: 0.99, &quot;validator&quot;: &quot;email-syntax&quot; },
+    { &quot;type&quot;: &quot;PHONE&quot;, &quot;start&quot;: 28, &quot;end&quot;: 43, &quot;confidence&quot;: 0.9, &quot;validator&quot;: &quot;phone-shape&quot; },
+    { &quot;type&quot;: &quot;CREDIT_CARD&quot;, &quot;start&quot;: 50, &quot;end&quot;: 69, &quot;confidence&quot;: 0.97, &quot;validator&quot;: &quot;luhn&quot;, &quot;detail&quot;: &quot;visa&quot; }
+  ],
+  &quot;counts&quot;: { &quot;EMAIL&quot;: 1, &quot;PHONE&quot;: 1, &quot;CREDIT_CARD&quot;: 1 }
+}</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Which endpoint for which job</h2>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Endpoint</th><th>Output</th><th>Use when</th></tr></thead><tbody><tr><td>POST /v1/scan</td><td>findings with offsets and validators</td><td>you want to review before changing anything</td></tr><tr><td>POST /v1/redact</td><td>same detection pass, replacements applied</td><td>shipping to a log or a model</td></tr><tr><td>POST /v1/profanity</td><td>profanity with obfuscation handling</td><td>user generated content</td></tr><tr><td>POST /v1/spam</td><td>weighted heuristic spam score</td><td>contact forms and comments</td></tr><tr><td>POST /v1/moderation</td><td>PII, profanity and spam in one call</td><td>a single gate before publish</td></tr><tr><td>GET /v1/types</td><td>every detector and its validator</td><td>building a review UI</td></tr></tbody></table></div>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Why validators matter</h2>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Redaction styles</h2><p style="color:var(--text-dim);margin:0 0 16px">Styles are a parameter on <code>/v1/redact</code>, not separate endpoints. <b>mask</b> keeps the last <code>keepLast</code> characters, which is what a support agent needs to read a card back to a customer. <b>label</b> emits stable tokens like <code>[EMAIL_1]</code> so two occurrences of the same address share a token and a model can still follow the thread. <b>hash</b> emits the first eight hex characters of the value was SHA-256, plus a hash-to-count map, so records stay joinable without the raw value ever coming back.</p><p style="color:var(--text-dim);margin:0 0 16px">A card number that fails Luhn is almost certainly not a card, and redacting it costs you real information. The card detector runs Luhn, the IBAN runs mod-97, and the response names the validator that fired so you can decide how strict to be.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Where heuristics stop</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li>Structured data (emails, cards, IBANs, IPs, tokens) is reliable and checksummed.</li><li>Names and addresses are shapes, not formats. They carry lower confidence deliberately.</li><li>Unusual formats will slip through. That is why every finding has an offset and a confidence: review the low-confidence band, and never treat one pass as a guarantee.</li></ul>
+      <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+        <h3 style="margin:0 0 8px;font-size:1.05rem">Try PII Shield</h3>
+        <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">Pay as you go at $0.05 a call, no monthly minimum. or a monthly plan from $25 once the volume justifies it.</p>
+        <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/pii-shield-api" rel="noopener">Open the listing on RapidAPI</a>
+      </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to verify an email address without sending mail</title>
+<meta name="description" content="What an email verification API can actually check without SMTP, how to read the score, and where the approach stops working.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-email-verification.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to verify an email address without sending mail">
+<meta property="og:description" content="What an email verification API can actually check without SMTP, how to read the score, and where the approach stops working.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Verify an email address without sending a single message", "description": "What an email verification API can actually check without SMTP, how to read the score, and where the approach stops working.", "author": {"@type": "Organization", "name": "Ayam Labs"}, "publisher": {"@type": "Organization", "name": "Ayam Labs"}, "mainEntityOfPage": "https://labs.ayamk.in/guides-email-verification.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Email verification</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:22ch">Verify an email address without sending a single message</h1>
+      <p class="lede" style="max-width:64ch">You can tell whether an address is worth keeping in one request. You cannot tell whether the mailbox exists. Knowing the difference is most of the work.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Why bad addresses cost money</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">A bounce is not free. Every hard bounce teaches the receiving provider that your sending domain is noisy, and those signals compound. Cleaning at signup is cheaper than cleaning later, and far cheaper than repairing a sending reputation.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">What you can check without SMTP</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li><b>Syntax</b>: RFC length limits, quoted locals, illegal characters.</li><li><b>MX records</b>: does the domain accept mail at all, and which provider handles it.</li><li><b>A/AAAA fallback</b>: domains without MX sometimes inherit the A record.</li><li><b>Disposable domains</b>: blocklists of throwaway providers.</li><li><b>Role accounts</b>: support@, admin@, noreply@ never reach a human.</li><li><b>Typo distance</b>: gmail.con is not gmail.com.</li></ul>
+      <p style="border-left:2px solid var(--accent);padding:10px 0 10px 16px;color:var(--text-dim);margin:0 0 18px;font-size:.92rem">What you cannot check: whether one specific mailbox exists. That needs an SMTP conversation, and most providers now treat verification probes as hostile. Vendors that promise it are guessing or risking your IP reputation.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">One request</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Use the marketplace proxy URL with your key. The same call works from a browser, a worker or a script.</p>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s &#x27;https://emailcheck.p.rapidapi.com/v1/verify?email=ayam.khan%40gmail.com&#x27; \
+  -H &#x27;X-RapidAPI-Key: YOUR_KEY&#x27; \
+  -H &#x27;X-RapidAPI-Host: emailcheck.p.rapidapi.com&#x27;</code></pre>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>const res = await fetch(&#x27;https://emailcheck.p.rapidapi.com/v1/verify?email=&#x27; + encodeURIComponent(email), {
+  headers: { &#x27;X-RapidAPI-Key&#x27;: process.env.RAPIDAPI_KEY, &#x27;X-RapidAPI-Host&#x27;: &#x27;emailcheck.p.rapidapi.com&#x27; }
+});
+const { score, deliverability, flags, didYouMean } = await res.json();</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Reading the response</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>{
+  &quot;email&quot;: &quot;ayam.khan@gmail.com&quot;,
+  &quot;canonical&quot;: &quot;ayamkhan@gmail.com&quot;,
+  &quot;validFormat&quot;: true,
+  &quot;score&quot;: 88,
+  &quot;deliverability&quot;: &quot;deliverable&quot;,
+  &quot;flags&quot;: {
+    &quot;disposable&quot;: false, &quot;roleAccount&quot;: false, &quot;freeProvider&quot;: true,
+    &quot;hasMx&quot;: true, &quot;hasARecord&quot;: true, &quot;nullMx&quot;: false, &quot;possibleTypo&quot;: false
+  },
+  &quot;provider&quot;: &quot;Google Workspace / Gmail&quot;,
+  &quot;didYouMean&quot;: null
+}</code></pre>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Field</th><th>What it means</th><th>How to use it</th></tr></thead><tbody><tr><td>score</td><td>0-100, weighted by the checks that fired</td><td>Gate signup below a threshold, e.g. 60</td></tr><tr><td>deliverability</td><td>deliverable / risky / undeliverable</td><td>Log risky, block undeliverable</td></tr><tr><td>flags.disposable</td><td>known throwaway provider</td><td>Block, or allow on a trial tier only</td></tr><tr><td>flags.roleAccount</td><td>shared inbox, not a person</td><td>Reject for account signups, keep for B2B contact forms</td></tr><tr><td>didYouMean</td><td>typo suggestion, same TLD only</td><td>Offer a correction UI instead of rejecting</td></tr></tbody></table></div>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Pitfalls worth knowing before you ship</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li><b>Catch-all domains</b> accept every address, so they look deliverable. The flag set will not save you here; treat catch-all as risky.</li><li><b>Score thresholds are policy, not truth</b>. A 70 is fine for a newsletter and too low for a billing contact.</li><li><b>Typo suggestions are deliberately conservative</b>: same TLD, edit distance of two or less. It will not suggest gmail.com for hotmail.com because those are different products.</li><li><b>Bulk is one call for up to 100 addresses</b>. For a list, use /v1/bulk and keep the per-address reasons; do not loop the single endpoint 100 times.</li></ul>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The bulk maths</h2><p style="color:var(--text-dim);margin:0 0 16px">One call to <code>/v1/bulk</code> verifies up to 100 addresses. Against a credit-pack vendor charging roughly half a cent per address, a bulk call works out about ten times cheaper per address. If you are checking a single signup, the per-call price is the wrong shape for you and a credit pack will be cheaper. The maths is laid out with sources on the <a href="/compare-pricing.html">pricing comparison</a> page.</p><h2 style="margin:44px 0 14px;font-size:1.5rem">Where this fits</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Run it on signup, on list import, and before any campaign send. Store the score, not just the boolean, so you can re-decide later without another request.</p>
+      <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+        <h3 style="margin:0 0 8px;font-size:1.05rem">Try EmailCheck</h3>
+        <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">Pay as you go at $0.05 a call, no monthly minimum. or a monthly plan from $25 once the volume justifies it.</p>
+        <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Open the listing on RapidAPI</a>
+      </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

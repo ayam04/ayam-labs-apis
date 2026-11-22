@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Audit API - On-page analysis | Ayam Labs</title>
+<meta name="description" content="Score any page in one request, without a headless browser.">
+<link rel="canonical" href="https://labs.ayamk.in/seo-audit.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SEO Audit API - On-page analysis | Ayam Labs">
+<meta property="og:description" content="Score any page in one request, without a headless browser.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.className += " js";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Ayam Labs","url":"https://labs.ayamk.in/","logo":"https://labs.ayamk.in/favicon.svg","sameAs":["https://github.com/ayam04"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SEO Audit API","description":"On-page SEO audit for any URL: titles, meta, headings, links, structured data, readability and a weighted score.","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","url":"https://labs.ayamk.in/seo-audit.html","offers":{"@type":"Offer","price":"0.05","priceCurrency":"USD","description":"Pay as you go from $0.05 per call, monthly plans from $25"},"publisher":{"@type":"Organization","name":"Ayam Labs"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html" aria-current="page">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="#get-started">Get an API key</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">On-page analysis &nbsp;/&nbsp; API %</div>
+        <h1>SEO Audit</h1>
+        <p class="lede">Titles, meta, headings, images, links, structured data, hreflang, readability and a weighted 0-100 score with per-check status. Parsed at the edge with HTMLRewriter, so a full audit costs pennies and returns in under a second.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#get-started">Get a key on RapidAPI</a>
+          <a class="btn" href="/demo-seo-audit.html">Audit a page live</a>
+          <a class="btn" href="https://seo-audit.ayamk.in/openapi.json">OpenAPI spec</a>
+          <a class="btn" href="#live">See a live response</a>
+        </div>
+        <div class="row" style="margin-top:22px">
+          <span class="status-dot" data-status-for="seo-audit"><i></i> <span data-status-label>checking</span></span>
+          <span class="tag">8 endpoints</span>
+          <span class="tag">Cloudflare edge</span>
+        </div>
+      </div>
+      <div class="terminal reveal">
+        <div class="bar"><i></i><i></i><i></i> <span>seo-audit &middot; live</span></div>
+        <div class="body"><pre><span class="tok-cmd">$</span> curl -s &quot;https://seo-audit.ayamk.in/v1/meta?url=https%3A%2F%2Fexample.com&quot; | jq</pre><pre class="dim">{
+  &quot;url&quot;: &quot;https://example.com&quot;,
+  &quot;finalUrl&quot;: &quot;https://example.com/&quot;,
+  &quot;title&quot;: &quot;Example Domain&quot;,
+  &quot;titleLength&quot;: 14,
+  &quot;metaDescription&quot;: null,
+  &quot;canonical&quot;: null,
+  &quot;robots&quot;: { &quot;index&quot;: true, &quot;follow&quot;: true, &quot;raw&quot;: null },
+  &quot;lang&quot;: &quot;en&quot;,
+  ...</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="section-num">01 - ENDPOINTS</div><h2>8 endpoints, one key</h2></div>
+        <p style="max-width:38ch;margin:0;font-size:.9rem">Every route below is described in the OpenAPI document. Import it into Postman or generate a client.</p>
+      </div>
+      <div style="overflow-x:auto"><table>
+  <thead><tr><th style="width:80px">Method</th><th style="width:210px">Path</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/audit</td><td>Full on-page audit plus a weighted score breakdown.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/meta</td><td>Title, description, canonical, robots, Open Graph, Twitter, JSON-LD.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/links</td><td>Internal vs external links, anchor texts, rel attributes.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/keywords</td><td>Term frequency, TF-IDF ranking and density for a page or raw text.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/readability</td><td>Flesch, Flesch-Kincaid, Gunning fog, sentence stats.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/robots</td><td>Parsed robots.txt groups, rules, crawl-delay, sitemaps.</td></tr>
+    <tr><td><span class="method get">GET</span></td><td class="path">/v1/sitemap</td><td>Sitemap index or urlset, parsed and counted.</td></tr>
+    <tr><td><span class="method post">POST</span></td><td class="path">/v1/text</td><td>Readability plus keyword analysis on raw text.</td></tr>
+  </tbody>
+</table></div>
+    </div>
+  </section>
+
+  <section id="live">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">02 - RESPONSE</div><h2>What you actually get back</h2></div></div>
+      <div class="row" style="align-items:flex-start;gap:20px">
+        <div style="flex:1 1 420px;min-width:300px" class="code-block">
+          <div class="cb-head"><span>curl</span><button class="copy-btn" data-copy="#curl-seo-audit">copy</button></div>
+          <pre id="curl-seo-audit">curl -s &quot;https://seo-audit.ayamk.in/v1/meta?url=https%3A%2F%2Fexample.com&quot; | jq</pre>
+        </div>
+        <div style="flex:1 1 420px;min-width:300px" class="code-block">
+          <div class="cb-head"><span>200 application/json</span><button class="copy-btn" data-copy="#res-seo-audit">copy</button></div>
+          <pre id="res-seo-audit">{
+  &quot;url&quot;: &quot;https://example.com&quot;,
+  &quot;finalUrl&quot;: &quot;https://example.com/&quot;,
+  &quot;title&quot;: &quot;Example Domain&quot;,
+  &quot;titleLength&quot;: 14,
+  &quot;metaDescription&quot;: null,
+  &quot;canonical&quot;: null,
+  &quot;robots&quot;: { &quot;index&quot;: true, &quot;follow&quot;: true, &quot;raw&quot;: null },
+  &quot;lang&quot;: &quot;en&quot;,
+  &quot;openGraph&quot;: { &quot;title&quot;: null, &quot;description&quot;: null, &quot;image&quot;: null },
+  &quot;twitterCard&quot;: { &quot;card&quot;: null, &quot;title&quot;: null },
+  &quot;jsonLd&quot;: [],
+  &quot;hreflang&quot;: [],
+  &quot;favicon&quot;: null,
+  &quot;durationMs&quot;: 143
+}</pre>
+        </div>
+      </div>
+      <div class="note" style="margin-top:20px"><strong style="color:var(--text)">Limit worth knowing.</strong> Audits the HTML of a single public page. It does not crawl a whole site, render JavaScript, or measure Core Web Vitals.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">03 - WHY</div><h2>Built for the boring part</h2></div></div>
+      <div class="grid-3">
+        <div><h3>No headless browser bill</h3><p>HTMLRewriter parses the document as a stream. You get structured findings in one pass instead of paying for a Chrome instance per page.</p></div>
+        <div><h3>Checks you can act on</h3><p>Every check returns pass, warn or fail with its weight and a message. Change one field, watch the score move by a known amount.</p></div>
+        <div><h3>SSRF safe by default</h3><p>Every fetch is resolved first and rejected if it points at a private address, on every redirect hop. Safe to expose behind a public form.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">04 - PRICING</div><h2>Priced per request, not per seat</h2></div></div>
+      <div class="pricing">
+  <div>
+    <div class="tier">Pay as you go</div>
+    <div class="price">$0.05<span style="font-size:.9rem;color:var(--muted)">/call</span></div>
+    <div class="req">no monthly minimum</div>
+    <div class="sub">Card required. Pay only for the calls you make. No free tier, no monthly minimum, no expiring trial.</div>
+  </div>
+  <div class="featured">
+    <div class="tier">Pro</div>
+    <div class="price">$25<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="req">25,000 requests / month</div>
+    <div class="sub">The tier most integrations land on.</div>
+  </div>
+  <div>
+    <div class="tier">Ultra</div>
+    <div class="price">$75<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="price" style="font-size:.8rem;color:var(--muted);font-family:var(--font-mono);margin-top:0">100,000 requests</div>
+    <div class="sub">Batch jobs and backfills.</div>
+  </div>
+  <div>
+    <div class="tier">Mega</div>
+    <div class="price">$150<span style="font-size:.9rem;color:var(--muted)">/mo</span></div>
+    <div class="price" style="font-size:.8rem;color:var(--muted);font-family:var(--font-mono);margin-top:0">400,000 requests</div>
+    <div class="sub">For platform-scale volume. Overage billed per request.</div>
+  </div>
+</div>
+      <p style="margin-top:16px;font-size:.85rem">All plans are managed by the RapidAPI marketplace, which applies a marketplace fee before payout. Annual and custom limits are available on request.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">05 - USE CASES</div><h2>Where this earns its place</h2></div></div>
+      <div class="grid-3">
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">01</div><h3 style="font-size:1rem">Client reporting in an SEO tool</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">02</div><h3 style="font-size:1rem">Content QA before publishing</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">03</div><h3 style="font-size:1rem">Competitor snapshots</h3></div>
+        <div><div class="mono" style="color:var(--accent);font-size:.72rem">04</div><h3 style="font-size:1rem">Migration checks</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">06 - FAQ</div><h2>Questions we get asked</h2></div></div>
+      <details><summary>Will it work on JavaScript-heavy sites?</summary><p>You get the server-rendered HTML. Single-page apps that render entirely in the browser will look thin. That is a real signal too, but treat the numbers accordingly.</p></details>
+      <details><summary>Can I audit a local or intranet URL?</summary><p>No. Private ranges, localhost and metadata endpoints are blocked twice: on hostname pattern and on DNS resolution of every redirect hop. That is deliberate.</p></details>
+      <details><summary>How is the score calculated?</summary><p>Each check carries a fixed weight and returns pass, warn or fail. The score is the weighted sum normalised to 0-100, and the full breakdown is in the response so you can explain it to a client.</p></details>
+      <details><summary>Do you cache pages?</summary><p>No page bodies are stored. DNS answers are cached for 10 minutes at the edge.</p></details>
+    </div>
+  </section>
+
+  <section id="get-started">
+    <div class="wrap">
+      <div style="border:1px solid var(--line-bright);background:var(--bg-raised);padding:clamp(24px,4vw,44px);display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+        <div>
+          <h2 style="margin-bottom:10px">Subscribe to SEO Audit</h2>
+          <p style="margin:0;max-width:56ch">Free tier included. The listing is published on the RapidAPI marketplace; the key works against every endpoint on this page.</p>
+        </div>
+        <div class="row">
+          <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">Open the seo-audit listing</a>
+          <a class="btn" href="https://seo-audit.ayamk.in/">Raw API root</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><span class="mark">AL</span> Ayam Labs</div>
+        <div style="max-width:36ch">Small, fast, honest APIs. Built on Cloudflare Workers, sold through the RapidAPI marketplace.</div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">APIS</div>
+        <div><a href="/emailcheck.html">EmailCheck</a></div>
+        <div><a href="/seo-audit.html">SEO Audit</a></div>
+        <div><a href="/docparse.html">DocParse</a></div>
+        <div><a href="/ai-text.html">TextMind</a></div>
+        <div><a href="/pii-shield.html">PII Shield</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">DOCS</div>
+        <div><a href="https://emailcheck.ayamk.in/openapi.json">EmailCheck OpenAPI</a></div>
+        <div><a href="https://seo-audit.ayamk.in/openapi.json">SEO Audit OpenAPI</a></div>
+        <div><a href="https://docparse.ayamk.in/openapi.json">DocParse OpenAPI</a></div>
+        <div><a href="https://textmind.ayamk.in/openapi.json">TextMind OpenAPI</a></div>
+        <div><a href="https://piishield.ayamk.in/openapi.json">PII Shield OpenAPI</a></div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--text);margin-bottom:8px;font-size:.78rem">MORE</div>
+        <div><a href="/pricing.html">Pricing</a></div>
+        <div><a href="/legal.html">Terms and privacy</a></div>
+        <div><a href="https://github.com/ayam04">GitHub</a></div>
+      </div>
+    </div>
+    <div class="fine">
+      Ayam Labs builds and operates every API listed here. Listings are published on the RapidAPI marketplace, which handles billing, keys and quotas; the marketplace fee is included in the prices shown.
+      No customer text, documents or fetched page bodies are stored. Last reviewed November 2026.
+    </div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

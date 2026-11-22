@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing - five APIs, one price ladder</title>
+<meta name="description" content="Every Ayam Labs API uses the same four tiers: free, Pro $25, Ultra $75, Mega $150. Priced per request, billed by the RapidAPI marketplace.">
+<link rel="canonical" href="https://labs.ayamk.in/pricing.html">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.className += " js";</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Ayam Labs","url":"https://labs.ayamk.in/","logo":"https://labs.ayamk.in/favicon.svg","sameAs":["https://github.com/ayam04"]}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+      <a href="/emailcheck.html">EmailCheck</a>
+      <a href="/seo-audit.html">SEO Audit</a>
+      <a href="/docparse.html">DocParse</a>
+      <a href="/ai-text.html">TextMind</a>
+      <a href="/pii-shield.html">PII Shield</a>
+      <a href="/pricing.html" aria-current="page">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/">Get a key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Pricing</div>
+      <h1 style="margin:18px 0 20px">Same ladder,<br>every API.</h1>
+      <p class="lede" style="max-width:60ch">One pricing shape across all five products means you can budget once and add a second API without a procurement cycle. No free tier: a pay-as-you-go rate of $0.05 per call, then monthly plans once the volume justifies one.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">01 - TIERS</div><h2>The four plans</h2></div></div>
+      <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Plan</th><th>Price</th><th>Requests / month</th><th>Rate limit</th><th>Who it is for</th></tr></thead>
+        <tbody>
+          <tr><td class="path">Pay as you go</td><td class="mono" style="color:var(--text)">$0.05/call</td><td class="mono">metered</td><td class="mono">1 req/sec</td><td>Enough to build and test an integration.</td></tr>
+          <tr><td class="path">Pro</td><td class="mono" style="color:var(--text)">$25</td><td class="mono">25,000</td><td class="mono">10 req/sec</td><td>The tier most production integrations land on.</td></tr>
+          <tr><td class="path">Ultra</td><td class="mono" style="color:var(--text)">$75</td><td class="mono">100,000</td><td class="mono">25 req/sec</td><td>Batch backfills, nightly jobs, agency reporting.</td></tr>
+          <tr><td class="path">Mega</td><td class="mono" style="color:var(--text)">$150</td><td class="mono">400,000</td><td class="mono">50 req/sec</td><td>Platform volume. Overage billed at $0.0004 per request.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-top:18px;font-size:.88rem">Limits above apply per API. All plans include every endpoint of that API. There is no endpoint gating between tiers; you pay for volume only.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">02 - COSTS</div><h2>What actually costs us money</h2></div></div>
+      <div class="grid-3">
+        <div><h3>DNS and HTTP lookups</h3><p>EmailCheck and SEO Audit make live network calls per unique domain or URL. Those are cached at the edge for 10 minutes, which is why the free tier can be generous.</p></div>
+        <div><h3>Neural calls</h3><p>TextMind's AI endpoints bill per token to Cloudflare Workers AI. They are the only endpoints where cost scales with your input length, and they are capped per request because of it.</p></div>
+        <div><h3>Everything else</h3><p>PDF parsing, PII detection, keyword extraction, redaction and scoring all run on the CPU of a single Worker. Marginal cost is effectively zero, which is why those plans can carry large quotas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">03 - FAQ</div><h2>Billing questions</h2></div></div>
+      <details><summary>Who charges my card?</summary><p>The RapidAPI marketplace. Your subscription, invoice, overage and refund all live there. We never see your card details.</p></details>
+      <details><summary>What happens when I hit my quota?</summary><p>The marketplace starts counting overages at the published rate, and warns you at 85% and 100%. If you would rather hard stop than pay overage, set a hard limit on the plan.</p></details>
+      <details><summary>Can I move between plans mid-month?</summary><p>Yes, from the listing page. Upgrades take effect immediately; downgrades on the next cycle.</p></details>
+      <details><summary>Do you offer annual or volume pricing?</summary><p>For commits above the Mega tier, email us and we will publish a custom plan. For everything else the published ladder is the whole price list.</p></details>
+      <details><summary>What if an endpoint returns a 5xx?</summary><p>Failed requests are not counted as usage. If a bad deploy breaks your integration, tell us and we will credit the affected period.</p></details>
+    </div>
+  </section>
+<p style="max-width:78ch;margin:26px auto 0;padding:0 24px;color:var(--text-dim)">Want the arithmetic against public market prices, including where we are more expensive? <a href="/compare-pricing.html">See the pricing comparison</a>.</p>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="brand"><span class="mark">AL</span> Ayam Labs</div></div>
+      <div><a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a></div>
+      <div><a href="/legal.html">Terms and privacy</a></div>
+      <div><a href="https://github.com/ayam04">GitHub</a></div>
+    </div>
+    <div class="fine">Prices shown are the listing price on the RapidAPI marketplace. The marketplace fee is deducted from the payout, not added to your bill. No hidden request-based surcharges beyond the published overage rate.</div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+name = "ayam-labs-site"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+routes = [
+  { pattern = "labs.ayamk.in", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "404-page"

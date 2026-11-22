@@ -1,0 +1,36 @@
+# Ayam Labs
+
+> Five focused HTTP APIs on Cloudflare Workers: email verification, on-page SEO audit,
+> document text extraction, text analysis and PII redaction. Pay as you go at $0.05 per
+> call with no free tier, or monthly plans from $25.
+
+## APIs
+
+- [EmailCheck API](https://labs.ayamk.in/emailcheck.html): syntax, MX DNS, disposable
+  domains, role accounts, typo detection and a 0-100 deliverability score.
+- [SEO Audit API](https://labs.ayamk.in/seo-audit.html): on-page audit for any URL, titles,
+  meta, headings, links, structured data, alt coverage and page weight.
+- [DocParse API](https://labs.ayamk.in/docparse.html): clean text from PDF, DOCX and HTML,
+  per-page text, metadata and markdown conversion.
+- [TextMind API](https://labs.ayamk.in/ai-text.html): sentiment, keywords, entities,
+  language detection for free, plus summaries, rewrites, zero-shot labels and translation.
+- [PII Shield API](https://labs.ayamk.in/pii-shield.html): find and redact emails, phones,
+  cards with Luhn, IBANs with mod-97, IPs, tokens and 13 more detectors.
+
+## Guides
+
+- [Email verification without SMTP](https://labs.ayamk.in/guides-email-verification.html)
+- [On-page SEO audit in one request](https://labs.ayamk.in/guides-seo-audit.html)
+- [PDF text extraction at the edge](https://labs.ayamk.in/guides-pdf-text.html)
+- [Deterministic text analysis](https://labs.ayamk.in/guides-ai-text.html)
+- [PII redaction before logging](https://labs.ayamk.in/guides-pii-redaction.html)
+
+## Listings
+
+All five are sold through the RapidAPI marketplace:
+https://rapidapi.com/ayamullahkhan04
+
+## Pricing
+
+BASIC pay per use $0.05 per call. PRO $25/month for 25,000 calls. ULTRA $75/month for
+100,000. MEGA $150/month for 400,000.

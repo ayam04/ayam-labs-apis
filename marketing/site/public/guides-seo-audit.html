@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit a page&#x27;s on-page SEO with one HTTP request</title>
+<meta name="description" content="The on-page signals that decide whether a page can rank, how to read them from a single audit response, and what the audit cannot tell you.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-seo-audit.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Audit a page&#x27;s on-page SEO with one HTTP request">
+<meta property="og:description" content="The on-page signals that decide whether a page can rank, how to read them from a single audit response, and what the audit cannot tell you.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "The on-page audit you can run in one request", "description": "The on-page signals that decide whether a page can rank, how to read them from a single audit response, and what the audit cannot tell you.", "author": {"@type": "Organization", "name": "Ayam Labs"}, "publisher": {"@type": "Organization", "name": "Ayam Labs"}, "mainEntityOfPage": "https://labs.ayamk.in/guides-seo-audit.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / SEO</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:22ch">The on-page audit you can run in one request</h1>
+      <p class="lede" style="max-width:64ch">Titles, headings, canonical, structured data, alt coverage and weight. All of it is in the HTML you already have. A crawler is optional.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">What actually moves on-page</h2>
+      <p style="color:var(--text-dim);margin:0 0 16px">Backlinks and authority are not on the page. Everything else is: title length, meta description, one H1, heading order, canonical, robots directives, structured data, image alt text, internal link count, page weight and response time. Those are the things a template regression breaks first.</p>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s &#x27;https://seo-audit.p.rapidapi.com/v1/audit?url=https://example.com&#x27; \
+  -H &#x27;X-RapidAPI-Key: YOUR_KEY&#x27; \
+  -H &#x27;X-RapidAPI-Host: seo-audit.p.rapidapi.com&#x27;</code></pre>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>const res = await fetch(&#x27;https://seo-audit.p.rapidapi.com/v1/audit?url=&#x27; + encodeURIComponent(pageUrl), {
+  headers: { &#x27;X-RapidAPI-Key&#x27;: process.env.RAPIDAPI_KEY, &#x27;X-RapidAPI-Host&#x27;: &#x27;seo-audit.p.rapidapi.com&#x27; }
+});
+const audit = await res.json();
+console.log(audit.score, audit.findings.map(f =&gt; f.id));</code></pre>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">The shape of the response</h2>
+      <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>{
+  &quot;requestedUrl&quot;: &quot;https://example.com/&quot;,
+  &quot;finalUrl&quot;: &quot;https://example.com/&quot;,
+  &quot;redirected&quot;: false,
+  &quot;statusCode&quot;: 200,
+  &quot;https&quot;: true,
+  &quot;bodyBytes&quot;: 577,
+  &quot;timings&quot;: { &quot;fetchMs&quot;: 10, &quot;parseMs&quot;: 0, &quot;totalMs&quot;: 10 },
+  &quot;page&quot;: {
+    &quot;title&quot;: &quot;Example Domain&quot;,
+    &quot;titleLength&quot;: 14,
+    &quot;metaDescription&quot;: null,
+    &quot;canonical&quot;: null
+  }
+}</code></pre>
+      <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem"><thead><tr><th>Signal</th><th>Why it matters</th><th>Typical fix</th></tr></thead><tbody><tr><td>titleLength</td><td>Truncated titles lose the tail in SERPs</td><td>Aim 30-60 chars, front-load the phrase</td></tr><tr><td>metaDescription</td><td>Missing means Google writes its own</td><td>Write 120-155 chars with the offer</td></tr><tr><td>headings</td><td>Order communicates structure</td><td>One H1, no skipped levels</td></tr><tr><td>canonical</td><td>Duplicates split signals</td><td>Self-referencing canonical per page</td></tr><tr><td>images without alt</td><td>Accessibility and image search</td><td>Describe the content, not the filename</td></tr><tr><td>bodyBytes</td><td>Heavy HTML delays first paint</td><td>Trim inline data, move to assets</td></tr></tbody></table></div>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">Other endpoints on the same API</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li><b>GET /v1/meta</b>: head tags only, the fast path when you do not need the body.</li><li><b>GET /v1/links</b>: internal and external links with anchors and rel attributes.</li><li><b>GET /v1/keywords</b>: term frequency and TF-IDF for a page or raw text.</li><li><b>GET /v1/readability</b>: Flesch, Flesch-Kincaid and Gunning fog.</li><li><b>GET /v1/robots</b> and <b>GET /v1/sitemap</b>: parse both files without another dependency.</li><li><b>POST /v1/text</b>: readability plus keywords on text you already have.</li></ul>
+      <h2 style="margin:44px 0 14px;font-size:1.5rem">What the audit cannot do</h2>
+      <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.75"><li>It does not measure backlinks, domain authority or rankings.</li><li>It does not read Search Console. Clicks and impressions are yours, not ours.</li><li>If the site blocks bots, the response says so. It will not invent a score.</li></ul>
+      <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+        <h3 style="margin:0 0 8px;font-size:1.05rem">Try SEO Audit</h3>
+        <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">Pay as you go at $0.05 a call, no monthly minimum. or a monthly plan from $25 once the volume justifies it.</p>
+        <a class="btn btn-primary" href="https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16" rel="noopener">Open the listing on RapidAPI</a>
+      </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

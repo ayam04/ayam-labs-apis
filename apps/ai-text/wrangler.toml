@@ -1,0 +1,15 @@
+name = "ai-text"
+routes = [
+  { pattern = "textmind.ayamk.in", custom_domain = true }
+]
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Workers AI. The binding is only available on deployed Cloudflare accounts
+# (and in remote/preview mode); every AI route degrades to a documented
+# 503 AI_UNAVAILABLE response when the binding is missing or the model fails.
+[ai]
+binding = "AI"
+
+[observability]
+enabled = true
