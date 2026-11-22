@@ -142,13 +142,14 @@ export function assertPdfSignature(bytes: Uint8Array): void {
 }
 
 /**
- * CPU safety valve.
+ * Size guard for the full-document extraction path.
  *
- * This deployment gets about 10 ms of CPU per request, measured with wrangler tail
- * ("cpuTime": 10, "outcome": "exceededCpu") on a 775 KB, 16-page PDF. pdf.js needs
- * more than that to walk a whole dense document, but a page slice fits. Documents above
- * this size are refused with a readable JSON error instead of dying as a Cloudflare HTML
- * 503, unless the caller asked for a specific page selection.
+ * Measured behaviour: a 775 KB, 16-page PDF kills the worker before it can answer, and the
+ * same file extracts fine one page at a time. The failure arrives after roughly 10 ms of CPU
+ * with outcome "exceededCpu", which does not fit a plain CPU ceiling (a sibling worker was
+ * measured at 158 ms CPU on a successful request). Cause is unconfirmed; the guard is
+ * justified by the outcome, not by a theory: callers get a readable 413 instead of a
+ * Cloudflare HTML page, and /v1/pdf/pages keeps working for the same file.
  */
 export const AUTO_PDF_MAX_BYTES = 400 * 1024;
 

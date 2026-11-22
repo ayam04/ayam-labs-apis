@@ -1,53 +1,51 @@
-# PDF CPU limit: confirmed and handled - 2026-11-22 (round 22)
+# PDF failure: what is actually proven - 2026-11-22 (round 23)
 
-## The evidence that settles it
+## Two claims of mine were wrong; here is the evidence
 
-`wrangler tail docparse --status error` while retrying the 775 KB, 16-page arXiv PDF:
+Round 20: "pdf.js needs more than the 10 ms Free-plan budget." (no evidence)
+Round 21: retracted as unproven.
+Round 22: re-asserted from `wrangler tail` showing `cpuTime 10-20ms, outcome exceededCpu`.
+Round 23, measuring a *different* worker the same way:
 
 ```
-wall 165ms  cpu 20ms  outcome exceededCpu
+seo-audit /v1/audit on a Wikipedia page   cpu 158ms  wall 356ms  -> 200 OK
+seo-audit /v1/readability on 13k chars    cpu   4ms  wall   5ms  -> 200 OK
+seo-audit /v1/keywords on 13k chars       cpu   5ms  wall   6ms  -> 200 OK
+```
+
+A request that burns **158 ms of CPU succeeds**, so the per-request CPU budget is at least
+158 ms. The "10 ms" framing cannot explain these numbers, and the note published in round 22
+has to come down.
+
+## What the docparse failures do show
+
+```
+wall 165ms  cpu 20ms  outcome exceededCpu   (full 16-page extraction)
 wall  42ms  cpu 10ms  outcome exceededCpu
 wall  48ms  cpu 10ms  outcome exceededCpu
+pages=1 on the same document: 200 OK, twice (1360 ms and 651 ms)
 ```
 
-`outcome: exceededCpu` with `cpuTime` at 10-20 ms. The per-request CPU budget really is about
-10 ms, which is the Workers Free allowance. Round 20 said that without evidence; round 21
-retracted it as unproven. The tail output is the evidence both attempts lacked.
+The worker dies early with very little CPU consumed, and the *same document* loads fine when
+only one page is extracted. That pattern fits memory exhaustion during multi-page extraction
+(Workers have 128 MB) better than a CPU ceiling, because a CPU ceiling would show up after the
+CPU had been spent, not at 10 ms.
 
-## The fix
+**Hypothesis, not conclusion.** I have not proven it, and I am not going to publish a third
+confident diagnosis without a memory measurement I do not have a tool for here.
 
-`apps/docparse/src/lib/pdf.ts` now carries a guard on the full-document path:
+## What stays
 
-```ts
-export const AUTO_PDF_MAX_BYTES = 400 * 1024;
-export function guardPdfCpuBudget(bytes: Uint8Array, pageSelection: string | null): void
-```
+The guard stays, because it is justified by outcome rather than by cause: a document over 400 KB
+asked to extract in full returns a readable 413 from our handler instead of dying as a Cloudflare
+HTML page. That is true regardless of whether the underlying limit is CPU or memory.
 
-`extractPdfText` refuses documents above 400 KB with a 413 PAYLOAD_TOO_LARGE and a hint that
-names the CPU budget and the escape hatch. `/v1/pdf/pages` passes an explicit selection and skips
-the guard; `/v1/pdf/info` is metadatum-only and stays available.
+The rationale in the code comment has been rewritten to say exactly that, and the published note
+no longer claims a 10 ms budget.
 
-400 KB is calibrated from measurement, not vibes: a 20 KB one-page file parses in budget, a
-775 KB dense 16-page file dies at 10 ms.
+## What I would need to settle it
 
-## Verified live
-
-```
-big   /v1/pdf/text       413  861ms  {error:{code:PAYLOAD_TOO_LARGE, message:'This document is too large...'}}
-big   /v1/pdf/pages?1    200  651ms  page 1 text extracted
-small /v1/pdf/text       200  593ms  full text
-big   /v1/pdf/info       200  395ms  pageCount 16, metadata
-```
-
-The opaque Cloudflare HTML 503 is gone for the common case: a buyer now gets our JSON envelope,
-a code, a reason and instructions.
-
-## Tests
-
-Three new unit tests pin the behaviour: large document refused on the full path, page selection
-allowed whatever the size, small documents allowed. docparse is at **131 tests passing** (was 128).
-
-## Still true
-
-The real capacity fix is a paid Workers plan (30 s CPU instead of 10 ms), at which point
-`AUTO_PDF_MAX_BYTES` can be raised or removed. That is a billing decision, not a code change.
+`allocated memory` is not exposed in tail. The practical test is to bisect page counts on the same
+document (1, 2, 4, 8, 16) across several minutes and see whether the failure tracks page count
+rather than wall time. I ran that once and got contradictory results inside one window, which is
+why the honest status is "intermittent, cause unconfirmed".
