@@ -118,5 +118,11 @@
       <guid isPermaLink="true">https://labs.ayamk.in/demo-bulk</guid>
       <description>Paste a list and see per-address verdicts, scores and the per-address cost of the bulk endpoint.</description>
     </item>
+    <item>
+      <title>Redact PII from a PDF in two calls</title>
+      <link>https://labs.ayamk.in/guides-redact-pdf</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/guides-redact-pdf</guid>
+      <description>Extract text with DocParse, then find and mask personal data with PII Shield. Where the flow stops.</description>
+    </item>
   </channel>
 </rss>

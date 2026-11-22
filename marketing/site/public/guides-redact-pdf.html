@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redact PII from a PDF in two API calls | Ayam Labs</title>
+<meta name="description" content="Extract the text from a PDF, then find and redact personal data in it. Working code for the two-step flow, with honest limits on scanned pages.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-redact-pdf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redact PII from a PDF in two API calls">
+<meta property="og:description" content="Extract text, then redact it. Working code and the limits.">
+<meta property="og:image" content="https://labs.ayamk.in/og/site.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Redact PII from a PDF in two API calls">
+<meta name="twitter:image" content="https://labs.ayamk.in/og/site.png">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Redact PII from a PDF in two API calls","description":"Extract text from a PDF, then find and redact personal data.","author":{"@type":"Organization","name":"Ayam Labs"},"publisher":{"@type":"Organization","name":"Ayam Labs"},"mainEntityOfPage":"https://labs.ayamk.in/guides-redact-pdf"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck">EmailCheck</a>
+        <a href="/seo-audit">SEO Audit</a>
+        <a href="/docparse">DocParse</a>
+        <a href="/ai-text">TextMind</a>
+        <a href="/pii-shield">PII Shield</a>
+        <a href="/demo">Demo</a>
+        <a href="/guides">Guides</a>
+        <a href="/performance">Latency</a>
+        <a href="/pricing">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="/demo-pii-shield">Try it live</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Privacy</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.1rem);margin:18px 0 18px;max-width:26ch">Redact PII from a PDF in two calls</h1>
+      <p class="lede" style="max-width:64ch">A PDF is a container, not text. You cannot redact what you have not extracted, so the job splits cleanly: one call turns the file into text, the next finds and masks the personal data. Here is the working flow and where it stops.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+
+    <h2 style="margin:0 0 14px;font-size:1.5rem">The two steps</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px"><b>1. DocParse</b> pulls the text out of the PDF, page by page, and gives you metadata alongside it. <b>2. PII Shield</b> scans that text and returns every finding with an offset, a type and a confidence score, or the redacted version directly.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 20px"><code>// 1. PDF to text
+const extracted = await fetch('https://docparse.p.rapidapi.com/v1/extract', {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+    'x-rapidapi-key': process.env.RAPIDAPI_KEY,
+    'x-rapidapi-host': 'docparse.p.rapidapi.com',
+  },
+  body: JSON.stringify({ url: 'https://example.com/contract.pdf' }),
+}).then((r) =&gt; r.json());
+
+const text = extracted.pages.map((p) =&gt; p.text).join('\n\n');
+
+// 2. find the personal data
+const scanned = await fetch('https://piishield.p.rapidapi.com/v1/scan', {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+    'x-rapidapi-key': process.env.RAPIDAPI_KEY,
+    'x-rapidapi-host': 'piishield.p.rapidapi.com',
+  },
+  body: JSON.stringify({ text }),
+}).then((r) =&gt; r.json());
+
+console.log(scanned.findings.map((f) =&gt; f.type + ' at ' + f.start));</code></pre>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">If you want the redacted text, not the list</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px">Call <code>/v1/redact</code> instead of <code>/v1/scan</code> on the extracted text. Choose a style based on what happens next:</p>
+    <ul style="color:var(--text-dim);margin:0 0 16px;padding-left:20px;line-height:1.9">
+      <li><code>label</code> keeps entities consistent, so the same person stays <code>[EMAIL_1]</code> throughout the document.</li>
+      <li><code>mask</code> keeps the last four characters, which is what a human reviewer usually needs.</li>
+      <li><code>hash</code> lets you join documents later without storing the value.</li>
+    </ul>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">Where this stops, honestly</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px"><b>Scanned PDFs.</b> If the page is an image, there is no text layer and nothing to redact. DocParse does not OCR and does not pretend to; you get a clear signal rather than an empty result.</p>
+    <p style="color:var(--text-dim);margin:0 0 14px"><b>Redaction is not a black box.</b> The output here is text with placeholders. If you need a pixel-level redaction burned into the PDF, that is a different operation and this flow does not do it.</p>
+    <p style="color:var(--text-dim);margin:0 0 14px"><b>Table layout is lost.</b> Extraction returns reading order, not a grid, so per-cell redaction needs your own parsing on top.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">What it costs</h2>
+    <p style="color:var(--text-dim);margin:0 0 16px">One call per service, $0.05 each on the pay-as-you-go plan. A 20-page contract therefore costs $0.10 to turn into redacted text, and the pricing comparison page lists where per-page vendors are cheaper.</p>
+
+    <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+      <h3 style="margin:0 0 8px;font-size:1.05rem">Run the second half now</h3>
+      <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">The redaction demo takes any text and runs the real endpoint, no key needed.</p>
+      <a class="btn btn-primary" href="/demo-pii-shield">Open the redactor</a>
+      <a class="btn" href="/reference-pii-shield">PII Shield reference</a>
+    </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides">Guides</a> &nbsp;·&nbsp; <a href="/legal">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
