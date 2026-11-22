@@ -55,7 +55,7 @@
     <h2 style="margin:0 0 14px;font-size:1.5rem">The two steps</h2>
     <p style="color:var(--text-dim);margin:0 0 14px"><b>1. DocParse</b> pulls the text out of the PDF, page by page, and gives you metadata alongside it. <b>2. PII Shield</b> scans that text and returns every finding with an offset, a type and a confidence score, or the redacted version directly.</p>
     <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 20px"><code>// 1. PDF to text
-const extracted = await fetch('https://docparse.p.rapidapi.com/v1/extract', {
+const extracted = await fetch('https://docparse.p.rapidapi.com/v1/pdf/text', {
   method: 'POST',
   headers: {
     'content-type': 'application/json',
@@ -65,7 +65,8 @@ const extracted = await fetch('https://docparse.p.rapidapi.com/v1/extract', {
   body: JSON.stringify({ url: 'https://example.com/contract.pdf' }),
 }).then((r) =&gt; r.json());
 
-const text = extracted.pages.map((p) =&gt; p.text).join('\n\n');
+// text is the joined document, pages is one string per page
+const text = extracted.pages.join('\n\n');
 
 // 2. find the personal data
 const scanned = await fetch('https://piishield.p.rapidapi.com/v1/scan', {
