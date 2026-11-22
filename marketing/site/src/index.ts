@@ -9,6 +9,7 @@ interface Env {
 
 const HOSTS: Record<string, string> = {
   emailcheck: "https://emailcheck.ayamk.in",
+  "emailcheck-bulk": "https://emailcheck.ayamk.in",
   "seo-audit": "https://seo-audit.ayamk.in",
   docparse: "https://docparse.ayamk.in",
   "ai-text": "https://textmind.ayamk.in",
@@ -17,6 +18,7 @@ const HOSTS: Record<string, string> = {
 
 const SECRETS: Record<string, keyof Env> = {
   emailcheck: "EMAILCHECK_SECRET",
+  "emailcheck-bulk": "EMAILCHECK_SECRET",
   "seo-audit": "SEO_SECRET",
   docparse: "DOCPARSE_SECRET",
   "ai-text": "AITEXT_SECRET",
@@ -83,6 +85,18 @@ export default {
       }
 
       try {
+        if (app === "emailcheck-bulk") {
+          const list = Array.isArray(body.emails) ? body.emails : [];
+          const emails = list.map((e: unknown) => String(e || "").trim()).filter(Boolean).slice(0, 20);
+          if (emails.length === 0) return bad("Paste at least one email, one per line");
+          if (emails.length > 20) return bad("The demo caps at 20 addresses per call");
+          const r = await callUpstream("emailcheck", env.EMAILCHECK_SECRET as string, "/v1/bulk", {
+            method: "POST",
+            body: JSON.stringify({ emails }),
+          });
+          return json(await r.json(), r.status);
+        }
+
         if (app === "emailcheck") {
           const email = String(body.email || "").trim();
           if (!email || email.length > 254) return bad("A valid email is required");

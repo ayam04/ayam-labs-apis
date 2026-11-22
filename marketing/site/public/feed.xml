@@ -112,5 +112,11 @@
       <pubDate>Sun, 22 Nov 2026 12:00:00 +0000</pubDate>
       <description>Client-side p50 and p95 latency for every endpoint, measured on 22 November 2026, with the method and the caveats.</description>
     </item>
+    <item>
+      <title>Bulk email verification demo - 20 addresses in one call</title>
+      <link>https://labs.ayamk.in/demo-bulk.html</link>
+      <guid isPermaLink="true">https://labs.ayamk.in/demo-bulk.html</guid>
+      <description>Paste a list and see per-address verdicts, scores and the per-address cost of the bulk endpoint.</description>
+    </item>
   </channel>
 </rss>

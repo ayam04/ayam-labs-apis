@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bulk email verification demo - check 20 addresses at once | Ayam Labs</title>
+<meta name="description" content="Paste a list and verify up to 20 addresses in one call. See the per-address verdict, score and flags from the real bulk endpoint.">
+<link rel="canonical" href="https://labs.ayamk.in/demo-bulk.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bulk email verification demo">
+<meta property="og:description" content="Up to 20 addresses per call, real results, no key.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Bulk email verification demo","url":"https://labs.ayamk.in/demo-bulk.html","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"10 demo calls per visitor per day"}}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="https://rapidapi.com/ayamullahkhan04/api/emailcheck-api" rel="noopener">Get an API key</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Live demo / EmailCheck bulk</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:24ch">Twenty addresses, one call</h1>
+      <p class="lede" style="max-width:64ch">The bulk endpoint is where the price stops being embarrassing. One call verifies up to 100 addresses, so the same $0.05 works out at half a thousandth of a dollar per address. Paste a list and check the arithmetic yourself.</p>
+
+      <form id="demo-form" style="margin:34px 0 10px;max-width:720px">
+        <textarea id="demo-emails" rows="7" required style="width:100%;padding:12px 14px;background:var(--bg-raised);border:1px solid var(--line-bright);border-radius:10px;color:var(--text);font-family:var(--font-mono);font-size:.9rem;resize:vertical">ayam.khan@gmail.com
+info@stripe.com
+someone@mailinator.com
+jane.doe@gmial.com
+not-an-email
+support@github.com
+alex@outlook.com
+test@temp-mail.org</textarea>
+        <button class="btn btn-primary" type="submit" id="demo-btn" style="margin-top:12px">Run bulk check</button>
+      </form>
+      <p id="demo-status" style="margin:0 0 20px;color:var(--muted);font-size:.85rem;min-height:20px">One request to <code>/v1/bulk</code>, capped at 20 addresses here.</p>
+
+      <div id="demo-out" style="display:none;max-width:900px">
+        <div id="b-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:0 0 18px"></div>
+        <div style="overflow:auto;border:1px solid var(--line);border-radius:12px">
+          <table style="width:100%;border-collapse:collapse;font-size:.86rem">
+            <thead><tr><th style="text-align:left;padding:10px 12px">Address</th><th style="text-align:left">Verdict</th><th style="text-align:left">Score</th><th style="text-align:left">Flags</th><th style="text-align:left">Why</th></tr></thead>
+            <tbody id="b-rows"></tbody>
+          </table>
+        </div>
+        <p id="b-cost" style="margin:16px 0 0;color:var(--muted);font-size:.85rem"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div><div class="section-num">01 - THE ARITHMETIC</div><h2>Why bulk is the honest way to price this</h2></div></div>
+      <p style="max-width:72ch;color:var(--text-dim);margin:22px 0 0">A single verification at $0.05 is ten times what a credit-pack vendor charges. A bulk call is the same $0.05 for up to 100 addresses, which is a fifth of a cent each, roughly ten times cheaper than the cheapest pack we found. The <a href="/compare-pricing.html">pricing comparison</a> has the sources and the two rows where we are more expensive.</p>
+      <p style="max-width:72ch;color:var(--text-dim);margin:14px 0 0">Ten demo calls per visitor per day, 20 addresses each. Past that the endpoint returns 429 and points at the listing.</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script>
+(function () {
+  var form = document.getElementById('demo-form');
+  var input = document.getElementById('demo-emails');
+  var btn = document.getElementById('demo-btn');
+  var status = document.getElementById('demo-status');
+  var out = document.getElementById('demo-out');
+
+  function pill(label, value, colour) {
+    var d = document.createElement('div');
+    d.style.cssText = 'border:1px solid var(--line);border-radius:10px;padding:10px 12px';
+    d.innerHTML = '<div class="mono" style="font-size:1.3rem;color:' + colour + '">' + value + '</div>' +
+                  '<div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">' + label + '</div>';
+    return d;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    status.textContent = 'Calling /v1/bulk...';
+    out.style.display = 'none';
+    var emails = input.value.split(/[\s,;]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+    try {
+      var res = await fetch('/api/demo/emailcheck-bulk', {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ emails: emails })
+      });
+      var data = await res.json();
+      if (!res.ok) { status.textContent = data.error || ('Request failed (' + res.status + ')'); return; }
+
+      var s = data.summary || {};
+      var box = document.getElementById('b-summary');
+      box.innerHTML = '';
+      box.appendChild(pill('total', s.total || 0, 'var(--text)'));
+      box.appendChild(pill('deliverable', s.deliverable || 0, '#4ade80'));
+      box.appendChild(pill('risky', s.risky || 0, '#fbbf24'));
+      box.appendChild(pill('undeliverable', s.undeliverable || 0, '#f87171'));
+      box.appendChild(pill('disposable', s.disposable || 0, '#f87171'));
+      box.appendChild(pill('role accounts', s.roleAccounts || 0, '#fbbf24'));
+
+      var rows = document.getElementById('b-rows');
+      rows.innerHTML = '';
+      (data.results || []).forEach(function (r) {
+        var colour = r.deliverability === 'deliverable' ? '#4ade80' : (r.deliverability === 'risky' ? '#fbbf24' : '#f87171');
+        var flags = Object.keys(r.flags || {}).filter(function (k) { return r.flags[k] === true; }).join(', ') || '-';
+        var why = (r.reasons && r.reasons.length) ? r.reasons.slice(0, 2).join('; ') : (r.didYouMean ? 'did you mean ' + r.didYouMean : '-');
+        var tr = document.createElement('tr');
+        tr.style.borderTop = '1px solid var(--line)';
+        tr.innerHTML =
+          '<td style="padding:9px 12px" class="mono">' + (r.email || '') + '</td>' +
+          '<td style="color:' + colour + '">' + (r.validFormat ? r.deliverability : 'invalid') + '</td>' +
+          '<td class="mono">' + (r.score != null ? r.score : '-') + '</td>' +
+          '<td style="color:var(--muted);font-size:.78rem">' + flags + '</td>' +
+          '<td style="color:var(--text-dim);font-size:.78rem">' + why + '</td>';
+        rows.appendChild(tr);
+      });
+
+      var n = (data.results || []).length;
+      document.getElementById('b-cost').textContent =
+        n + ' addresses in one call · $' + (0.05 / Math.max(n, 1)).toFixed(6) + ' per address on the pay-as-you-go rate · ' +
+        data.durationMs + 'ms of server work';
+      out.style.display = 'block';
+      status.textContent = 'One live call, ' + n + ' addresses.';
+    } catch (err) {
+      status.textContent = 'Network error. Try again.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
