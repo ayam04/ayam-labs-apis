@@ -34,6 +34,10 @@ https://github.com/ayam04/ayam-labs-apis - MIT licensed, tests and deployment co
 
 - [Measured latency](https://labs.ayamk.in/performance.html): p50 and p95 per endpoint.
 
+## Feed
+
+https://labs.ayamk.in/feed.xml - build notes and guides.
+
 ## Listings
 
 All five are sold through the RapidAPI marketplace:

@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://labs.ayamk.in/sitemap.xml
+
+# feed: https://labs.ayamk.in/feed.xml
