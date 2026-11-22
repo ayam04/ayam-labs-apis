@@ -75,6 +75,8 @@ export function defineApi<B extends Record<string, unknown> = Record<string, unk
     c.set("requestId", requestId);
     c.set("startedAt", Date.now());
     c.header("cache-control", "no-store");
+    // machine endpoint, never a search result: keep scanners' 401/404 probes out of indexes
+    c.header("x-robots-tag", "noindex, nofollow");
     await next();
     c.header("x-request-id", requestId);
     c.header("x-response-time-ms", String(Date.now() - c.get("startedAt")));
