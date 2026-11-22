@@ -20,6 +20,14 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PII Shield API","description":"Detect and redact PII with Luhn, mod-97 and base58check validators, plus profanity and spam screening.","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","url":"https://labs.ayamk.in/pii-shield.html","offers":{"@type":"Offer","price":"0.05","priceCurrency":"USD","description":"Pay as you go from $0.05 per call, monthly plans from $25"},"publisher":{"@type":"Organization","name":"Ayam Labs"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is this a substitute for a DLP product?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is a fast pre-filter: catch the obvious PII in text before it lands somewhere permanent. Pair it with policy and access control, not instead of them."}}, {"@type": "Question", "name": "Can I reverse a redaction?", "acceptedAnswer": {"@type": "Answer", "text": "With style hash you get a stable 8 character digest per value, so you can correlate occurrences without storing the original. Masks and labels are not reversible."}}, {"@type": "Question", "name": "Which languages are supported for profanity?", "acceptedAnswer": {"@type": "Answer", "text": "English is the most complete list. Spanish, French and German cover common terms. The PII detectors are language independent."}}, {"@type": "Question", "name": "How fast is it?", "acceptedAnswer": {"@type": "Answer", "text": "Deterministic scans on 10KB of text return in single digit milliseconds. The response includes durationMs so you can measure it yourself."}}]}</script>
 <link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
+<meta property="og:image" content="https://labs.ayamk.in/og/pii-shield.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PII Shield API - Privacy and safety | Ayam Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PII Shield API - Privacy and safety | Ayam Labs">
+<meta name="twitter:description" content="Find and redact personal data before it reaches your logs or your model.">
+<meta name="twitter:image" content="https://labs.ayamk.in/og/pii-shield.png">
 </head>
 <body>
 <header class="site-header">

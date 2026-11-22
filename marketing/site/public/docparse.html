@@ -20,6 +20,14 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DocParse API","description":"Extract clean text from PDF, DOCX and HTML: per page text, metadata and markdown conversion.","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","url":"https://labs.ayamk.in/docparse.html","offers":{"@type":"Offer","price":"0.05","priceCurrency":"USD","description":"Pay as you go from $0.05 per call, monthly plans from $25"},"publisher":{"@type":"Organization","name":"Ayam Labs"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can it read scanned PDFs?", "acceptedAnswer": {"@type": "Answer", "text": "It extracts whatever text layer exists. A pure image scan has none, so you get an empty string and a warning. Add your own OCR step if you need one."}}, {"@type": "Question", "name": "What is the largest file I can send?", "acceptedAnswer": {"@type": "Answer", "text": "8MB or 100 pages per request, whichever comes first. Larger documents should be split or fetched page ranges with /v1/pdf/pages."}}, {"@type": "Question", "name": "Do you keep my documents?", "acceptedAnswer": {"@type": "Answer", "text": "No. The body is processed in memory and discarded when the response is returned. Nothing is written to storage."}}, {"@type": "Question", "name": "Does it handle password protected PDFs?", "acceptedAnswer": {"@type": "Answer", "text": "It reports them as encrypted with a 422 and a clear message. Decryption is not supported."}}]}</script>
 <link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
+<meta property="og:image" content="https://labs.ayamk.in/og/docparse.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DocParse API - Document extraction | Ayam Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DocParse API - Document extraction | Ayam Labs">
+<meta name="twitter:description" content="Turn PDFs, DOCX and HTML into clean text for your LLM pipeline.">
+<meta name="twitter:image" content="https://labs.ayamk.in/og/docparse.png">
 </head>
 <body>
 <header class="site-header">

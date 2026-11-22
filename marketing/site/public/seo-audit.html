@@ -20,6 +20,14 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SEO Audit API","description":"On-page SEO audit for any URL: titles, meta, headings, links, structured data, readability and a weighted score.","applicationCategory":"DeveloperApplication","operatingSystem":"Any (HTTP API)","url":"https://labs.ayamk.in/seo-audit.html","offers":{"@type":"Offer","price":"0.05","priceCurrency":"USD","description":"Pay as you go from $0.05 per call, monthly plans from $25"},"publisher":{"@type":"Organization","name":"Ayam Labs"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will it work on JavaScript-heavy sites?", "acceptedAnswer": {"@type": "Answer", "text": "You get the server-rendered HTML. Single-page apps that render entirely in the browser will look thin. That is a real signal too, but treat the numbers accordingly."}}, {"@type": "Question", "name": "Can I audit a local or intranet URL?", "acceptedAnswer": {"@type": "Answer", "text": "No. Private ranges, localhost and metadata endpoints are blocked twice: on hostname pattern and on DNS resolution of every redirect hop. That is deliberate."}}, {"@type": "Question", "name": "How is the score calculated?", "acceptedAnswer": {"@type": "Answer", "text": "Each check carries a fixed weight and returns pass, warn or fail. The score is the weighted sum normalised to 0-100, and the full breakdown is in the response so you can explain it to a client."}}, {"@type": "Question", "name": "Do you cache pages?", "acceptedAnswer": {"@type": "Answer", "text": "No page bodies are stored. DNS answers are cached for 10 minutes at the edge."}}]}</script>
 <link rel="alternate" type="application/rss+xml" title="Ayam Labs" href="/feed.xml">
+<meta property="og:image" content="https://labs.ayamk.in/og/seo-audit.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SEO Audit API - On-page analysis | Ayam Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SEO Audit API - On-page analysis | Ayam Labs">
+<meta name="twitter:description" content="Score any page in one request, without a headless browser.">
+<meta name="twitter:image" content="https://labs.ayamk.in/og/seo-audit.png">
 </head>
 <body>
 <header class="site-header">
