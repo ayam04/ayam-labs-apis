@@ -24,6 +24,29 @@ import { runAudit, runKeywords, runLinks, runMetadata, runReadability, runRobots
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const jsonContent = (schema: any) => ({ "application/json": { schema } });
 
+/**
+ * Ten minute edge cache for audits of the same URL. Auditing is the expensive route here
+ * (fetch plus parse), and the same URL is commonly audited repeatedly during a build.
+ * Bodies are never stored: only the response JSON, keyed by the normalised URL.
+ */
+const AUDIT_TTL_SECONDS = 600;
+
+async function cachedAudit(url: string): Promise<{ body: unknown; cached: boolean }> {
+  const key = new Request("https://audit-cache.internal/" + encodeURIComponent(url));
+  const cache = (globalThis as any).caches?.default as Cache | undefined;
+  if (!cache) return { body: await runAudit(url), cached: false };
+
+  const hit = await cache.match(key);
+  if (hit) return { body: await hit.json(), cached: true };
+
+  const body = await runAudit(url);
+  const stored = new Response(JSON.stringify(body), {
+    headers: { "content-type": "application/json", "cache-control": "max-age=" + AUDIT_TTL_SECONDS },
+  });
+  await cache.put(key, stored);
+  return { body, cached: false };
+}
+
 /** Same as the marketplace-wide JSON body limit. */
 const MAX_JSON_BODY_BYTES = 512 * 1024;
 
@@ -164,7 +187,9 @@ const app = defineApi(config, (app) => {
 
   app.openapi(auditRoute, async (c) => {
     const { url } = c.req.valid("query");
-    return c.json(await runAudit(url), 200);
+    const { body, cached } = await cachedAudit(url);
+    c.header("x-cache", cached ? "hit" : "miss");
+    return c.json(body, 200);
   });
 
   app.openapi(metaRoute, async (c) => {
