@@ -55,10 +55,25 @@ Secrets are set with `wrangler secret put RAPIDAPI_PROXY_SECRET`, never committe
 
 ## Verification
 
+Nothing below is a style check. Each one fails when a published claim stops being true.
+
 ```bash
-node scripts/smoke.mjs                     # 12 live checks across all five
-node scripts/check-endpoints.mjs .         # every documented path must exist in a live spec
+node scripts/smoke.mjs                     # 14 live calls across all five APIs
+node scripts/check-endpoints.mjs .         # every documented path exists in a live spec
+node scripts/check-docs.mjs .              # published limits match the API; corrected values stay gone
+node scripts/check-examples.mjs .          # all 44 curl samples on the site actually run
+pwsh -File scripts/refresh-docs.ps1        # rebuild generated docs from live specs, then run all of the above
 ```
+
+`check-examples.mjs` needs the proxy secrets in the environment (`SECRET_EMAILCHECK`,
+`SECRET_SEO_AUDIT`, `SECRET_DOCPARSE`, `SECRET_AI_TEXT`, `SECRET_PII_SHIELD`); the other three run
+without credentials (`check-docs` skips the numeric comparison and still runs the stale-value scan,
+which is what CI uses).
+
+The API reference pages under `marketing/site/public/reference-*.html` are generated from frozen
+copies of each `/openapi.json` in `.tmp`. If a spec changes and the copy does not, the site keeps
+publishing examples the API rejects. `refresh-docs.ps1` exists so that cycle cannot half-happen:
+download specs, regenerate, deploy, then prove every example still runs.
 
 ## License
 
