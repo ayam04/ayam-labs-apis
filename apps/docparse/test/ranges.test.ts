@@ -1,3 +1,4 @@
+import { LIMITS } from "../src/lib/limits";
 import { describe, expect, it } from "vitest";
 import { buildPageSelection, formatPageRanges, parsePageRanges } from "../src/lib/ranges";
 
@@ -46,9 +47,13 @@ describe("parsePageRanges", () => {
     expect(() => parsePageRanges("  ")).toThrowError(/Missing required parameter/);
   });
 
-  it("rejects selections above 100 pages", () => {
-    expect(() => parsePageRanges("1-101")).toThrowError(/more than 100 pages/);
-    expect(() => parsePageRanges("1-60,100-150")).toThrowError(/Too many pages requested/);
+  it("rejects selections above the CPU budget", () => {
+    // the cap is LIMITS.maxSelectedPages, bounded by measured CPU per page
+    expect(() => parsePageRanges("1-" + (LIMITS.maxSelectedPages + 1))).toThrowError(
+      new RegExp("more than " + LIMITS.maxSelectedPages + " pages"),
+    );
+    // many small ranges that add up past the cap are rejected with a different message
+    expect(() => parsePageRanges("1-4,10-13,20-23")).toThrowError(/Too many pages requested/);
   });
 
   it("rejects more than 64 tokens", () => {

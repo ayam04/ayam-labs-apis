@@ -13,10 +13,18 @@ export const LIMITS = {
   maxBase64Chars: 12_500_000,
   /** Request body cap for document endpoints (base64 of 8 MB plus JSON overhead). */
   maxDocumentBodyBytes: 12 * 1024 * 1024,
-  /** Pages extracted by /v1/pdf/text before the response is marked truncated. */
-  maxPdfPages: 100,
-  /** Pages a single /v1/pdf/pages call may select. */
-  maxSelectedPages: 100,
+  /**
+   * Pages extracted by /v1/pdf/text before the response is marked truncated.
+   *
+   * Bounded by measured CPU, not by taste: on a 775 KB, 16-page LaTeX PDF, pdf.js costs
+   * roughly 30 ms of CPU per page (1 page 77-224 ms, 4 pages 188-223 ms, 8 pages 285-316 ms,
+   * 16 pages 421-513 ms) and this deployment terminates requests around 500 ms of CPU
+   * ("outcome": "exceededCpu"). Eight pages leaves headroom for denser documents; callers
+   * who need more pass explicit ranges to /v1/pdf/pages.
+   */
+  maxPdfPages: 8,
+  /** Pages a single /v1/pdf/pages call may select, same CPU budget as maxPdfPages. */
+  maxSelectedPages: 8,
   /** Range tokens (comma separated chunks) accepted by /v1/pdf/pages. */
   maxPageRangeTokens: 64,
   /** Highest page number accepted in a range expression. */

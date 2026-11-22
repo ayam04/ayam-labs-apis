@@ -214,7 +214,7 @@
       </div>
     </div>
   </section>
-<div style="border:1px solid #3a2a1a;background:rgba(251,191,36,.06);border-radius:12px;padding:16px 18px;margin:22px 0"><p style="margin:0;color:var(--text-dim);font-size:.92rem"><b style="color:#fbbf24">Known issue, measured:</b> a full extraction of some dense documents kills the worker before it can answer, and Cloudflare returns an HTML page instead of our JSON. Since this build, <code>/v1/pdf/text</code> refuses documents above 400&nbsp;KB with a readable 413 and a reason; <code>/v1/pdf/pages?pages=1-4</code> extracts a slice and works on the same files. DOCX, HTML and the metadata route are unaffected. The underlying cause is under investigation: the failure arrives after ~10&nbsp;ms of CPU and the same document loads fine for a single page, so it is not simply a CPU ceiling. I would rather say that than guess.</p></div></main>
+<div style="border:1px solid #3a2a1a;background:rgba(251,191,36,.06);border-radius:12px;padding:16px 18px;margin:22px 0"><p style="margin:0;color:var(--text-dim);font-size:.92rem"><b style="color:#fbbf24">Measured limit, 2026-11-22:</b> pdf.js costs roughly 30&nbsp;ms of CPU per page, and this deployment terminates a request at about 500&nbsp;ms. A 16-page document therefore died mid-extraction and Cloudflare answered with an HTML page. <code>/v1/pdf/text</code> now extracts up to 8 pages per call and sets <code>"truncated": true</code>; fetch more with <code>/v1/pdf/pages?pages=9-16</code>. Ranges are capped at 8 pages for the same reason, DOCX and HTML are unaffected, and a paid Workers plan would lift the ceiling.</p></div></main>
 <footer class="site-footer">
   <div class="wrap">
     <div class="cols">

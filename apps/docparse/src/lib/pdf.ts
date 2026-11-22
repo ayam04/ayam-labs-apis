@@ -151,13 +151,13 @@ export function assertPdfSignature(bytes: Uint8Array): void {
  * justified by the outcome, not by a theory: callers get a readable 413 instead of a
  * Cloudflare HTML page, and /v1/pdf/pages keeps working for the same file.
  */
-export const AUTO_PDF_MAX_BYTES = 400 * 1024;
+export const AUTO_PDF_MAX_BYTES = 3 * 1024 * 1024;
 
 export function guardPdfCpuBudget(bytes: Uint8Array, pageSelection: string | null): void {
   if (pageSelection) return;
   if (bytes.byteLength <= AUTO_PDF_MAX_BYTES) return;
   throw new ApiError(413, ErrorCode.PAYLOAD_TOO_LARGE, "This document is too large to extract in one pass on this deployment", {
-    hint: "The worker has a 10 ms CPU budget, so dense documents over 400 KB are killed mid-parse and return a Cloudflare error. Pass ?pages=1-4 to extract a slice, or send a smaller file. The DOCX and HTML routes are unaffected.",
+    hint: "Documents above 3 MB are refused before parsing because even a single dense page can exceed the request CPU budget. Pass ?pages= to extract a slice, or send a smaller file. The DOCX and HTML routes are unaffected.",
   });
 }
 

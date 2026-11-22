@@ -60,9 +60,9 @@ const guardRes = await fetch(api("docparse") + "/v1/pdf/text", {
   body: JSON.stringify({ url: "https://arxiv.org/pdf/1706.03762v7" }),
 });
 const guardBody = await guardRes.text();
-const guardOk = guardRes.status === 413 && guardBody.includes("PAYLOAD_TOO_LARGE");
+const guardOk = guardRes.status === 200 && guardBody.includes('"truncated":true');
 guardOk ? pass++ : fail++;
-console.log((guardOk ? "PASS " : "FAIL ") + String(guardRes.status).padEnd(3) + "      cpu guard returns JSON 413");
+console.log((guardOk ? "PASS " : "FAIL ") + String(guardRes.status).padEnd(3) + "      large pdf returns truncated JSON, not a 503");
 if (!guardOk) console.log("      " + guardBody.slice(0, 140));
 await hit("pdf/pages", api("docparse") + "/v1/pdf/pages?pages=1", json({ url: "https://arxiv.org/pdf/1706.03762v7" }), "docparse");
 await hit("html/markdown", api("docparse") + "/v1/html/markdown", json({ html: "<h1>Hi</h1><p>Hello <b>world</b>.</p>" }), "docparse");

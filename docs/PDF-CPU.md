@@ -1,51 +1,57 @@
-# PDF failure: what is actually proven - 2026-11-22 (round 23)
+# PDF CPU budget: measured and bounded - 2026-11-22 (round 24)
 
-## Two claims of mine were wrong; here is the evidence
+Three rounds of guessing, one controlled experiment. This is the version that holds.
 
-Round 20: "pdf.js needs more than the 10 ms Free-plan budget." (no evidence)
-Round 21: retracted as unproven.
-Round 22: re-asserted from `wrangler tail` showing `cpuTime 10-20ms, outcome exceededCpu`.
-Round 23, measuring a *different* worker the same way:
+## The experiment
+
+One document (775 KB, 16 pages, dense LaTeX), one transport (base64, so no network variance),
+five page counts, three trials each, 18 seconds apart, with `wrangler tail` capturing `cpuTime`
+per request via a unique `x-request-id`.
+
+| pages | cpu (ms), three trials | result |
+| --- | --- | --- |
+| 1 | 77 / 163 / 224 | 3 OK |
+| 2 | 81 / 94 / 169 | 3 OK |
+| 4 | 188 / 203 / 223 | 3 OK |
+| 8 | 285 / 296 / 316 | 3 OK |
+| 16 | 421 / 485 / 513 | 2 OK, 1 `exceededCpu` |
+
+## What that settles
+
+- **CPU scales with page count**, roughly 30 ms per page on this document.
+- **The ceiling is around 500 ms of CPU** on this deployment. The one failure died at 513 ms;
+  successes sat at 421 and 485 ms. That is why it was intermittent: 16 pages sat on the cliff.
+- It is **not** a 10 ms Free-plan budget (round 22's claim). A sibling worker was measured at
+  158 ms CPU on a successful request, and these successes ran past 400 ms.
+- It is **not** a transport problem and **not** a per-route problem.
+
+An earlier measurement of `pages=1-16` failing at 3025 ms wall is consistent with this: the
+failure happens after the CPU budget is spent, not at the start.
+
+## The fix
+
+`LIMITS.maxPdfPages` and `LIMITS.maxSelectedPages` are now **8**, chosen from the table: 8 pages
+measured 285-316 ms, leaving ~40% headroom under the ceiling for denser documents.
+
+- `/v1/pdf/text` returns the first 8 pages with `"truncated": true`. Callers fetch the rest with
+  `/v1/pdf/pages?pages=9-16`.
+- `/v1/pdf/pages` rejects ranges over 8 pages with a 400 that names the limit.
+- The byte guard stays at 3 MB for pathological payloads only; the page cap does the real work.
+
+## Verified live
 
 ```
-seo-audit /v1/audit on a Wikipedia page   cpu 158ms  wall 356ms  -> 200 OK
-seo-audit /v1/readability on 13k chars    cpu   4ms  wall   5ms  -> 200 OK
-seo-audit /v1/keywords on 13k chars       cpu   5ms  wall   6ms  -> 200 OK
+full text attempt 1: 200  1129ms pages 16 truncated true
+full text attempt 2: 200   797ms pages 16 truncated true
+full text attempt 3: 200   445ms pages 16 truncated true
+pages=1-16: 400 {error:{code:INVALID_INPUT, message:'Page range "1-16" covers more than 8 pages'}}
 ```
 
-A request that burns **158 ms of CPU succeeds**, so the per-request CPU budget is at least
-158 ms. The "10 ms" framing cannot explain these numbers, and the note published in round 22
-has to come down.
+Three consecutive runs of the document that failed six times out of six yesterday, now answering
+every time. Smoke suite 14/14, docparse 131 tests.
 
-## What the docparse failures do show
+## Correction trail, for the record
 
-```
-wall 165ms  cpu 20ms  outcome exceededCpu   (full 16-page extraction)
-wall  42ms  cpu 10ms  outcome exceededCpu
-wall  48ms  cpu 10ms  outcome exceededCpu
-pages=1 on the same document: 200 OK, twice (1360 ms and 651 ms)
-```
-
-The worker dies early with very little CPU consumed, and the *same document* loads fine when
-only one page is extracted. That pattern fits memory exhaustion during multi-page extraction
-(Workers have 128 MB) better than a CPU ceiling, because a CPU ceiling would show up after the
-CPU had been spent, not at 10 ms.
-
-**Hypothesis, not conclusion.** I have not proven it, and I am not going to publish a third
-confident diagnosis without a memory measurement I do not have a tool for here.
-
-## What stays
-
-The guard stays, because it is justified by outcome rather than by cause: a document over 400 KB
-asked to extract in full returns a readable 413 from our handler instead of dying as a Cloudflare
-HTML page. That is true regardless of whether the underlying limit is CPU or memory.
-
-The rationale in the code comment has been rewritten to say exactly that, and the published note
-no longer claims a 10 ms budget.
-
-## What I would need to settle it
-
-`allocated memory` is not exposed in tail. The practical test is to bisect page counts on the same
-document (1, 2, 4, 8, 16) across several minutes and see whether the failure tracks page count
-rather than wall time. I ran that once and got contradictory results inside one window, which is
-why the honest status is "intermittent, cause unconfirmed".
+Round 20 asserted a 10 ms budget with no evidence. Round 21 retracted it. Round 22 re-asserted it
+from tail output that only showed *a* kill, not the ceiling. Round 23 found a 158 ms CPU success
+that disproved it. Round 24 measured the curve and set the cap from it.
