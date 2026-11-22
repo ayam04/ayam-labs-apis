@@ -17,3 +17,5 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r test
+      # catches published numbers that no longer match the API (offline mode in CI)
+      - run: node scripts/check-docs.mjs .

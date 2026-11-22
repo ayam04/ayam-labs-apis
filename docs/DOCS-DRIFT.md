@@ -1,48 +1,51 @@
-# Docs drifted from behaviour after the page cap - 2026-11-23 (round 26)
+# Docs drift check - 2026-11-23 (round 27)
 
-## The problem
+Round 26 was spent fixing eight published claims that the page cap invalidated. This round makes
+that class of mistake fail a check instead of waiting for me to notice.
 
-Round 25 capped PDF extraction at 4 pages per call to stay inside the measured CPU budget. That
-made a set of published claims false, and none of them were in code paths the tests cover:
+## `scripts/check-docs.mjs`
 
-| where | claim | reality after the cap |
-| --- | --- | --- |
-| compare-pricing | "a 100-page PDF is $0.0005 per page, parity with the cheapest OCR" | $1.25 per 100 pages, 17x the market |
-| compare-pricing table | "DocParse, 100-page PDF: $0.05 per call, parity" | 25 calls |
-| docparse FAQ | "8MB or 100 pages per request" | 4 pages |
-| docparse page | "8MB input, 100 pages per request" | 4 pages |
-| OpenAPI spec (`info.description`) | "100 pages per PDF request" | 4 pages |
-| OpenAPI spec (`/v1/pdf/text`) | "Text extraction stops at 100 pages" | 4 pages |
-| OpenAPI spec (`/v1/pdf/pages`) | "up to 100 pages" | 4 pages |
-| docs/listings/docparse*.md | 100 pages in several places | 4 pages |
+Two layers:
 
-The spec matters most: it is what RapidAPI and the site's generated reference pages show, so the
-same wrong number was on three surfaces.
+**Live comparison** (needs `SECRET_DOCPARSE`): reads `docparse /v1/formats` and compares every
+`N pages per request/call/extraction` and `N MB` claim on the pages that describe DocParse
+against the API's own limits. Any disagreement is printed as `DRIFT`.
 
-## The fix
+**Stale-value scan** (offline, no credentials): flags values that were wrong once and must not
+come back - `100 pages per request`, `$0.0005 per page`, `parity at $0.0005`, `10 ms CPU budget`,
+`/v1/extract`. Sentences that explicitly retract a value ("used to claim", "corrected",
+"previously") are excluded, so a page can quote its own old mistake honestly.
 
-Descriptions in `src/config.ts`, `src/index.ts` and `src/schemas.ts` now interpolate
-`LIMITS.maxPdfPages` / `LIMITS.maxSelectedPages` instead of hardcoding a number, so the next cap
-change propagates by itself. `config.ts` needed an import added; typecheck caught that.
+## Two false positives it produced, and the fixes
 
-Pricing corrected to the arithmetic: $0.05 per call, 4 pages per call, so a 100-page document is
-25 calls and $1.25, which is **$0.0125 per page** - about 17x PennyOCR and Textract, about 3x
-cheaper than Sidian. The corrected paragraph says explicitly that it used to claim $0.0005.
+1. **5 MB** on the reference page was flagged against an 8 MB document cap. The API's HTML cap is
+   5,000,000 bytes; the page said 5 MB. Both are honest descriptions of the same number, so the
+   check now accepts decimal and binary interpretations.
+2. **`$0.0005 per page`** on the pricing page was flagged even though the sentence is the
+   correction: "This paragraph used to claim $0.0005 per page." The scan now drops sentences
+   containing a retraction before matching.
+
+## A Node bug worth recording
+
+`process.exit(0)` while undici fetch handles are closing trips `Assertion failed:
+!(handle->flags & UV_HANDLE_CLOSING)` on Node 24 / Windows, which turns a clean run into a
+non-zero exit. Setting `process.exitCode` instead lets the event loop drain. Worth knowing
+because the symptom looks like a failing check rather than a runtime bug.
+
+## Wired into CI
+
+```yaml
+- run: pnpm -r test
+# catches published numbers that no longer match the API (offline mode in CI)
+- run: node scripts/check-docs.mjs .
+```
+
+Offline mode skips the numeric comparison (no secret, no network needed) and still runs the
+stale-value scan, so the pipeline catches regressions on every push.
 
 ## Verified
 
 ```
-live spec: 'Text extraction stops at 4 pages per call'   (no '100 pages' anywhere in the spec)
-live spec info: '4 pages per PDF request'
-/v1/formats: maxPdfPages 4, maxSelectedPages 4
-reference-docparse: says 4 pages, no 100-page text
-docparse page: no '100 pages' text
-grep marketing/site/public/*.html for '100 pages': no matches
+offline mode: docs drift check: clean   exit 0
+live mode:    docs drift check: clean   exit 0
 ```
-
-## A checking mistake worth recording
-
-Twice this round I concluded the deploy was stale because `Invoke-WebRequest` still showed the old
-text. It was the HTTP cache, not the server: the local file and a cache-busted request were both
-correct. The reference page had been right for a while. Verify with `?cb=<random>`, or trust the
-file, before blaming a deploy.
