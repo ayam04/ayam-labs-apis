@@ -25,6 +25,10 @@
 - [Deterministic text analysis](https://labs.ayamk.in/guides-ai-text.html)
 - [PII redaction before logging](https://labs.ayamk.in/guides-pii-redaction.html)
 
+## Source
+
+https://github.com/ayam04/ayam-labs-apis - MIT licensed, tests and deployment config included.
+
 ## Listings
 
 All five are sold through the RapidAPI marketplace:
