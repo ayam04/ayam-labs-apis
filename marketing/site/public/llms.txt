@@ -25,6 +25,7 @@
 - [On-page SEO audit in one request](https://labs.ayamk.in/guides-seo-audit.html)
 - [PDF text extraction at the edge](https://labs.ayamk.in/guides-pdf-text.html)
 - [Deterministic text analysis](https://labs.ayamk.in/guides-ai-text.html)
+- [Redact before an LLM prompt](https://labs.ayamk.in/guides-pii-llm.html)
 - [PII redaction before logging](https://labs.ayamk.in/guides-pii-redaction.html)
 
 ## Source

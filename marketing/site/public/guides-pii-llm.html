@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redact PII before you send text to an LLM | Ayam Labs</title>
+<meta name="description" content="What leaks when customer text reaches a model prompt, which detectors catch it, and how to redact with labels so the model can still follow the conversation.">
+<link rel="canonical" href="https://labs.ayamk.in/guides-pii-llm.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redact PII before you send text to an LLM">
+<meta property="og:description" content="Detection, redaction styles, and the restore pattern that keeps prompts coherent.">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Redact PII before you send text to an LLM","description":"What leaks when customer text reaches a model prompt, which detectors catch it, and how to redact with labels.","author":{"@type":"Organization","name":"Ayam Labs"},"publisher":{"@type":"Organization","name":"Ayam Labs"},"mainEntityOfPage":"https://labs.ayamk.in/guides-pii-llm.html"}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/"><span class="mark">AL</span> Ayam Labs</a>
+    <nav class="nav">
+        <a href="/emailcheck.html">EmailCheck</a>
+        <a href="/seo-audit.html">SEO Audit</a>
+        <a href="/docparse.html">DocParse</a>
+        <a href="/ai-text.html">TextMind</a>
+        <a href="/pii-shield.html">PII Shield</a>
+        <a href="/demo.html">Demo</a>
+        <a href="/guides.html">Guides</a>
+        <a href="/performance.html">Latency</a>
+        <a href="/pricing.html">Pricing</a>
+    </nav>
+    <a class="btn btn-sm" href="/demo-pii-shield.html">Try it live</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Guide / Privacy</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem);margin:18px 0 18px;max-width:26ch">Redact before the prompt, not after the leak</h1>
+      <p class="lede" style="max-width:64ch">Support tickets, emails and CRM notes are the most useful context you can give a model, and the most dangerous thing you can paste into one. Here is where the data actually escapes and how to stop it without wrecking the answer.</p>
+    </div>
+  </section>
+  <section class="section"><div class="wrap" style="max-width:78ch">
+    <h2 style="margin:0 0 14px;font-size:1.5rem">Four places the text ends up</h2>
+    <ul style="color:var(--text-dim);margin:0 0 18px;padding-left:20px;line-height:1.9">
+      <li><b>Your own logs.</b> The request body that built the prompt is usually logged, and logs outlive their purpose by years.</li>
+      <li><b>The provider's retention window.</b> Most APIs keep requests for a period for abuse monitoring, and some train on what you send unless you opt out.</li>
+      <li><b>Prompt evaluation tools</b>, if you fan out to several models or log completions for review.</li>
+      <li><b>Your database.</b> The completion gets stored, and a completion often quotes the input back.</li>
+    </ul>
+    <p style="color:var(--text-dim);margin:0 0 16px">You rarely need the raw values after the request is served. You need the model to understand that a card number is present, and you need the record to remain joinable to the customer. Both are possible without sending the value.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">Redact, but keep the shape</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px">Replacing everything with asterisks destroys the answer: the model cannot tell an email from a card, and cannot tell whether two mentions are the same person. Labelled placeholders solve both.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>curl -s -X POST 'https://piishield.p.rapidapi.com/v1/redact' \\
+  -H 'Content-Type: application/json' \\
+  -H 'X-RapidAPI-Key: YOUR_KEY' \\
+  -H 'X-RapidAPI-Host: piishield.p.rapidapi.com' \\
+  -d '{"text":"Hi, I am Jane Doe, jane@acme.com, card 4111 1111 1111 1111","style":"label"}'</code></pre>
+    <p style="color:var(--text-dim);margin:0 0 14px">With <code>style: "label"</code> the same value becomes the same token everywhere: <code>[EMAIL_1]</code> twice stays one entity, <code>[EMAIL_2]</code> is a different person. The model can still reason about "the card ending in 1111 was declined and the customer at [EMAIL_1] asked twice".</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">The three styles, and when each is right</h2>
+    <div style="overflow:auto;margin:0 0 20px"><table style="width:100%;border-collapse:collapse;font-size:.9rem">
+      <thead><tr><th>Style</th><th>Output</th><th>Use when</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">mask</td><td class="mono">************1111</td><td>a human needs the last four to verify identity</td></tr>
+        <tr><td class="mono">label</td><td class="mono">[CREDIT_CARD_1]</td><td>the model must follow entities across a conversation</td></tr>
+        <tr><td class="mono">hash</td><td class="mono">[EMAIL_a3f19c02]</td><td>you need to join records later without storing the value</td></tr>
+      </tbody></table></div>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">The restore pattern</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px">If your product has to show the original value back to the customer, keep the mapping on your side and never send it to the model.</p>
+    <pre style="background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0 0 18px"><code>const scan = await fetch('https://piishield.p.rapidapi.com/v1/scan', { ... });
+const { findings } = await scan.json();
+
+// build the placeholder map locally
+const map = new Map();
+let text = input;
+for (const f of findings.sort((a, b) =&gt; b.start - a.start)) {
+  const token = '[' + f.type + '_' + (map.size + 1) + ']';
+  map.set(token, f.value);
+  text = text.slice(0, f.start) + token + text.slice(f.end);
+}
+
+// send only the redacted text, then restore what you display
+const answer = await askTheModel(text);
+const restored = answer.replace(/\[[A-Z_]+_\d+\]/g, (t) =&gt; map.get(t) ?? t);</code></pre>
+    <p style="color:var(--text-dim);margin:0 0 16px">Note the reverse-order splice: replacing from the end keeps the earlier offsets valid. Doing it forwards is the classic off-by-N bug.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">What the detectors actually catch</h2>
+    <p style="color:var(--text-dim);margin:0 0 14px">Structured data is reliable and checksummed: emails, phone numbers, cards with Luhn, IBANs with mod-97, IPs, JWTs, API keys, crypto wallets, MAC addresses. Freeform data is not: names and addresses are pattern shapes, so they carry lower confidence and can miss unusual formats.</p>
+    <p style="color:var(--text-dim);margin:0 0 14px">That is why every finding comes with an offset and a confidence score. Review the low-confidence band instead of trusting one pass, and never treat redaction as a guarantee.</p>
+
+    <h2 style="margin:44px 0 14px;font-size:1.5rem">Cost of getting this wrong</h2>
+    <p style="color:var(--text-dim);margin:0 0 16px">A single card number in a log is a PCI incident. A customer's email in a prompt sent to a provider that trains on inputs is a disclosure you cannot retract. Neither is hypothetical, and both are cheap to prevent at the boundary.</p>
+
+    <div style="border:1px solid var(--line);border-radius:14px;padding:22px;margin:36px 0 10px;background:var(--bg-raised)">
+      <h3 style="margin:0 0 8px;font-size:1.05rem">Try it on your own text</h3>
+      <p style="margin:0 0 14px;color:var(--text-dim);font-size:.92rem">The demo runs the real endpoint, ten calls per visitor per day, no key needed.</p>
+      <a class="btn btn-primary" href="/demo-pii-shield.html">Open the redactor</a>
+      <a class="btn" href="/reference-pii-shield.html">API reference</a>
+    </div>
+  </div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap inner">
+    <div><span class="mono">&copy; 2026 Ayam Labs</span> &nbsp;·&nbsp; APIs for email, SEO, documents, text and privacy.</div>
+    <div class="mono"><a href="https://github.com/ayam04/ayam-labs-apis" rel="noopener">Source</a> &nbsp;·&nbsp; <a href="/guides.html">Guides</a> &nbsp;·&nbsp; <a href="/legal.html">Legal</a></div>
+  </div>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
