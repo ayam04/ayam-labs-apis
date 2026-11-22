@@ -17,6 +17,8 @@
 - [PII Shield API](https://labs.ayamk.in/pii-shield.html): find and redact emails, phones,
   cards with Luhn, IBANs with mod-97, IPs, tokens and 13 more detectors.
 
+- [Disposable email domain list](https://labs.ayamk.in/disposable-domains.html): 10,400 domains, free txt and json.
+
 ## Guides
 
 - [Email verification without SMTP](https://labs.ayamk.in/guides-email-verification.html)
