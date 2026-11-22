@@ -141,6 +141,25 @@ export function assertPdfSignature(bytes: Uint8Array): void {
   }
 }
 
+/**
+ * CPU safety valve.
+ *
+ * This deployment gets about 10 ms of CPU per request, measured with wrangler tail
+ * ("cpuTime": 10, "outcome": "exceededCpu") on a 775 KB, 16-page PDF. pdf.js needs
+ * more than that to walk a whole dense document, but a page slice fits. Documents above
+ * this size are refused with a readable JSON error instead of dying as a Cloudflare HTML
+ * 503, unless the caller asked for a specific page selection.
+ */
+export const AUTO_PDF_MAX_BYTES = 400 * 1024;
+
+export function guardPdfCpuBudget(bytes: Uint8Array, pageSelection: string | null): void {
+  if (pageSelection) return;
+  if (bytes.byteLength <= AUTO_PDF_MAX_BYTES) return;
+  throw new ApiError(413, ErrorCode.PAYLOAD_TOO_LARGE, "This document is too large to extract in one pass on this deployment", {
+    hint: "The worker has a 10 ms CPU budget, so dense documents over 400 KB are killed mid-parse and return a Cloudflare error. Pass ?pages=1-4 to extract a slice, or send a smaller file. The DOCX and HTML routes are unaffected.",
+  });
+}
+
 async function openPdf(bytes: Uint8Array): Promise<PdfProxy> {
   assertPdfSignature(bytes);
   try {
@@ -254,6 +273,8 @@ export interface PdfTextResult {
  * pdf.js objects in memory at once.
  */
 export async function extractPdfText(bytes: Uint8Array, maxPages = LIMITS.maxPdfPages): Promise<PdfTextResult> {
+  // full-document extraction is the CPU-heavy path; /v1/pdf/pages bypasses this with an explicit selection
+  guardPdfCpuBudget(bytes, null);
   const pdf = await openPdf(bytes);
   try {
     const pageCount = pdf.numPages;

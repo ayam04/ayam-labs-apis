@@ -6,6 +6,8 @@ import {
   metadataFromPdfInfo,
   normalizePdfDate,
   readPdfInfo,
+  AUTO_PDF_MAX_BYTES,
+  guardPdfCpuBudget,
 } from "../src/lib/pdf";
 
 const buildPdf = async (title: string, pages = 2): Promise<Uint8Array> => {
@@ -100,5 +102,27 @@ describe("readPdfInfo", () => {
   it("rejects a non pdf payload with 422 before parsing", async () => {
     const bytes = new TextEncoder().encode("<html>not a pdf</html>");
     await expect(readPdfInfo(bytes)).rejects.toMatchObject({ status: 422, code: "UNSUPPORTED_MEDIA" });
+  });
+});
+
+describe('PDF CPU budget guard', () => {
+  it('refuses a large document on the full-extraction path', () => {
+    const big = new Uint8Array(AUTO_PDF_MAX_BYTES + 1);
+    expect(() => guardPdfCpuBudget(big, null)).toThrowError(/too large to extract in one pass/i);
+    try {
+      guardPdfCpuBudget(big, null);
+    } catch (error) {
+      const err = error as { status?: number; code?: string };
+      expect(err.status).toBe(413);
+      expect(err.code).toBe('PAYLOAD_TOO_LARGE');
+    }
+  });
+  it('lets a page selection through, whatever the size', () => {
+    const big = new Uint8Array(AUTO_PDF_MAX_BYTES + 1);
+    expect(() => guardPdfCpuBudget(big, '1-4')).not.toThrow();
+  });
+  it('lets documents under the threshold through', () => {
+    const small = new Uint8Array(1024);
+    expect(() => guardPdfCpuBudget(small, null)).not.toThrow();
   });
 });

@@ -53,7 +53,7 @@
     </div>
   </section>
   <section class="section"><div class="wrap" style="max-width:78ch">
-      <p style="color:#fbbf24;margin:0 0 16px;font-size:.92rem"><b>Known issue:</b> some dense multi-page PDFs intermittently return a Cloudflare 503 (error 1102) instead of JSON, 20 of 823 requests over the last week. Retry, or split the file with <code>/v1/pdf/pages</code>. DOCX and HTML are unaffected.</p><h2 style="margin:44px 0 14px;font-size:1.5rem">Why this is annoying in a worker</h2>
+      <p style="color:#fbbf24;margin:0 0 16px;font-size:.92rem"><b>Measured limit:</b> the worker has a 10&nbsp;ms CPU budget (from the runtime log: <code>cpuTime 10ms, outcome exceededCpu</code>), so since 2026-11-22 <code>/v1/pdf/text</code> returns a 413 with a reason for dense documents above 400&nbsp;KB instead of a Cloudflare error. Use <code>/v1/pdf/pages?pages=1-4</code> for a slice. DOCX and HTML are unaffected.</p><h2 style="margin:44px 0 14px;font-size:1.5rem">Why this is annoying in a worker</h2>
       <p style="color:var(--text-dim);margin:0 0 16px">Most PDF libraries pull in a native canvas for layout, assume Node built-ins, or want 300ms of CPU per page. In an edge runtime that is either unavailable or priced differently than you expect. The alternative is to move parsing out of your process entirely.</p>
       <h2 style="margin:44px 0 14px;font-size:1.5rem">The request</h2>
       <p style="color:var(--text-dim);margin:0 0 16px">Send a URL or a base64 payload. URL is better for anything large: no encoding cost, and the fetch happens on our side.</p>
