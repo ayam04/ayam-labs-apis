@@ -31,4 +31,5 @@
   <url><loc>https://labs.ayamk.in/guides-pii-llm</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://labs.ayamk.in/demo-bulk</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://labs.ayamk.in/guides-redact-pdf</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://labs.ayamk.in/verification.json</loc><changefreq>weekly</changefreq></url>
 </urlset>

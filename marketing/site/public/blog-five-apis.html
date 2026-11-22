@@ -51,7 +51,7 @@
     <div class="wrap"><p style="border-left:2px solid var(--accent);padding:10px 0 10px 16px;color:var(--text-dim);margin:0 0 22px;font-size:.92rem"><b>Disclosure:</b> I built these APIs and I sell them. Everything here is what I measured on my own product, and the pricing comparison page names where a competitor is cheaper. Treat the post as a build log, not an independent review.</p><div style="display:none">>
       <div class="eyebrow">Build log &middot; November 2026</div>
       <h1 style="margin:18px 0 22px;max-width:20ch">Five APIs on Cloudflare Workers, and the four bugs that nearly shipped</h1>
-      <p class="lede" style="max-width:62ch">Five products, 37 endpoints, 470 tests, one deploy command each. Here is the architecture, the pricing maths, and the four bugs that would have made the whole thing useless.</p>
+      <p class="lede" style="max-width:62ch">Five products, 37 endpoints, 473 tests, one deploy command each. Here is the architecture, the pricing maths, and the four bugs that would have made the whole thing useless.</p>
       <div class="row" style="margin-top:22px"><span class="tag">Cloudflare Workers</span><span class="tag">Hono</span><span class="tag">OpenAPI 3.0</span><span class="tag">RapidAPI</span></div>
     </div>
   </section>
@@ -61,7 +61,7 @@
       <h2>The shape of the thing</h2>
       <p>One pnpm workspace, five Workers, one shared package. Each Worker is its own product with its own name, its own key, its own quota and its own failure domain. A bug in the PDF parser cannot take down email verification, and I can ship one without redeploying the other four.</p>
       <p>The shared package does the boring, dangerous work once: error envelope, CORS, request ids, timing headers, OpenAPI generation, SSRF-safe fetching, and the RapidAPI proxy-secret check. Every route in every app is registered through <code>app.openapi(createRoute(...), handler)</code> so the spec is generated from the same source of truth as the handler. There is no hand-written YAML to drift out of date.</p>
-      <p>That gave me 37 endpoints and 470 unit tests. Every app passes <code>tsc --noEmit</code> and every route was answered with a real curl before it was listed anywhere.</p>
+      <p>That gave me 37 endpoints and 473 unit tests. Every app passes <code>tsc --noEmit</code> and every route was answered with a real curl before it was listed anywhere.</p>
 
       <h2>Why these five</h2>
       <p>APIs on a marketplace sell on search intent, not on cleverness. Someone types "email verification api" because their signup flow is leaking bounces. They are not looking for a platform. So the product has to name the job, not the technology.</p>

@@ -11,7 +11,7 @@ listing copy can.
 
 ## What shipped
 
-- 237 files, 1.33 MB, MIT licensed, 470 tests, green CI.
+- 237 files, 1.33 MB, MIT licensed, 473 tests, green CI.
 - Top-level README: what each API does, live origins, architecture notes, how to run, how to
   verify.
 - CI badge from GitHub Actions (`.github/workflows/ci.yml`, pnpm install + pnpm -r test).
@@ -42,5 +42,5 @@ sitemap urls: 21 | 200s: 21 | failures: 0
 
 A repo with zero stars is not distribution on its own. What it does add: a credible link
 target, something to paste when someone asks "is this a wrapper around someone else's API",
-and a place where the SSRF guard and the 470 tests are visible. The listing copy claims speed
+and a place where the SSRF guard and the 473 tests are visible. The listing copy claims speed
 and honesty; this is the artefact that can be checked.

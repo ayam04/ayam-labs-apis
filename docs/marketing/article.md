@@ -1,6 +1,6 @@
 # Five APIs on Cloudflare Workers, and the four bugs that nearly shipped
 
-Five products, 37 endpoints, 470 tests, one deploy command each. Here is the architecture, the pricing maths, and the four bugs that would have made the whole thing useless.
+Five products, 37 endpoints, 473 tests, one deploy command each. Here is the architecture, the pricing maths, and the four bugs that would have made the whole thing useless.
 
 ## The shape of the thing
 
@@ -8,7 +8,7 @@ One pnpm workspace, five Workers, one shared package. Each Worker is its own pro
 
 The shared package does the boring, dangerous work once: error envelope, CORS, request ids, timing headers, OpenAPI generation, SSRF-safe fetching, and the RapidAPI proxy-secret check. Every route in every app is registered through `app.openapi(createRoute(...), handler)` so the spec is generated from the same source of truth as the handler. There is no hand-written YAML to drift out of date.
 
-That gave me 37 endpoints and 470 unit tests. Every app passes `tsc --noEmit` and every route was answered with a real curl before it was listed anywhere.
+That gave me 37 endpoints and 473 unit tests. Every app passes `tsc --noEmit` and every route was answered with a real curl before it was listed anywhere.
 
 ## Why these five
 

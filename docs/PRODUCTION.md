@@ -53,5 +53,5 @@ The marketing site deliberately does not carry the header.
 
 ## Regression check
 
-470 tests still pass (19 / 115 / 128 / 87 / 121) and the live smoke suite is 12/12 after
+473 tests still pass (19 / 115 / 128 / 87 / 121) and the live smoke suite is 12/12 after
 deploying all five workers.

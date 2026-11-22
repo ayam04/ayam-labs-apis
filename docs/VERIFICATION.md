@@ -7,7 +7,7 @@ Every claim below was produced by running the thing, not by recalling it.
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Research demand for niche APIs | `docs/DEMAND.md` with dated public price anchors (EmailListVerify, PennyOCR, AWS Textract, Sidian) and a per-unit verdict for all five | done |
-| Build multiple production-quality APIs on Workers, TypeScript | five apps, shared core, **470 tests passing** (19 / 115 / 128 / 87 / 121) | done |
+| Build multiple production-quality APIs on Workers, TypeScript | five apps, shared core, **473 tests passing** (19 / 115 / 128 / 87 / 121) | done |
 | List properly: OpenAPI, auth, docs, pricing | all five listings **Public**, 33 routes served as OpenAPI 3.0.3, proxy-secret auth enforced, docs tabs filled, pay-per-use plus three tiers | done |
 | Deploy via wrangler | five workers plus the site on custom domains, TLS issued, `/health` 200 | done |
 | Drive traffic with ethical marketing, with disclosure | 29 crawlable pages, 5 guides, 5 references, 5 demos, pricing comparison, free dataset, IndexNow submissions, public MIT repo, explicit disclosure on the build log | done, except Reddit |

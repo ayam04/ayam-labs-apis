@@ -17,26 +17,29 @@ $hosts = [ordered]@{
   "pii-shield" = "piishield.ayamk.in"
 }
 
-Write-Host "1/5 downloading live specs"
+Write-Host "1/6 downloading live specs"
 foreach ($key in $hosts.Keys) {
   Invoke-WebRequest ("https://" + $hosts[$key] + "/openapi.json") -OutFile ".tmp\spec-$key.json" -UseBasicParsing -TimeoutSec 30
   Write-Host ("    " + $key + "  " + (Get-Item ".tmp\spec-$key.json").Length + " bytes")
 }
 
-Write-Host "2/5 regenerating reference pages"
+Write-Host "2/6 regenerating reference pages"
 python scripts\build_reference.py
 
-Write-Host "3/5 deploying the site"
+Write-Host "3/6 deploying the site"
 Push-Location marketing\site
 wrangler deploy 2>&1 | Select-Object -Last 1
 Pop-Location
 Start-Sleep -Seconds 3
 
-Write-Host "4/5 docs drift check"
+Write-Host "4/6 docs drift check"
 node scripts\check-docs.mjs .
 
-Write-Host "5/5 executing every published curl example"
+Write-Host "5/6 executing every published curl example"
 node scripts\check-examples.mjs .
+
+Write-Host "6/6 refreshing the published manifest"
+node scripts\build-manifest.mjs .
 
 Write-Host ""
 Write-Host "done: specs refreshed, references rebuilt, deployed, drift clean, examples green"

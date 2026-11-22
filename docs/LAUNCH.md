@@ -27,7 +27,7 @@ stays on the subdomain.
 
 ## Verification evidence
 
-- 470 unit tests pass across the five apps
+- 473 unit tests pass across the five apps
 - 12/12 live smoke checks pass against the custom domains
 - direct calls to /v1/* without the marketplace secret return 401
 - /health and /openapi.json are public, everything else is gated

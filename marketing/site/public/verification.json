@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-11-22T18:55:40.145Z",
+  "what": "Five production APIs on Cloudflare Workers, sold through RapidAPI. This file is generated from the live services, not written by hand.",
+  "site": "https://labs.ayamk.in",
+  "source": "https://github.com/ayam04/ayam-labs-apis",
+  "licence": "MIT",
+  "prices": {
+    "payPerUseUsd": 0.05,
+    "tiers": {
+      "pro": 25,
+      "ultra": 75,
+      "mega": 150
+    },
+    "freeTier": false
+  },
+  "tests": {
+    "count": 473,
+    "runner": "vitest",
+    "note": "count as of 2026-11-22"
+  },
+  "totals": {
+    "apis": 5,
+    "endpoints": 37
+  },
+  "apis": [
+    {
+      "name": "EmailCheck",
+      "host": "emailcheck.ayamk.in",
+      "listing": "https://rapidapi.com/ayamullahkhan04/api/emailcheck-api",
+      "openapi": "https://emailcheck.ayamk.in/openapi.json",
+      "title": "EmailCheck API",
+      "version": "1.0.0",
+      "endpoints": 5,
+      "health": "ok",
+      "limits": null
+    },
+    {
+      "name": "SEO Audit",
+      "host": "seo-audit.ayamk.in",
+      "listing": "https://rapidapi.com/ayamullahkhan04/api/seo-audit-api16",
+      "openapi": "https://seo-audit.ayamk.in/openapi.json",
+      "title": "SEO Audit API",
+      "version": "1.0.0",
+      "endpoints": 8,
+      "health": "ok",
+      "limits": null
+    },
+    {
+      "name": "DocParse",
+      "host": "docparse.ayamk.in",
+      "listing": "https://rapidapi.com/ayamullahkhan04/api/docparse-api",
+      "openapi": "https://docparse.ayamk.in/openapi.json",
+      "title": "DocParse API",
+      "version": "1.0.0",
+      "endpoints": 7,
+      "health": "ok",
+      "limits": {
+        "maxDocumentBytes": 8388608,
+        "maxBase64Chars": 12500000,
+        "maxPdfPages": 4,
+        "maxSelectedPages": 4,
+        "maxPageRangeTokens": 64,
+        "maxHtmlJsonChars": 500000,
+        "maxFetchedHtmlBytes": 5000000,
+        "maxTextChars": 1000000,
+        "maxLinks": 200,
+        "maxUrlLength": 2048,
+        "fetchTimeoutMs": 12000
+      }
+    },
+    {
+      "name": "TextMind",
+      "host": "textmind.ayamk.in",
+      "listing": "https://rapidapi.com/ayamullahkhan04/api/textmind-api",
+      "openapi": "https://textmind.ayamk.in/openapi.json",
+      "title": "TextMind API",
+      "version": "1.0.0",
+      "endpoints": 11,
+      "health": "ok",
+      "limits": null
+    },
+    {
+      "name": "PII Shield",
+      "host": "piishield.ayamk.in",
+      "listing": "https://rapidapi.com/ayamullahkhan04/api/pii-shield-api",
+      "openapi": "https://piishield.ayamk.in/openapi.json",
+      "title": "PII Shield API",
+      "version": "1.0.0",
+      "endpoints": 6,
+      "health": "ok",
+      "limits": null
+    }
+  ]
+}

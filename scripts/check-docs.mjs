@@ -72,6 +72,16 @@ for (const name of readdirSync(PUB).filter((f) => f.endsWith(".html"))) {
   }
 }
 
+// the published manifest should be recent; a month-old one is a warning, not a failure
+try {
+  const manifest = JSON.parse(readFileSync(join(PUB, "verification.json"), "utf8"));
+  const ageDays = Math.floor((Date.now() - Date.parse(manifest.generatedAt)) / 86400000);
+  if (ageDays > 30) console.log(`warning: verification.json is ${ageDays} days old, run scripts/build-manifest.mjs`);
+  else console.log(`manifest: ${ageDays} day(s) old, ${manifest.totals.endpoints} endpoints`);
+} catch {
+  console.log("warning: verification.json missing, run scripts/build-manifest.mjs");
+}
+
 console.log(failures === 0 ? "docs drift check: clean" : `docs drift check: ${failures} problem(s)`);
 // set exitCode rather than calling process.exit(): exiting while fetch handles are closing
 // trips a libuv assertion on Node 24 / Windows and turns a clean run into a failure
